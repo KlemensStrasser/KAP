@@ -1,0 +1,340 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		66A55EA121E48EF9008D29A2 /* NSSpeechSynthesizer+KAPAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 66A55EA021E48EF9008D29A2 /* NSSpeechSynthesizer+KAPAdditions.m */; };
+		66A55EAC21E4C01D008D29A2 /* KAPMacSpeechSynthesizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 66A55EA321E48F07008D29A2 /* KAPMacSpeechSynthesizer.m */; };
+		66A55EAD21E4C021008D29A2 /* KAPMacVoice.mm in Sources */ = {isa = PBXBuildFile; fileRef = 66A55EA821E49936008D29A2 /* KAPMacVoice.mm */; };
+		66A55EB321E4D6DB008D29A2 /* KAPSpeechSynthesizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 66A55EB221E4D6DB008D29A2 /* KAPSpeechSynthesizer.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		66A55E9321E48EAE008D29A2 /* KAPMac.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KAPMac.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		66A55E9621E48EAE008D29A2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		66A55E9F21E48EF9008D29A2 /* NSSpeechSynthesizer+KAPAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSSpeechSynthesizer+KAPAdditions.h"; sourceTree = "<group>"; };
+		66A55EA021E48EF9008D29A2 /* NSSpeechSynthesizer+KAPAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSSpeechSynthesizer+KAPAdditions.m"; sourceTree = "<group>"; };
+		66A55EA221E48F07008D29A2 /* KAPMacSpeechSynthesizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KAPMacSpeechSynthesizer.h; sourceTree = "<group>"; };
+		66A55EA321E48F07008D29A2 /* KAPMacSpeechSynthesizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KAPMacSpeechSynthesizer.m; sourceTree = "<group>"; };
+		66A55EA721E496B7008D29A2 /* KAPMacVoice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KAPMacVoice.h; sourceTree = "<group>"; };
+		66A55EA821E49936008D29A2 /* KAPMacVoice.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = KAPMacVoice.mm; sourceTree = "<group>"; };
+		66A55EAA21E49FB0008D29A2 /* KAPMac.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KAPMac.h; sourceTree = "<group>"; };
+		66A55EB121E4D6DB008D29A2 /* KAPSpeechSynthesizer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KAPSpeechSynthesizer.h; sourceTree = "<group>"; };
+		66A55EB221E4D6DB008D29A2 /* KAPSpeechSynthesizer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KAPSpeechSynthesizer.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		66A55E9021E48EAE008D29A2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		66A55E8A21E48EAE008D29A2 = {
+			isa = PBXGroup;
+			children = (
+				66A55E9521E48EAE008D29A2 /* KAPMac */,
+				66A55E9421E48EAE008D29A2 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		66A55E9421E48EAE008D29A2 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				66A55E9321E48EAE008D29A2 /* KAPMac.bundle */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		66A55E9521E48EAE008D29A2 /* KAPMac */ = {
+			isa = PBXGroup;
+			children = (
+				66A55EAA21E49FB0008D29A2 /* KAPMac.h */,
+				66A55EA721E496B7008D29A2 /* KAPMacVoice.h */,
+				66A55EA821E49936008D29A2 /* KAPMacVoice.mm */,
+				66A55E9E21E48EF9008D29A2 /* Categories */,
+				66A55E9D21E48EF9008D29A2 /* Voice */,
+				66A55E9C21E48EDB008D29A2 /* Resources */,
+			);
+			path = KAPMac;
+			sourceTree = "<group>";
+		};
+		66A55E9C21E48EDB008D29A2 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				66A55E9621E48EAE008D29A2 /* Info.plist */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		66A55E9D21E48EF9008D29A2 /* Voice */ = {
+			isa = PBXGroup;
+			children = (
+				66A55EB121E4D6DB008D29A2 /* KAPSpeechSynthesizer.h */,
+				66A55EB221E4D6DB008D29A2 /* KAPSpeechSynthesizer.m */,
+				66A55EA221E48F07008D29A2 /* KAPMacSpeechSynthesizer.h */,
+				66A55EA321E48F07008D29A2 /* KAPMacSpeechSynthesizer.m */,
+			);
+			path = Voice;
+			sourceTree = "<group>";
+		};
+		66A55E9E21E48EF9008D29A2 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				66A55E9F21E48EF9008D29A2 /* NSSpeechSynthesizer+KAPAdditions.h */,
+				66A55EA021E48EF9008D29A2 /* NSSpeechSynthesizer+KAPAdditions.m */,
+			);
+			path = Categories;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		66A55E9221E48EAE008D29A2 /* KAPMac */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 66A55E9921E48EAE008D29A2 /* Build configuration list for PBXNativeTarget "KAPMac" */;
+			buildPhases = (
+				66A55E8F21E48EAE008D29A2 /* Sources */,
+				66A55E9021E48EAE008D29A2 /* Frameworks */,
+				66A55E9121E48EAE008D29A2 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = KAPMac;
+			productName = "KAP-Mac";
+			productReference = 66A55E9321E48EAE008D29A2 /* KAPMac.bundle */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		66A55E8B21E48EAE008D29A2 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				CLASSPREFIX = KAP;
+				LastUpgradeCheck = 1010;
+				ORGANIZATIONNAME = KlemensStrasser;
+				TargetAttributes = {
+					66A55E9221E48EAE008D29A2 = {
+						CreatedOnToolsVersion = 10.1;
+					};
+				};
+			};
+			buildConfigurationList = 66A55E8E21E48EAE008D29A2 /* Build configuration list for PBXProject "KAPMac" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 66A55E8A21E48EAE008D29A2;
+			productRefGroup = 66A55E9421E48EAE008D29A2 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				66A55E9221E48EAE008D29A2 /* KAPMac */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		66A55E9121E48EAE008D29A2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		66A55E8F21E48EAE008D29A2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				66A55EA121E48EF9008D29A2 /* NSSpeechSynthesizer+KAPAdditions.m in Sources */,
+				66A55EB321E4D6DB008D29A2 /* KAPSpeechSynthesizer.m in Sources */,
+				66A55EAD21E4C021008D29A2 /* KAPMacVoice.mm in Sources */,
+				66A55EAC21E4C01D008D29A2 /* KAPMacSpeechSynthesizer.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		66A55E9721E48EAE008D29A2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		66A55E9821E48EAE008D29A2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		66A55E9A21E48EAE008D29A2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 4JUY73SH5E;
+				INFOPLIST_FILE = KAPMac/Resources/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				PRODUCT_BUNDLE_IDENTIFIER = com.klemens.KAPMac;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Debug;
+		};
+		66A55E9B21E48EAE008D29A2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 4JUY73SH5E;
+				INFOPLIST_FILE = KAPMac/Resources/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				PRODUCT_BUNDLE_IDENTIFIER = com.klemens.KAPMac;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		66A55E8E21E48EAE008D29A2 /* Build configuration list for PBXProject "KAPMac" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				66A55E9721E48EAE008D29A2 /* Debug */,
+				66A55E9821E48EAE008D29A2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		66A55E9921E48EAE008D29A2 /* Build configuration list for PBXNativeTarget "KAPMac" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				66A55E9A21E48EAE008D29A2 /* Debug */,
+				66A55E9B21E48EAE008D29A2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 66A55E8B21E48EAE008D29A2 /* Project object */;
+}
