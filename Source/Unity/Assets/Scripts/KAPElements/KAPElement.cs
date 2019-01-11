@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 /// Basic Element
 /// Used for custom GameObject that should be made accessible
@@ -25,6 +24,23 @@ public class KAPElement : MonoBehaviour
         set 
         {
             _label = value;
+        }
+    }
+
+    public virtual Rect frame
+    {
+        get
+        {
+            RectTransform rectTransform = gameObject.GetComponent<RectTransform>();
+
+            if (rectTransform != null) 
+            {
+                return ScreenRectForRectTransform(rectTransform);   
+            } 
+            else 
+            {
+                return new Rect(0, 0, 0, 0);   
+            }
         }
     }
 
@@ -53,5 +69,14 @@ public class KAPElement : MonoBehaviour
     protected virtual string ImplicitLabelValue() 
     {
         return "";
+    }
+
+    /// Static Helper Methods, not sure yet where to put them
+
+    protected static Rect ScreenRectForRectTransform(RectTransform rectTransform) 
+    {
+        Vector3 screenPosition = Camera.main.WorldToScreenPoint(rectTransform.position);
+        // TODO: Height & Width
+        return new Rect(screenPosition.x, screenPosition.y, 0, 0);
     }
 }

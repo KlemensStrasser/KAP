@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -26,9 +27,26 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
         selectedElementIndex = 0;
         if (accessibilityElements != null && accessibilityElements.Length > 0)
         {
+            SortByFrame();
             AnnouceElementAtSelectedIndex();
         }
     }
+
+    void SortByFrame()
+    {
+        Array.Sort(accessibilityElements, delegate(KAPElement element1, KAPElement element2) {
+            int comparrisonResult = element2.frame.y.CompareTo(element1.frame.y);
+            if (comparrisonResult == 0)
+            {
+                comparrisonResult = element1.frame.x.CompareTo(element2.frame.x);
+            }
+            return comparrisonResult;
+        });
+
+        foreach(KAPElement element in accessibilityElements) {
+            Debug.Log(element.label + " Pos" + element.frame.position);
+        }
+    } 
 
     // Update is called once per frame
     void Update()
@@ -43,7 +61,7 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
             if (selectedElementIndex < accessibilityElements.Length)
             {
                 KAPElement element = accessibilityElements[selectedElementIndex];
-                Debug.Log("Speak: " + element.label);
+                //Debug.Log("Element: " + element.frame);
                 speechSynthesizer.StartSpeaking(element.label);
             }
             else
