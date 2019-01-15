@@ -8,9 +8,21 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
     private uint selectedElementIndex;
     private KAPSpeechSynthesizer speechSynthesizer;
 
+    private AudioSource soundEffectAudioSource;
+
+    private AudioClip focusAudioClip;
+    private AudioClip blockAudioClip;
+    private AudioClip selectAudioClip;
+
     KAPInput input;
     KAPElement[] accessibilityElements;
     // TODO: No Next/Previous Element sound
+
+    // TODO: Language
+
+    // TODO: Implement Notifications for:
+    //       - Announcing specific string 
+    //       - Changing Focus on specific element
 
     // Use this for initialization
     void Start()
@@ -18,6 +30,11 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
         // TODO: Add the correct input for the current device
         input = gameObject.AddComponent<KAPKeyboardInput>();
         input.inputReceiver = this;
+
+        soundEffectAudioSource = gameObject.AddComponent<AudioSource>();
+        focusAudioClip = Resources.Load("Audio/kap_focus") as AudioClip;
+        blockAudioClip = Resources.Load("Audio/kap_block") as AudioClip;
+        selectAudioClip = Resources.Load("Audio/kap_select") as AudioClip;
 
         accessibilityElements = FindObjectsOfType<KAPElement>();
 
@@ -34,7 +51,8 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
 
     void SortByFrame()
     {
-        Array.Sort(accessibilityElements, delegate(KAPElement element1, KAPElement element2) {
+        Array.Sort(accessibilityElements, delegate (KAPElement element1, KAPElement element2)
+        {
             int comparrisonResult = element2.frame.y.CompareTo(element1.frame.y);
             if (comparrisonResult == 0)
             {
@@ -43,25 +61,22 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
             return comparrisonResult;
         });
 
-        foreach(KAPElement element in accessibilityElements) {
+        foreach (KAPElement element in accessibilityElements)
+        {
             Debug.Log(element.label + " Pos" + element.frame.position);
         }
-    } 
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
+
+    #region Sounds
 
     void AnnouceElementAtSelectedIndex()
     {
         if (speechSynthesizer != null)
         {
-            if (selectedElementIndex < accessibilityElements.Length)
+            KAPElement element = this.SelectedElement();
+
+            if (element != null)
             {
-                KAPElement element = accessibilityElements[selectedElementIndex];
-                //Debug.Log("Element: " + element.frame);
                 speechSynthesizer.StartSpeaking(element.label);
             }
             else
@@ -75,14 +90,25 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
         }
     }
 
-    void PlayBlockingSound() 
+    void PlayFocusSound() 
     {
-        // TODO: Implement & Rename
-        Debug.Log("Block");
-
-        // TODO: Play annoucement after blocking sound was played
-        AnnouceElementAtSelectedIndex();
+        soundEffectAudioSource.Stop();
+        soundEffectAudioSource.PlayOneShot(focusAudioClip);
     }
+
+    void PlayBlockingSound()
+    {
+        soundEffectAudioSource.Stop();
+        soundEffectAudioSource.PlayOneShot(blockAudioClip);
+    }
+
+    void PlaySelectSound()
+    {
+        soundEffectAudioSource.Stop();
+        soundEffectAudioSource.PlayOneShot(selectAudioClip);
+    }
+
+    #endregion
 
     #region IKAPInputReceiver
 
@@ -91,11 +117,13 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
         if (selectedElementIndex + 1 < accessibilityElements.Length)
         {
             selectedElementIndex += 1;
+            PlayFocusSound();
             AnnouceElementAtSelectedIndex();
         }
         else
         {
             PlayBlockingSound();
+            AnnouceElementAtSelectedIndex();
         }
     }
 
@@ -104,13 +132,28 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
         if (selectedElementIndex > 0)
         {
             selectedElementIndex -= 1;
+            PlayFocusSound();
             AnnouceElementAtSelectedIndex();
         }
         else
         {
             PlayBlockingSound();
+            AnnouceElementAtSelectedIndex();
         }
     }
+
+    public void SelectFocusedElement()
+    {
+        // TODO: Play Slection sound
+        KAPElement selectedElement = this.SelectedElement();
+        if (selectedElement)
+        {
+            selectedElement.InvokeSelection();
+            PlaySelectSound();
+            AnnouceElementAtSelectedIndex();
+        }
+    }
+
 
     public void FocusElementAtPosition(Vector2 position)
     {
@@ -120,6 +163,24 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
     public void HandleEscapeGesture()
     {
         throw new System.NotImplementedException();
+    }
+
+    #endregion
+
+    #region Private Helpers
+
+    private KAPElement SelectedElement() 
+    {
+        KAPElement element;
+        if(selectedElementIndex >= 0 && selectedElementIndex < accessibilityElements.Length) 
+        {
+            element = accessibilityElements[selectedElementIndex];
+        } 
+        else 
+        {
+            element = null;
+        }
+        return element;
     }
 
     #endregion

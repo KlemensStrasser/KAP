@@ -53,6 +53,12 @@ public class KAPElement : MonoBehaviour
     // TODO: Think if we really need the trait
     public KAPTrait trait;
 
+    // TODO: shouldGroupAccessibilityChildren
+    // TODO: Implement UIAccessibilityFocus Protocol https://developer.apple.com/documentation/uikit/accessibility/uiaccessibilityfocus
+
+
+    protected bool isFocused;
+
     public KAPElement() 
     {
         this._label = null;
@@ -71,8 +77,16 @@ public class KAPElement : MonoBehaviour
         return "";
     }
 
-    /// Static Helper Methods, not sure yet where to put them
+    /// Selecting the element
+    /// This could trigger button press, switch change...
+    /// If
+    public virtual void InvokeSelection() 
+    {
+        // TODO: Search trough the gameObject if there is a gameObject that receives a trigger call
+    }
 
+
+    /// Static Helper Methods, not sure yet where to put them
     protected static Rect ScreenRectForRectTransform(RectTransform rectTransform) 
     {
         Vector3 screenPosition = Camera.main.WorldToScreenPoint(rectTransform.position);

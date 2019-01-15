@@ -1,4 +1,5 @@
 ﻿using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class KAPButton : KAPElement
 {
@@ -33,5 +34,21 @@ public class KAPButton : KAPElement
         }
 
         return implicitTextValue;
+    }
+
+    override public void InvokeSelection()
+    {
+        if (EventSystem.current != null)
+        {
+            ExecuteEvents.Execute(gameObject, new BaseEventData(EventSystem.current), ExecuteEvents.submitHandler);
+        }
+        else if (button != null)
+        {
+            button.onClick.Invoke();
+        }
+        else
+        {
+            base.InvokeSelection();
+        }
     }
 }

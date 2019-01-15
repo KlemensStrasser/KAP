@@ -8,12 +8,16 @@ public class KAPKeyboardInput : KAPInput {
     public KeyCode previousElementKey;
     /// Keycode of the key used to trigger the escape gesture
     public KeyCode escapeKey;
+    /// Keycode for the key used to trigger a selection
+    public KeyCode selectKey;
 
     void Start ()
     {
+        // TODO: Config
         nextElementKey = KeyCode.RightArrow;
         previousElementKey = KeyCode.LeftArrow;
         escapeKey = KeyCode.Escape;
+        selectKey = KeyCode.Space;
     }
 
 	void Update ()
@@ -32,7 +36,11 @@ public class KAPKeyboardInput : KAPInput {
             {
                 inputReceiver.HandleEscapeGesture();
             }
-            // TODO: Implement via mouse down.
+            else if(Input.GetKeyDown(selectKey)) 
+            {
+                inputReceiver.SelectFocusedElement();
+            }
+            // TODO: Implement the rest?
         } else {
             // TODO: LOG ERROR
         }
