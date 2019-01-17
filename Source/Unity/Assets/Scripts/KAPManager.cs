@@ -66,7 +66,7 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
 
             if (element != null)
             {
-                speechSynthesizer.StartSpeaking(element.label);
+                speechSynthesizer.StartSpeaking(element.LabelWithTrait());
             }
             else
             {

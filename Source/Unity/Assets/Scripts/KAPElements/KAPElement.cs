@@ -85,6 +85,19 @@ public class KAPElement : MonoBehaviour
         // TODO: Search trough the gameObject if there is a gameObject that receives a trigger call
     }
 
+    public string LabelWithTrait() {
+        string labelWithTrait;
+        if(this.trait != null && this.trait.Value != null && this.trait.Value != "") 
+        {
+            labelWithTrait = label + ". " + trait.Value;
+        } 
+        else 
+        {
+            labelWithTrait = label;
+        }
+
+        return labelWithTrait;
+    }
 
     /// Static Helper Methods, not sure yet where to put them
     protected static Rect ScreenRectForRectTransform(RectTransform rectTransform) 
