@@ -54,11 +54,6 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
             }
             return comparrisonResult;
         });
-
-        foreach (KAPElement element in accessibilityElements)
-        {
-            Debug.Log(element.label + " Pos" + element.frame.position);
-        }
     }
 
     #region Sounds
@@ -75,12 +70,12 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
             }
             else
             {
-                // TODO: LOG ERROR
+                Debug.LogError("KAP Element at the selectedElementIndex is null!");
             }
         }
         else
         {
-            // TODO: Log Error!
+            Debug.LogError("The speechSynthesizer is null!");
         }
     }
 
