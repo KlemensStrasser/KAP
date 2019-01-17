@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class KAPManager : MonoBehaviour, IKAPInputReceiver
 {
-    private uint selectedElementIndex;
+    private int selectedElementIndex;
     private KAPSpeechSynthesizer speechSynthesizer;
 
     private AudioSource soundEffectAudioSource;
@@ -164,6 +164,42 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
     {
         throw new System.NotImplementedException();
     }
+
+    #endregion
+
+    #region "Notifications"
+
+    /// Stops any text that is currently spoken and annouces the given message
+    public void AnnouceMessage(string message) 
+    {
+        if (message != null && speechSynthesizer != null)
+        {
+            speechSynthesizer.StartSpeaking(message);
+        }
+    }
+
+    /// Tries to set the focus on a given KAPElement
+    public void FocusElement(KAPElement element) 
+    {
+        int index = Array.IndexOf(accessibilityElements, element);
+        if(index != -1) {
+            selectedElementIndex = index;
+            AnnouceElementAtSelectedIndex();
+        }
+    }
+
+    /// Tries to set the focus on a KAPElement that is attached to the given
+    /// GameObject
+    public void FocusGameObject(GameObject gObject)
+    {
+        int index = Array.FindIndex(accessibilityElements, element => element.gameObject == gObject);
+        if (index != -1)
+        {
+            selectedElementIndex = index;
+            AnnouceElementAtSelectedIndex();
+        }
+    }
+
 
     #endregion
 
