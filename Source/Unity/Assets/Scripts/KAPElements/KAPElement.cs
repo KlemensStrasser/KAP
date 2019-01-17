@@ -1,13 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 /// Basic Element
 /// Used for custom GameObject that should be made accessible
 public class KAPElement : MonoBehaviour
 {
     private string _label;
-
     public string label 
     { 
         get 
@@ -50,14 +50,17 @@ public class KAPElement : MonoBehaviour
     /// Value
     public string value;
 
-    // TODO: Think if we really need the trait
+    /// Indication on how the accessibilityElement should be treated
     public KAPTrait trait;
 
     // TODO: shouldGroupAccessibilityChildren
-    // TODO: Implement UIAccessibilityFocus Protocol https://developer.apple.com/documentation/uikit/accessibility/uiaccessibilityfocus
 
-
-    protected bool isFocused;
+    /// Event that gets invoked when the element was focused by the manager
+    public UnityEvent becomeFocusedEvent = new UnityEvent();
+    /// Event that gets invoked when the element loses focus
+    public UnityEvent loseFocusEvent = new UnityEvent();
+    /// Indicates if the element currently has focus.
+    private bool isFocused;
 
     public KAPElement() 
     {
@@ -67,6 +70,8 @@ public class KAPElement : MonoBehaviour
         this.description = "";
         this.value = "";
         this.trait = KAPTrait.None;
+
+        this.isFocused = false;
     }
 
     /// Label value if none was set.
@@ -77,15 +82,46 @@ public class KAPElement : MonoBehaviour
         return "";
     }
 
+
     /// Selecting the element
     /// This could trigger button press, switch change...
-    /// If
     public virtual void InvokeSelection() 
     {
         // TODO: Search trough the gameObject if there is a gameObject that receives a trigger call
     }
 
-    public string LabelWithTrait() {
+    #region Focus Events and indication
+
+    public void DidBecomeFocused()
+    {
+        this.isFocused = true;
+        if(this.becomeFocusedEvent != null) 
+        {
+            becomeFocusedEvent.Invoke();
+        }
+    }
+
+    public void DidLoseFocus()
+    {
+        this.isFocused = false;
+        if (this.loseFocusEvent != null)
+        {
+            loseFocusEvent.Invoke();
+        }
+    }
+
+    /// Indicates if the element currently has focus.
+    public bool IsFocused()
+    {
+        return this.isFocused;
+    }
+
+    #endregion
+
+    #region Public Helpers
+
+    public string LabelWithTrait()
+    {
         string labelWithTrait;
         if(this.trait != null && this.trait.Value != null && this.trait.Value != "") 
         {
@@ -98,6 +134,8 @@ public class KAPElement : MonoBehaviour
 
         return labelWithTrait;
     }
+
+    #endregion
 
     /// Static Helper Methods, not sure yet where to put them
     protected static Rect ScreenRectForRectTransform(RectTransform rectTransform) 

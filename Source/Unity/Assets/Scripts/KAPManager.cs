@@ -34,11 +34,13 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
 
         // TODO: Settings
         speechSynthesizer = new KAPSpeechSynthesizer();
+        selectedElementIndex = -1;
 
-        selectedElementIndex = 0;
         if (accessibilityElements != null && accessibilityElements.Length > 0)
         {
             SortByFrame();
+
+            UpdateSelectedElementIndex(0);
             AnnouceElementAtSelectedIndex();
         }
     }
@@ -105,7 +107,7 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
     {
         if (selectedElementIndex + 1 < accessibilityElements.Length)
         {
-            selectedElementIndex += 1;
+            UpdateSelectedElementIndex(selectedElementIndex + 1);
             PlayFocusSound();
             AnnouceElementAtSelectedIndex();
         }
@@ -120,7 +122,7 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
     {
         if (selectedElementIndex > 0)
         {
-            selectedElementIndex -= 1;
+            UpdateSelectedElementIndex(selectedElementIndex - 1);
             PlayFocusSound();
             AnnouceElementAtSelectedIndex();
         }
@@ -171,7 +173,7 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
     {
         int index = Array.IndexOf(accessibilityElements, element);
         if(index != -1) {
-            selectedElementIndex = index;
+            UpdateSelectedElementIndex(index);
             AnnouceElementAtSelectedIndex();
         }
     }
@@ -183,7 +185,7 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
         int index = Array.FindIndex(accessibilityElements, element => element.gameObject == gObject);
         if (index != -1)
         {
-            selectedElementIndex = index;
+            UpdateSelectedElementIndex(index);
             AnnouceElementAtSelectedIndex();
         }
     }
@@ -205,6 +207,26 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
             element = null;
         }
         return element;
+    }
+
+    private void UpdateSelectedElementIndex(int newSelectedElementIndex) 
+    {
+        if(selectedElementIndex != newSelectedElementIndex) 
+        {
+            KAPElement previousSelectedElement = SelectedElement();
+            if(previousSelectedElement != null) 
+            {
+                previousSelectedElement.DidLoseFocus();
+            }
+
+            selectedElementIndex = newSelectedElementIndex;
+
+            KAPElement newSelectedElement = SelectedElement();
+            if (newSelectedElement != null)
+            {
+                newSelectedElement.DidBecomeFocused();
+            }
+        }
     }
 
     #endregion
