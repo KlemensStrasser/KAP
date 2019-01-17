@@ -42,7 +42,7 @@ public class KAPKeyboardInput : KAPInput {
             }
             // TODO: Implement the rest?
         } else {
-            Debug.LogError("The KAPKeyboardInput has no input receiver and thus, cannot forward any input.");
+            Debug.LogWarning("The KAPKeyboardInput has no input receiver and thus, cannot forward any input.");
         }
 	}
 }

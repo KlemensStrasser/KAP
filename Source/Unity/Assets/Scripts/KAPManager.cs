@@ -72,12 +72,12 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
             }
             else
             {
-                Debug.LogError("KAP Element at the selectedElementIndex is null!");
+                Debug.LogWarning("KAP Element at the selectedElementIndex is null!");
             }
         }
         else
         {
-            Debug.LogError("The speechSynthesizer is null!");
+            Debug.LogWarning("The speechSynthesizer is null!");
         }
     }
 
