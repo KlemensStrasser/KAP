@@ -30,18 +30,31 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
         blockAudioClip = Resources.Load("Audio/kap_block") as AudioClip;
         selectAudioClip = Resources.Load("Audio/kap_select") as AudioClip;
 
-        accessibilityElements = FindObjectsOfType<KAPElement>();
-
         // TODO: Settings
         speechSynthesizer = new KAPSpeechSynthesizer();
+
+        LoadAccessibilityElements();
+
         selectedElementIndex = -1;
 
         if (accessibilityElements != null && accessibilityElements.Length > 0)
         {
-            SortByFrame();
-
             UpdateSelectedElementIndex(0);
             AnnouceElementAtSelectedIndex();
+        }
+    }
+
+    void LoadAccessibilityElements()
+    {
+        accessibilityElements = FindObjectsOfType<KAPElement>();
+
+        // TODO: This should do more in the future, like:
+        //       - Respect shouldGroupAccessibilityChildren
+        //       - Handle Popovers
+
+        if(accessibilityElements != null) 
+        {
+            SortByFrame();
         }
     }
 
@@ -190,6 +203,12 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
         }
     }
 
+    /// Should be called when a popover appears,
+    /// level changes (but scene stays), ...
+    public void VisibleElementsDidChange() 
+    {
+        LoadAccessibilityElements();
+    }
 
     #endregion
 
