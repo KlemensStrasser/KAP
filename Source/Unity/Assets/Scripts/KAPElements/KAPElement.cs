@@ -62,6 +62,8 @@ public class KAPElement : MonoBehaviour
     /// Indicates if the element currently has focus.
     private bool isFocused;
 
+    public UnityEvent onClick = new UnityEvent();
+
     public KAPElement() 
     {
         this._label = null;
@@ -87,7 +89,10 @@ public class KAPElement : MonoBehaviour
     /// This could trigger button press, switch change...
     public virtual void InvokeSelection() 
     {
-        // TODO: Search trough the gameObject if there is a gameObject that receives a trigger call
+        if(this.onClick != null) 
+        {
+            onClick.Invoke();
+        }
     }
 
     #region Focus Events and indication

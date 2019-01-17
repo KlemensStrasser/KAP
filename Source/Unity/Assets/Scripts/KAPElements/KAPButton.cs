@@ -46,9 +46,10 @@ public class KAPButton : KAPElement
         {
             button.onClick.Invoke();
         }
-        else
+
+        if(this.onClick != null) 
         {
-            base.InvokeSelection();
+            this.onClick.Invoke();
         }
     }
 }
