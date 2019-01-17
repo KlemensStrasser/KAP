@@ -16,15 +16,9 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
 
     KAPInput input;
     KAPElement[] accessibilityElements;
-    // TODO: No Next/Previous Element sound
 
     // TODO: Language
 
-    // TODO: Implement Notifications for:
-    //       - Announcing specific string 
-    //       - Changing Focus on specific element
-
-    // Use this for initialization
     void Start()
     {
         // TODO: Add the correct input for the current device
@@ -69,7 +63,7 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
 
     #region Sounds
 
-    void AnnouceElementAtSelectedIndex()
+    private void AnnouceElementAtSelectedIndex()
     {
         if (speechSynthesizer != null)
         {
@@ -90,19 +84,19 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
         }
     }
 
-    void PlayFocusSound() 
+    private void PlayFocusSound() 
     {
         soundEffectAudioSource.Stop();
         soundEffectAudioSource.PlayOneShot(focusAudioClip);
     }
 
-    void PlayBlockingSound()
+    private void PlayBlockingSound()
     {
         soundEffectAudioSource.Stop();
         soundEffectAudioSource.PlayOneShot(blockAudioClip);
     }
 
-    void PlaySelectSound()
+    private void PlaySelectSound()
     {
         soundEffectAudioSource.Stop();
         soundEffectAudioSource.PlayOneShot(selectAudioClip);
@@ -144,7 +138,6 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
 
     public void SelectFocusedElement()
     {
-        // TODO: Play Slection sound
         KAPElement selectedElement = this.SelectedElement();
         if (selectedElement)
         {
