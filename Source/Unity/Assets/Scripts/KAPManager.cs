@@ -40,7 +40,7 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
         if (accessibilityElements != null && accessibilityElements.Length > 0)
         {
             UpdateSelectedElementIndex(0);
-            AnnouceElementAtSelectedIndex();
+            AnnouceElementAtSelectedIndex(true);
         }
     }
 
@@ -73,7 +73,8 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
 
     #region Sounds
 
-    private void AnnouceElementAtSelectedIndex()
+
+    private void AnnouceElementAtSelectedIndex(bool includeDescription)
     {
         if (speechSynthesizer != null)
         {
@@ -81,7 +82,17 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
 
             if (element != null)
             {
-                speechSynthesizer.StartSpeaking(element.LabelWithTrait());
+                string text;
+                if(includeDescription)
+                {
+                    text = element.FullLabel();
+                }
+                else 
+                {
+                    text = element.LabelWithTraitAndValue();
+                }
+
+                speechSynthesizer.StartSpeaking(text);
             }
             else
             {
@@ -145,12 +156,12 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
         {
             UpdateSelectedElementIndex(selectedElementIndex + 1);
             PlayFocusSound();
-            AnnouceElementAtSelectedIndex();
+            AnnouceElementAtSelectedIndex(true);
         }
         else
         {
             PlayBlockingSound();
-            AnnouceElementAtSelectedIndex();
+            AnnouceElementAtSelectedIndex(false);
         }
     }
 
@@ -160,12 +171,12 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
         {
             UpdateSelectedElementIndex(selectedElementIndex - 1);
             PlayFocusSound();
-            AnnouceElementAtSelectedIndex();
+            AnnouceElementAtSelectedIndex(true);
         }
         else
         {
             PlayBlockingSound();
-            AnnouceElementAtSelectedIndex();
+            AnnouceElementAtSelectedIndex(false);
         }
     }
 
@@ -176,7 +187,7 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
         {
             selectedElement.InvokeSelection();
             PlaySelectSound();
-            AnnouceElementAtSelectedIndex();
+            AnnouceElementAtSelectedIndex(true);
         }
     }
 
@@ -210,7 +221,7 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
         int index = Array.IndexOf(accessibilityElements, element);
         if(index != -1) {
             UpdateSelectedElementIndex(index);
-            AnnouceElementAtSelectedIndex();
+            AnnouceElementAtSelectedIndex(true);
         }
     }
 
@@ -222,7 +233,7 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
         if (index != -1)
         {
             UpdateSelectedElementIndex(index);
-            AnnouceElementAtSelectedIndex();
+            AnnouceElementAtSelectedIndex(true);
         }
     }
 

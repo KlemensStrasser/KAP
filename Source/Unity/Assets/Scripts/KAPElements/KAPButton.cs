@@ -19,6 +19,8 @@ public class KAPButton : KAPElement
         {
             this.buttonText = button.GetComponentInChildren<Text>();
         }
+
+        SetupLabel();
     }
 
     override protected string ImplicitLabelValue()

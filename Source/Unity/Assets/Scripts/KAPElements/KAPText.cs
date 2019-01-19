@@ -13,6 +13,7 @@ public class KAPText : KAPElement
     private void Start()
     {
         this.text = gameObject.GetComponent<Text>();
+        SetupLabel();
     }
 
     override protected string ImplicitLabelValue()

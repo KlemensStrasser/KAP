@@ -7,51 +7,25 @@ using System.Linq;
 /// Used for custom GameObject that should be made accessible
 public class KAPElement : MonoBehaviour
 {
-    private string _label;
-    public string label 
-    { 
-        get 
-        {
-            if(_label != null) 
-            {
-                return _label;
-            } 
-            else 
-            {
-                return ImplicitLabelValue();
-            }
-        } 
-        set 
-        {
-            _label = value;
-        }
-    }
+    public string label = "";
 
     public virtual Rect frame
     {
         get
         {
-            RectTransform rectTransform = gameObject.GetComponent<RectTransform>();
-
-            if (rectTransform != null) 
-            {
-                return ScreenRectForRectTransform(rectTransform);   
-            } 
-            else 
-            {
-                return new Rect(0, 0, 0, 0);   
-            }
+            return ScreenRectForGameObject(this.gameObject);
         }
     }
 
-    /// Detailed description of the function of the element
-    public string description;
-
     /// Value
-    public string value;
+    public string value = "";
+
+    /// Detailed description of the function of the element
+    public string description = "";
 
     /// Indication on how the accessibilityElement should be treated
-    public KAPTrait trait;
+    [HideInInspector]
+    public KAPTrait trait = KAPTrait.None;
 
     // TODO: shouldGroupAccessibilityChildren
 
@@ -64,17 +38,22 @@ public class KAPElement : MonoBehaviour
 
     public UnityEvent onClick = new UnityEvent();
 
-    public KAPElement() 
+    public KAPElement()
     {
-        this._label = null;
         this.isFocused = false;
+    }
 
-        this.label = null;
-        this.description = "";
-        this.value = "";
-        this.trait = KAPTrait.None;
+    void Start()
+    {
+        SetupLabel();
+    }
 
-        this.isFocused = false;
+    protected void SetupLabel()
+    {
+        if (label == null || label.Length == 0)
+        {
+            this.label = ImplicitLabelValue();
+        }
     }
 
     /// Label value if none was set.
@@ -126,19 +105,58 @@ public class KAPElement : MonoBehaviour
 
     #region Public Helpers
 
-    public string LabelWithTrait()
+    public string FullLabel()
     {
-        string labelWithTrait;
-        if(this.trait != null && this.trait.Value != null && this.trait.Value != "") 
+        string fullString;
+
+        if(description != null && description.Length > 0)
         {
-            labelWithTrait = label + ". " + trait.Value;
-        } 
+            string lableWithTrait = LabelWithTraitAndValue();
+
+            if(lableWithTrait != null && lableWithTrait.Length > 0)
+            {
+                fullString = LabelWithTraitAndValue() + ". " + description;
+            } 
+            else
+            {
+                fullString = description;    
+            }
+        }
         else 
         {
-            labelWithTrait = label;
+            fullString = LabelWithTraitAndValue();
         }
 
-        return labelWithTrait;
+        if (fullString == null)
+        {
+            fullString = "";
+        }
+
+        return fullString;
+    }
+
+    public string LabelWithTraitAndValue()
+    {
+        string fullString;
+        string[] strings;
+
+        if(trait != null)
+        {
+            strings = (new[] { label, trait.Value, value });
+        }
+        else 
+        {
+            strings = (new[] { label, value });   
+        }
+
+        fullString = String.Join(". ", strings.Where(str => str != null && str.Length > 0).ToArray());
+
+        if (fullString == null)
+        {
+            fullString = "";
+        }
+
+        return fullString;
     }
 
     #endregion
