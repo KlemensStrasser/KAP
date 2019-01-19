@@ -50,7 +50,14 @@ public class KAPSpeechSynthesizer {
 
     public void StartSpeaking(string text)
     {
-        VoiceStartSpeaking(text);
+        if(text != null && text.Length > 0)
+        {
+            VoiceStartSpeaking(text);    
+        } 
+        else 
+        {
+            StopSpeaking();
+        }
     }
 
     public void PauseSpeaking()
