@@ -62,7 +62,7 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
     {
         Array.Sort(accessibilityElements, delegate (KAPElement element1, KAPElement element2)
         {
-            int comparrisonResult = element2.frame.y.CompareTo(element1.frame.y);
+            int comparrisonResult = element1.frame.y.CompareTo(element2.frame.y);
             if (comparrisonResult == 0)
             {
                 comparrisonResult = element1.frame.x.CompareTo(element2.frame.x);
@@ -113,6 +113,29 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
     }
 
     #endregion
+
+    private void OnGUI()
+    {
+        // TODO: Only call when changed
+        DrawRect();
+    }
+
+    public void DrawRect() 
+    {
+        KAPElement selectedElement = SelectedElement();
+
+        if(selectedElement != null) 
+        {
+            Texture2D texture = new Texture2D(1, 1);
+            texture.SetPixel(0 , 0, Color.red);
+            texture.Apply();
+
+            Rect frame = selectedElement.frame;
+
+            GUI.skin.box.normal.background = texture;
+            GUI.Box(frame,GUIContent.none);
+        }
+    }
 
     #region IKAPInputReceiver
 
