@@ -22,3 +22,4 @@ Game Maker's Toolkit: Designing for Disability
 - [Making Games Better for Players with Motor Disabilities](https://www.youtube.com/watch?v=Ufe0i26DGiA&list=PLc38fcMFcV_vvWOhMDriBlVocTZ8mKQzR)
 - [Making Games Better for Gamers with Colourblindness & Low Vision](https://www.youtube.com/watch?v=xrqdU4cZaLw&index=2&list=PLc38fcMFcV_vvWOhMDriBlVocTZ8mKQzR)
 - [Making Games Better for the Deaf and Hard of Hearing](https://www.youtube.com/watch?v=4NGe4dzlukc&index=3&list=PLc38fcMFcV_vvWOhMDriBlVocTZ8mKQzR)
+- [Making Games Better for Players with Cognitive Disabilities](https://www.youtube.com/watch?v=ObhvacfIOg0&list=PLc38fcMFcV_vvWOhMDriBlVocTZ8mKQzR&index=4)
