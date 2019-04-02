@@ -302,9 +302,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 211d5d5f46d24439da52ed8da0c20c3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  label: My old friend
+  label: Sprite
   value: selected
-  description: Righty
+  description: Right
   becomeFocusedEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -607,7 +607,7 @@ GameObject:
   - component: {fileID: 712512365}
   - component: {fileID: 712512364}
   m_Layer: 0
-  m_Name: Lefty (1)
+  m_Name: CenterSprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -624,9 +624,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 211d5d5f46d24439da52ed8da0c20c3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  label: Darkness
+  label: Center
   value: 
-  description: Lefty
+  description: Sprite
   becomeFocusedEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -1242,9 +1242,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 211d5d5f46d24439da52ed8da0c20c3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  label: Hello
+  label: Left
   value: 
-  description: Lefty
+  description: Sprite
   becomeFocusedEvent:
     m_PersistentCalls:
       m_Calls: []

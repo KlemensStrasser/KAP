@@ -9,9 +9,26 @@
 /* Begin PBXBuildFile section */
 		66A55EA121E48EF9008D29A2 /* NSSpeechSynthesizer+KAPAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 66A55EA021E48EF9008D29A2 /* NSSpeechSynthesizer+KAPAdditions.m */; };
 		66A55EAC21E4C01D008D29A2 /* KAPMacSpeechSynthesizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 66A55EA321E48F07008D29A2 /* KAPMacSpeechSynthesizer.m */; };
-		66A55EAD21E4C021008D29A2 /* KAPMacVoice.mm in Sources */ = {isa = PBXBuildFile; fileRef = 66A55EA821E49936008D29A2 /* KAPMacVoice.mm */; };
+		66A55EAD21E4C021008D29A2 /* KAPVoice.mm in Sources */ = {isa = PBXBuildFile; fileRef = 66A55EA821E49936008D29A2 /* KAPVoice.mm */; };
 		66A55EB321E4D6DB008D29A2 /* KAPSpeechSynthesizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 66A55EB221E4D6DB008D29A2 /* KAPSpeechSynthesizer.m */; };
+		66BA332F2253604C0034572D /* KAPiOS.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 66BA332C2253604C0034572D /* KAPiOS.h */; };
+		66BA3333225360650034572D /* KAPSpeechSynthesizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 66A55EB221E4D6DB008D29A2 /* KAPSpeechSynthesizer.m */; };
+		66BA333A225364520034572D /* KAPiOSSpeechSynthesizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 66BA3338225364170034572D /* KAPiOSSpeechSynthesizer.m */; };
+		66BA333B2253A7D90034572D /* KAPVoice.mm in Sources */ = {isa = PBXBuildFile; fileRef = 66A55EA821E49936008D29A2 /* KAPVoice.mm */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		66BA33282253604C0034572D /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+				66BA332F2253604C0034572D /* KAPiOS.h in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		66A55E9321E48EAE008D29A2 /* KAPMac.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KAPMac.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -20,15 +37,26 @@
 		66A55EA021E48EF9008D29A2 /* NSSpeechSynthesizer+KAPAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSSpeechSynthesizer+KAPAdditions.m"; sourceTree = "<group>"; };
 		66A55EA221E48F07008D29A2 /* KAPMacSpeechSynthesizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KAPMacSpeechSynthesizer.h; sourceTree = "<group>"; };
 		66A55EA321E48F07008D29A2 /* KAPMacSpeechSynthesizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KAPMacSpeechSynthesizer.m; sourceTree = "<group>"; };
-		66A55EA721E496B7008D29A2 /* KAPMacVoice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KAPMacVoice.h; sourceTree = "<group>"; };
-		66A55EA821E49936008D29A2 /* KAPMacVoice.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = KAPMacVoice.mm; sourceTree = "<group>"; };
+		66A55EA721E496B7008D29A2 /* KAPVoice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KAPVoice.h; sourceTree = "<group>"; };
+		66A55EA821E49936008D29A2 /* KAPVoice.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = KAPVoice.mm; sourceTree = "<group>"; };
 		66A55EAA21E49FB0008D29A2 /* KAPMac.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KAPMac.h; sourceTree = "<group>"; };
 		66A55EB121E4D6DB008D29A2 /* KAPSpeechSynthesizer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KAPSpeechSynthesizer.h; sourceTree = "<group>"; };
 		66A55EB221E4D6DB008D29A2 /* KAPSpeechSynthesizer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KAPSpeechSynthesizer.m; sourceTree = "<group>"; };
+		66BA332A2253604C0034572D /* libKAPiOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libKAPiOS.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		66BA332C2253604C0034572D /* KAPiOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KAPiOS.h; sourceTree = "<group>"; };
+		66BA3337225364170034572D /* KAPiOSSpeechSynthesizer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KAPiOSSpeechSynthesizer.h; sourceTree = "<group>"; };
+		66BA3338225364170034572D /* KAPiOSSpeechSynthesizer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KAPiOSSpeechSynthesizer.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		66A55E9021E48EAE008D29A2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		66BA33272253604C0034572D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -41,7 +69,9 @@
 		66A55E8A21E48EAE008D29A2 = {
 			isa = PBXGroup;
 			children = (
-				66A55E9521E48EAE008D29A2 /* KAPMac */,
+				66A55E9521E48EAE008D29A2 /* KAP */,
+				66BA3336225363E80034572D /* KAPMac */,
+				66BA332B2253604C0034572D /* KAPiOS */,
 				66A55E9421E48EAE008D29A2 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -50,21 +80,20 @@
 			isa = PBXGroup;
 			children = (
 				66A55E9321E48EAE008D29A2 /* KAPMac.bundle */,
+				66BA332A2253604C0034572D /* libKAPiOS.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		66A55E9521E48EAE008D29A2 /* KAPMac */ = {
+		66A55E9521E48EAE008D29A2 /* KAP */ = {
 			isa = PBXGroup;
 			children = (
-				66A55EAA21E49FB0008D29A2 /* KAPMac.h */,
-				66A55EA721E496B7008D29A2 /* KAPMacVoice.h */,
-				66A55EA821E49936008D29A2 /* KAPMacVoice.mm */,
+				66A55EA721E496B7008D29A2 /* KAPVoice.h */,
+				66A55EA821E49936008D29A2 /* KAPVoice.mm */,
 				66A55E9E21E48EF9008D29A2 /* Categories */,
 				66A55E9D21E48EF9008D29A2 /* Voice */,
-				66A55E9C21E48EDB008D29A2 /* Resources */,
 			);
-			path = KAPMac;
+			path = KAP;
 			sourceTree = "<group>";
 		};
 		66A55E9C21E48EDB008D29A2 /* Resources */ = {
@@ -80,8 +109,8 @@
 			children = (
 				66A55EB121E4D6DB008D29A2 /* KAPSpeechSynthesizer.h */,
 				66A55EB221E4D6DB008D29A2 /* KAPSpeechSynthesizer.m */,
-				66A55EA221E48F07008D29A2 /* KAPMacSpeechSynthesizer.h */,
-				66A55EA321E48F07008D29A2 /* KAPMacSpeechSynthesizer.m */,
+				66BA3335225360870034572D /* iOS */,
+				66BA33342253607D0034572D /* Mac */,
 			);
 			path = Voice;
 			sourceTree = "<group>";
@@ -93,6 +122,41 @@
 				66A55EA021E48EF9008D29A2 /* NSSpeechSynthesizer+KAPAdditions.m */,
 			);
 			path = Categories;
+			sourceTree = "<group>";
+		};
+		66BA332B2253604C0034572D /* KAPiOS */ = {
+			isa = PBXGroup;
+			children = (
+				66BA332C2253604C0034572D /* KAPiOS.h */,
+			);
+			path = KAPiOS;
+			sourceTree = "<group>";
+		};
+		66BA33342253607D0034572D /* Mac */ = {
+			isa = PBXGroup;
+			children = (
+				66A55EA221E48F07008D29A2 /* KAPMacSpeechSynthesizer.h */,
+				66A55EA321E48F07008D29A2 /* KAPMacSpeechSynthesizer.m */,
+			);
+			path = Mac;
+			sourceTree = "<group>";
+		};
+		66BA3335225360870034572D /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				66BA3337225364170034572D /* KAPiOSSpeechSynthesizer.h */,
+				66BA3338225364170034572D /* KAPiOSSpeechSynthesizer.m */,
+			);
+			path = iOS;
+			sourceTree = "<group>";
+		};
+		66BA3336225363E80034572D /* KAPMac */ = {
+			isa = PBXGroup;
+			children = (
+				66A55EAA21E49FB0008D29A2 /* KAPMac.h */,
+				66A55E9C21E48EDB008D29A2 /* Resources */,
+			);
+			path = KAPMac;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -115,6 +179,23 @@
 			productReference = 66A55E9321E48EAE008D29A2 /* KAPMac.bundle */;
 			productType = "com.apple.product-type.bundle";
 		};
+		66BA33292253604C0034572D /* KAPiOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 66BA33322253604C0034572D /* Build configuration list for PBXNativeTarget "KAPiOS" */;
+			buildPhases = (
+				66BA33262253604C0034572D /* Sources */,
+				66BA33272253604C0034572D /* Frameworks */,
+				66BA33282253604C0034572D /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = KAPiOS;
+			productName = KAPiOS;
+			productReference = 66BA332A2253604C0034572D /* libKAPiOS.a */;
+			productType = "com.apple.product-type.library.static";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -127,6 +208,9 @@
 				TargetAttributes = {
 					66A55E9221E48EAE008D29A2 = {
 						CreatedOnToolsVersion = 10.1;
+					};
+					66BA33292253604C0034572D = {
+						CreatedOnToolsVersion = 10.2;
 					};
 				};
 			};
@@ -143,6 +227,7 @@
 			projectRoot = "";
 			targets = (
 				66A55E9221E48EAE008D29A2 /* KAPMac */,
+				66BA33292253604C0034572D /* KAPiOS */,
 			);
 		};
 /* End PBXProject section */
@@ -164,8 +249,18 @@
 			files = (
 				66A55EA121E48EF9008D29A2 /* NSSpeechSynthesizer+KAPAdditions.m in Sources */,
 				66A55EB321E4D6DB008D29A2 /* KAPSpeechSynthesizer.m in Sources */,
-				66A55EAD21E4C021008D29A2 /* KAPMacVoice.mm in Sources */,
+				66A55EAD21E4C021008D29A2 /* KAPVoice.mm in Sources */,
 				66A55EAC21E4C01D008D29A2 /* KAPMacSpeechSynthesizer.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		66BA33262253604C0034572D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				66BA333A225364520034572D /* KAPiOSSpeechSynthesizer.m in Sources */,
+				66BA333B2253A7D90034572D /* KAPVoice.mm in Sources */,
+				66BA3333225360650034572D /* KAPSpeechSynthesizer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -289,8 +384,13 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 4JUY73SH5E;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					TARGET_MAC,
+					"DEBUG=1",
+				);
 				INFOPLIST_FILE = KAPMac/Resources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				OTHER_CFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.klemens.KAPMac;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -304,12 +404,53 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 4JUY73SH5E;
+				GCC_PREPROCESSOR_DEFINITIONS = TARGET_MAC;
 				INFOPLIST_FILE = KAPMac/Resources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				OTHER_CFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.klemens.KAPMac;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				WRAPPER_EXTENSION = bundle;
+			};
+			name = Release;
+		};
+		66BA33302253604C0034572D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4JUY73SH5E;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+					TARGET_IOS,
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		66BA33312253604C0034572D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4JUY73SH5E;
+				GCC_PREPROCESSOR_DEFINITIONS = TARGET_IOS;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
@@ -330,6 +471,15 @@
 			buildConfigurations = (
 				66A55E9A21E48EAE008D29A2 /* Debug */,
 				66A55E9B21E48EAE008D29A2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		66BA33322253604C0034572D /* Build configuration list for PBXNativeTarget "KAPiOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				66BA33302253604C0034572D /* Debug */,
+				66BA33312253604C0034572D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -10,8 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-NSString *const kKAPSpeechSynthesizerPreferenceLanguageCode = @"com.klemens.accessibilityplugin.speech.language";
-NSString *const kKAPSpeechSynthesizerPreferenceGenderPreference = @"com.klemens.accessibilityplugin.speech.gender";
+
 
 
 @interface KAPMacSpeechSynthesizer () {
@@ -26,7 +25,7 @@ NSString *const kKAPSpeechSynthesizerPreferenceGenderPreference = @"com.klemens.
 
 #pragma mark - Class methods
 
-+(NSArray <NSString *> *)availableLanguages
++ (NSArray<NSString *> *)availableLanguages
 {
     NSMutableSet<NSString *> *languageIdentifiers = [[NSMutableSet alloc] init];
     

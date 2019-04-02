@@ -26,6 +26,27 @@ public class KAPSpeechSynthesizer {
 
     [DllImport("KAPMac")]
     private static extern bool VoiceIsPaused();
+#elif UNITY_IOS
+    [DllImport ("__Internal")]
+    private static extern void VoiceSetup();
+
+    [DllImport ("__Internal")]
+    private static extern void VoiceStartSpeaking(string cString);
+
+    [DllImport ("__Internal")]
+    private static extern void VoicePauseSpeaking();
+
+    [DllImport ("__Internal")]
+    private static extern void VoiceContinueSpeaking();
+
+    [DllImport ("__Internal")]
+    private static extern void VoiceStopSpeaking();
+
+    [DllImport ("__Internal")]
+    private static extern bool VoiceIsSpeaking();
+
+    [DllImport ("__Internal")]
+    private static extern bool VoiceIsPaused();
 #else
     // Dummy Implementations for non supported platforms
     private void VoiceSetup() { }

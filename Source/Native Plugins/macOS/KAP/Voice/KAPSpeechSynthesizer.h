@@ -10,6 +10,9 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+extern NSString *const kKAPSpeechSynthesizerPreferenceLanguageCode;
+extern NSString *const kKAPSpeechSynthesizerPreferenceGenderPreference;
+
 /// Key for language code (ISO 639-1) as NSString value
 /// This value has the highest priority
 extern NSString *const kKAPSpeechSynthesizerPreferenceLanguageCode;
