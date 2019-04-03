@@ -12,14 +12,22 @@ KAP is an open source project and can be used without any fees. If any feature i
 
 Here are some useful links!
 
+### General Info
+
 [Game Accessibility Guidelines](http://gameaccessibilityguidelines.com)
 
 [Accessibility on Apple Platforms](https://www.apple.com/lae/accessibility/)
 
-[AppleVis](https://www.applevis.com): Community-powered website for blind and low-vision users of Apple devices
+### Videos
 
-Game Maker's Toolkit: Designing for Disability
+[Extra Credits: Accessibility - The Curb Cut Effect](https://www.youtube.com/watch?v=PJoax1Z1x4Y)
+
+#### Game Maker's Toolkit: Designing for Disability
 - [Making Games Better for Players with Motor Disabilities](https://www.youtube.com/watch?v=Ufe0i26DGiA&list=PLc38fcMFcV_vvWOhMDriBlVocTZ8mKQzR)
 - [Making Games Better for Gamers with Colourblindness & Low Vision](https://www.youtube.com/watch?v=xrqdU4cZaLw&index=2&list=PLc38fcMFcV_vvWOhMDriBlVocTZ8mKQzR)
 - [Making Games Better for the Deaf and Hard of Hearing](https://www.youtube.com/watch?v=4NGe4dzlukc&index=3&list=PLc38fcMFcV_vvWOhMDriBlVocTZ8mKQzR)
 - [Making Games Better for Players with Cognitive Disabilities](https://www.youtube.com/watch?v=ObhvacfIOg0&list=PLc38fcMFcV_vvWOhMDriBlVocTZ8mKQzR&index=4)
+
+### Communities
+
+[AppleVis](https://www.applevis.com): Community-powered website for blind and low-vision users of Apple devices
