@@ -1,7 +1,5 @@
 ﻿using UnityEngine;
 
-// Based on the "Mobile Swipe Detection [Tutorial]" by N3K EN
-// https://www.youtube.com/watch?v=poeXGuQ7eUo
 public class KAPMobileInput : KAPInput
 {
     private Vector3 touchStartPosition;
