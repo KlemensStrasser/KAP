@@ -44,8 +44,11 @@ NS_ASSUME_NONNULL_BEGIN
 {
     self = [super init];
     if (self) {
-        // nil = defaultVoice
         _speechSynthesizer = [[AVSpeechSynthesizer alloc] init];
+        
+        // Set default values here.
+        volume = 1.0;
+        rate = 0.5;
     }
     return self;
 }
@@ -58,6 +61,10 @@ NS_ASSUME_NONNULL_BEGIN
         
         _voice = voice;
         _speechSynthesizer = synthezier;
+        
+        // Set default values here.
+        volume = 1.0;
+        rate = 0.5;
     }
     return self;
 }
@@ -75,6 +82,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void)startSpeakingString:(NSString *)string
 {
+    [[self speechSynthesizer] stopSpeakingAtBoundary:AVSpeechBoundaryImmediate];
+    
     if(string != nil) {
         AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:string];
         [utterance setRate:[self rate]];
