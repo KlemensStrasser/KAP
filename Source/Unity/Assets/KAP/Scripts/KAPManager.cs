@@ -138,7 +138,6 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
 
     private void OnGUI()
     {
-        // TODO: Only call when changed
         DrawRect();
     }
 
@@ -161,8 +160,6 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
             KAPVisualiser.DrawRectBorder(outerFrame, borderWidth, Color.white);
         }
     }
-
-
 
     private Texture2D MakeTex(int width, int height, Color col)
     {
@@ -223,7 +220,37 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
 
     public void FocusElementAtPosition(Vector2 position)
     {
-        throw new System.NotImplementedException();
+        int touchedElementIndex = IndexForTopElementAtPosition(position);
+
+        if (touchedElementIndex != -1 && selectedElementIndex != touchedElementIndex)
+        {
+            UpdateSelectedElementIndex(touchedElementIndex);
+            PlayFocusSound();
+            AnnouceElementAtSelectedIndex(true);
+        }
+    }
+
+    private int IndexForTopElementAtPosition(Vector2 position)
+    {
+        int index = -1;
+
+        for(int i = 0; i < accessibilityElements.Length; i++) 
+        {
+            KAPElement element = accessibilityElements[i];
+            if(element.frame.Contains(position))
+            {
+                if(index == -1)
+                {
+                    index = i;
+                }
+                else
+                {
+                    // TODO: If both elments Overlap, get the one that is in front!
+                }
+            }
+        }
+
+        return index;
     }
 
     public void HandleEscapeGesture()
