@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class KAPManager : MonoBehaviour, IKAPInputReceiver
 {
@@ -13,6 +14,8 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
     private AudioClip focusAudioClip;
     private AudioClip blockAudioClip;
     private AudioClip selectAudioClip;
+
+    private Image fuImage;
 
     KAPInput input;
     KAPElement[] accessibilityElements;
@@ -34,6 +37,12 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
 
         // TODO: Settings, like language, volume etc.
         speechSynthesizer = new KAPSpeechSynthesizer();
+
+        Sprite imageSprite = Resources.Load<Sprite>("Sprites/BorderSprite") as Sprite;
+
+        fuImage = gameObject.AddComponent<Image>();
+        fuImage.sprite = imageSprite;
+        fuImage.fillCenter = false;
 
         LoadAccessibilityElements();
 
@@ -139,15 +148,33 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
 
         if(selectedElement != null) 
         {
-            Texture2D texture = new Texture2D(1, 1);
-            texture.SetPixel(0 , 0, Color.red);
-            texture.Apply();
-
+            float borderWidth = 2;
             Rect frame = selectedElement.frame;
+            KAPVisualiser.DrawRectBorder(frame, borderWidth, Color.white);
 
-            GUI.skin.box.normal.background = texture;
-            GUI.Box(frame,GUIContent.none);
+            Rect innerFrame = new Rect(
+                frame.x + borderWidth,
+                frame.y + borderWidth,
+                frame.width - borderWidth * 2,
+                frame.height - borderWidth * 2);
+
+            KAPVisualiser.DrawRectBorder(innerFrame, borderWidth, Color.black);
         }
+    }
+
+
+
+    private Texture2D MakeTex(int width, int height, Color col)
+    {
+        Color[] pix = new Color[width * height];
+        for (int i = 0; i < pix.Length; ++i)
+        {
+            pix[i] = col;
+        }
+        Texture2D result = new Texture2D(width, height);
+        result.SetPixels(pix);
+        result.Apply();
+        return result;
     }
 
     #region IKAPInputReceiver
