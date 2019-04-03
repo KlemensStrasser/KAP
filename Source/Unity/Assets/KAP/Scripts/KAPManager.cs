@@ -150,15 +150,15 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
         {
             float borderWidth = 2;
             Rect frame = selectedElement.frame;
-            KAPVisualiser.DrawRectBorder(frame, borderWidth, Color.white);
+            KAPVisualiser.DrawRectBorder(frame, borderWidth, Color.black);
 
-            Rect innerFrame = new Rect(
-                frame.x + borderWidth,
-                frame.y + borderWidth,
-                frame.width - borderWidth * 2,
-                frame.height - borderWidth * 2);
+            Rect outerFrame = new Rect(
+                frame.x - borderWidth,
+                frame.y - borderWidth,
+                frame.width + borderWidth * 2,
+                frame.height + borderWidth * 2);
 
-            KAPVisualiser.DrawRectBorder(innerFrame, borderWidth, Color.black);
+            KAPVisualiser.DrawRectBorder(outerFrame, borderWidth, Color.white);
         }
     }
 

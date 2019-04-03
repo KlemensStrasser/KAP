@@ -221,8 +221,9 @@ public class KAPElement : MonoBehaviour
         {
             // TODO: Size.
             Vector2 screenPosition = RectTransformUtility.WorldToScreenPoint(null, rectTransform.position);
-            screenPosition.y = Screen.height - screenPosition.y;
-            rect = new Rect(screenPosition.x, screenPosition.y, 20, 20);
+            screenPosition.y = Screen.height - screenPosition.y - rectTransform.rect.height / 2;
+            screenPosition.x = screenPosition.x - rectTransform.rect.width/ 2;
+            rect = new Rect(screenPosition.x, screenPosition.y, rectTransform.rect.width, rectTransform.rect.height);
         }
         else 
         {

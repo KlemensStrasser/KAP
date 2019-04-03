@@ -30,12 +30,12 @@ public static class KAPVisualiser
     public static void DrawRectBorder(Rect rect, float borderWidth, Color color)
     {
         // Top
-        DrawRect(new Rect(rect.xMin, rect.yMin, rect.width, borderWidth), color);
+        DrawRect(new Rect(rect.xMin - borderWidth / 2, rect.yMin - borderWidth, rect.width + borderWidth / 2, borderWidth), color);
         // Left
-        DrawRect(new Rect(rect.xMin, rect.yMin, borderWidth, rect.height), color);
+        DrawRect(new Rect(rect.xMin - borderWidth / 2, rect.yMin - borderWidth, borderWidth, rect.height + borderWidth), color);
         // Right
-        DrawRect(new Rect(rect.xMax - borderWidth, rect.yMin, borderWidth, rect.height), color);
+        DrawRect(new Rect(rect.xMax, rect.yMin - borderWidth, borderWidth, rect.height + borderWidth), color);
         // Bottom
-        DrawRect(new Rect(rect.xMin, rect.yMax - borderWidth, rect.width, borderWidth), color);
+        DrawRect(new Rect(rect.xMin - borderWidth / 2, rect.yMax - borderWidth / 2, rect.width + borderWidth * 1.5f, borderWidth), color);
     }
 }
