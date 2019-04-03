@@ -17,20 +17,22 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
     KAPInput input;
     KAPElement[] accessibilityElements;
 
-    // TODO: Language
-
     void Start()
     {
-        // TODO: Add the correct input for the current device
-        input = gameObject.AddComponent<KAPKeyboardInput>();
+#if UNITY_STANDALONE || UNITY_EDITOR
+        input = gameObject.AddComponent<KAPDesktopInput>();
         input.inputReceiver = this;
+#elif UNITY_IOS || UNITY_ANDROID
+        input = gameObject.AddComponent<KAPMobileInput>();
+        input.inputReceiver = this;
+#endif
 
         soundEffectAudioSource = gameObject.AddComponent<AudioSource>();
         focusAudioClip = Resources.Load("Audio/kap_focus") as AudioClip;
         blockAudioClip = Resources.Load("Audio/kap_block") as AudioClip;
         selectAudioClip = Resources.Load("Audio/kap_select") as AudioClip;
 
-        // TODO: Settings
+        // TODO: Settings, like language, volume etc.
         speechSynthesizer = new KAPSpeechSynthesizer();
 
         LoadAccessibilityElements();

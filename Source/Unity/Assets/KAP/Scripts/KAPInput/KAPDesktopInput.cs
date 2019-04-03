@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class KAPKeyboardInput : KAPInput {
+public class KAPDesktopInput : KAPInput {
     
     /// Keycode of the key used to move to the next element
     public KeyCode nextElementKey;
