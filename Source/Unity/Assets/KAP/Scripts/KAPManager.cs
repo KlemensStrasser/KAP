@@ -8,6 +8,7 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
 {
     private int selectedElementIndex;
     private KAPSpeechSynthesizer speechSynthesizer;
+    private KAPVisualizer kapVisualizer;
 
     private AudioSource soundEffectAudioSource;
 
@@ -18,10 +19,12 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
     KAPInput input;
     KAPElement[] accessibilityElements;
 
-    private Text statusText;
+// Only for testing, remove this in the future
+private Text statusText;
 
     void Start()
     {
+        // Create the correct Input depending on the available device
 #if UNITY_STANDALONE || UNITY_EDITOR
         input = gameObject.AddComponent<KAPDesktopInput>();
         input.inputReceiver = this;
@@ -29,7 +32,7 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
         input = gameObject.AddComponent<KAPMobileInput>();
         input.inputReceiver = this;
 #endif
-
+        // Initialize Sounds
         soundEffectAudioSource = gameObject.AddComponent<AudioSource>();
         focusAudioClip = Resources.Load("Audio/kap_focus") as AudioClip;
         blockAudioClip = Resources.Load("Audio/kap_block") as AudioClip;
@@ -38,16 +41,27 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
         // TODO: Settings, like language, volume etc.
         speechSynthesizer = new KAPSpeechSynthesizer();
 
-        LoadAccessibilityElements();
+        // Initialize Visualizer
+        GameObject visualizerObject = Resources.Load<GameObject>("Prefabs/KAPVisualizer");
+        visualizerObject = Instantiate<GameObject>(visualizerObject);
+        visualizerObject.name = "KAPVisualizer";
+        if(visualizerObject != null) 
+        {
+            kapVisualizer = visualizerObject.GetComponent<KAPVisualizer>();
+        }
 
+        // Fetch Elements
+        LoadAccessibilityElements();
         selectedElementIndex = -1;
 
+        // Annouce the very first one.
         if (accessibilityElements != null && accessibilityElements.Length > 0)
         {
             UpdateSelectedElementIndex(0);
             AnnouceElementAtSelectedIndex(true);
         }
 
+        // Testing. TODO: Remove!
         GameObject textObject = GameObject.Find("StatusText");
         if(textObject != null)
         {
@@ -83,7 +97,6 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
     }
 
     #region Sounds
-
 
     private void AnnouceElementAtSelectedIndex(bool includeDescription)
     {
@@ -136,43 +149,20 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
 
     #endregion
 
+    #region Visualization
+
     private void OnGUI()
     {
-        DrawRect();
-    }
-
-    public void DrawRect() 
-    {
+        // Update visualizer
         KAPElement selectedElement = SelectedElement();
 
-        if(selectedElement != null) 
+        if(selectedElement != null && kapVisualizer != null)
         {
-            float borderWidth = 2;
-            Rect frame = selectedElement.frame;
-            KAPVisualiser.DrawRectBorder(frame, borderWidth, Color.black);
-
-            Rect outerFrame = new Rect(
-                frame.x - borderWidth,
-                frame.y - borderWidth,
-                frame.width + borderWidth * 2,
-                frame.height + borderWidth * 2);
-
-            KAPVisualiser.DrawRectBorder(outerFrame, borderWidth, Color.white);
+            kapVisualizer.DrawIndicatorForElement(selectedElement);
         }
     }
 
-    private Texture2D MakeTex(int width, int height, Color col)
-    {
-        Color[] pix = new Color[width * height];
-        for (int i = 0; i < pix.Length; ++i)
-        {
-            pix[i] = col;
-        }
-        Texture2D result = new Texture2D(width, height);
-        result.SetPixels(pix);
-        result.Apply();
-        return result;
-    }
+    #endregion
 
     #region IKAPInputReceiver
 

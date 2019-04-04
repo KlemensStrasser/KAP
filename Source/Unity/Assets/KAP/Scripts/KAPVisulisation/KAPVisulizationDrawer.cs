@@ -2,7 +2,7 @@
 
 // Based on RTS Style Unit Selection in Unity 5 by Jeff Zimmer
 // Link https://hyunkell.com/blog/rts-style-unit-selection-in-unity-5/
-public static class KAPVisualiser
+public static class KAPVisulizationDrawer
 {
     static Texture2D _borderTexture;
     public static Texture2D borderTexture
