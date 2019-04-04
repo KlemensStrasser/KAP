@@ -1,86 +1,132 @@
 ﻿using UnityEngine;
 
-enum TouchAction {None, SwipeLeft, SwipeRight, Browsing }
+enum TouchAction {None, SwipeLeft, SwipeRight, Browsing, Tapping }
 
 public class KAPMobileInput : KAPInput
 {
     // The maximum time to recognize the touch+move as a gesture (like a swipe)
-    static float MaximumGestureTime = 0.25f; 
+    static float MaximumSwipeGestureTime = 0.25f;
+    static float MaximumTapTime = 0.175f;
+    static float MaximumTapCooldownTime = 0.1f;
 
     private Vector3 touchStartPosition;
     private Vector2 swipeResistance = new Vector2(50f, 50f);
 
     private float touchDownTime;
 
+    public int tapCount = 0;
+    private float timeSinceLastTap = 0.0f;
+
     private TouchAction currentTouchAction = TouchAction.None;
 
     void Update()
     {
-        Touch touch = Input.GetTouch(0);
-
         float currentTime = Time.time;
+        bool touchActive = false;
 
-        switch (touch.phase)
+        if (Input.touchCount > 0)
         {
-            // Record initial touch position.
-            case TouchPhase.Began:
-                touchStartPosition = touch.position;
-                touchDownTime = currentTime;
-                break;
+            Touch touch = Input.GetTouch(0);
+            touchActive = true;
 
-            case TouchPhase.Moved:
-                if(currentTime - touchDownTime > MaximumGestureTime) {
-                    currentTouchAction = TouchAction.Browsing;
-                }
+            switch (touch.phase)
+            {
+                // Record initial touch position.
+                case TouchPhase.Began:
+                    touchStartPosition = touch.position;
+                    touchDownTime = currentTime;
+                    break;
 
-                break;
+                case TouchPhase.Moved:
+                    if (currentTime - touchDownTime > MaximumSwipeGestureTime)
+                    {
+                        currentTouchAction = TouchAction.Browsing;
+                    }
 
-            // Report that a direction has been chosen when the finger is lifted.
-            case TouchPhase.Ended:
-                if (currentTime - touchDownTime <= MaximumGestureTime)
-                {
+                    break;
+
+                // Report that a direction has been chosen when the finger is lifted.
+                case TouchPhase.Ended:
+
                     Vector3 touchLiftPosition = touch.position;
                     Vector2 swipeDelta = touchStartPosition - touchLiftPosition;
 
-                    if (swipeDelta.x > swipeResistance.x)
+                    float timeDelta = currentTime - touchDownTime;
+
+                    if (timeDelta <= MaximumTapTime && Mathf.Abs(swipeDelta.x) <= swipeResistance.x)
                     {
-                        currentTouchAction = TouchAction.SwipeLeft;
+                        tapCount += 1;
+                        timeSinceLastTap = currentTime;
+                        currentTouchAction = TouchAction.Tapping;
                     }
-                    else if (swipeDelta.x < -swipeResistance.x)
+                    else if (currentTime - touchDownTime <= MaximumSwipeGestureTime)
                     {
-                        currentTouchAction = TouchAction.SwipeRight;
+                        if (swipeDelta.x > swipeResistance.x)
+                        {
+                            currentTouchAction = TouchAction.SwipeLeft;
+                        }
+                        else if (swipeDelta.x < -swipeResistance.x)
+                        {
+                            currentTouchAction = TouchAction.SwipeRight;
+                        }
+                    }
+                    else if (currentTouchAction == TouchAction.Browsing)
+                    {
+                        currentTouchAction = TouchAction.None;
                     }
 
-                } 
-                else if(currentTouchAction == TouchAction.Browsing)
-                {
-                    currentTouchAction = TouchAction.None;
-                }
+                    break;
+            }
 
-                break;
-        }
-
-        if (inputReceiver != null)
-        {
-            switch (currentTouchAction)
+            if (inputReceiver != null)
             {
-                case TouchAction.None:
-                    break;
-                case TouchAction.SwipeLeft:
-                    inputReceiver.FocusPreviousElement();
-                    currentTouchAction = TouchAction.None;
-                    break;
-                case TouchAction.SwipeRight:
-                    inputReceiver.FocusNextElement();
-                    currentTouchAction = TouchAction.None;
-                    break;
-                case TouchAction.Browsing:
-                    Vector2 point = touch.position;
-                    point.y = Screen.height - point.y;
-                    inputReceiver.FocusElementAtPosition(point);
-                    break;
-
+                switch (currentTouchAction)
+                {
+                    case TouchAction.None:
+                        break;
+                    case TouchAction.SwipeLeft:
+                        inputReceiver.FocusPreviousElement();
+                        currentTouchAction = TouchAction.None;
+                        break;
+                    case TouchAction.SwipeRight:
+                        inputReceiver.FocusNextElement();
+                        currentTouchAction = TouchAction.None;
+                        break;
+                    case TouchAction.Browsing:
+                        Vector2 point = touch.position;
+                        point.y = Screen.height - point.y;
+                        inputReceiver.FocusElementAtPosition(point);
+                        break;
+                    case TouchAction.Tapping:
+                        // This needs to be handled outside
+                        // The tapping action will be triggered when the last touch is already over. 
+                        // And when the touch is over, Input.touchCount > 0 fails.
+                        break;
+                }
             }
         }
+
+        if (!touchActive && currentTouchAction == TouchAction.Tapping && currentTime - timeSinceLastTap >= MaximumTapCooldownTime)
+        {
+            if (tapCount == 2)
+            {
+                inputReceiver.SelectFocusedElement();
+            }
+            else
+            {
+                // Handle tripple tpuches and stuff
+            }
+            currentTouchAction = TouchAction.None;
+        }
+
+        if (currentTouchAction != TouchAction.Tapping)
+        {
+            tapCount = 0;
+        }
+    }
+
+    override public string GetStatusText() 
+    {
+        return currentTouchAction.ToString() +  " - " + tapCount.ToString();
     }
 }
