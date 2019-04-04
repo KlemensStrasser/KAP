@@ -45,4 +45,9 @@ public class KAPDesktopInput : KAPInput {
             Debug.LogWarning("The KAPKeyboardInput has no input receiver and thus, cannot forward any input.");
         }
 	}
+
+    override public string GetStatusText()
+    {
+        return "Nothing";
+    }
 }

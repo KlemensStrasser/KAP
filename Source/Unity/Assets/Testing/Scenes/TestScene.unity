@@ -314,9 +314,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 211d5d5f46d24439da52ed8da0c20c3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  label: Sprite
-  value: selected
-  description: Right
+  label: Right
+  value: 
+  description: Sprite
   becomeFocusedEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -1474,7 +1474,7 @@ GameObject:
   - component: {fileID: 1968234342}
   - component: {fileID: 1968234341}
   m_Layer: 5
-  m_Name: Text (3)
+  m_Name: StatusText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

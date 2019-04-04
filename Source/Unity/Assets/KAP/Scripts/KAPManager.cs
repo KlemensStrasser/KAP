@@ -15,10 +15,10 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
     private AudioClip blockAudioClip;
     private AudioClip selectAudioClip;
 
-    private Image fuImage;
-
     KAPInput input;
     KAPElement[] accessibilityElements;
+
+    private Text statusText;
 
     void Start()
     {
@@ -38,12 +38,6 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
         // TODO: Settings, like language, volume etc.
         speechSynthesizer = new KAPSpeechSynthesizer();
 
-        Sprite imageSprite = Resources.Load<Sprite>("Sprites/BorderSprite") as Sprite;
-
-        fuImage = gameObject.AddComponent<Image>();
-        fuImage.sprite = imageSprite;
-        fuImage.fillCenter = false;
-
         LoadAccessibilityElements();
 
         selectedElementIndex = -1;
@@ -52,6 +46,12 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
         {
             UpdateSelectedElementIndex(0);
             AnnouceElementAtSelectedIndex(true);
+        }
+
+        GameObject textObject = GameObject.Find("StatusText");
+        if(textObject != null)
+        {
+            statusText = textObject.GetComponent<Text>();
         }
     }
 
@@ -339,4 +339,18 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
     }
 
     #endregion
+
+    private void Update()
+    {
+        if(statusText != null && input != null) 
+        {
+            string currentStatusString = statusText.text;
+            string newStatusString = input.GetStatusText();
+
+            if(currentStatusString == null || !currentStatusString.Equals(newStatusString)) 
+            {
+                statusText.text = newStatusString;
+            }
+        }
+    }
 }
