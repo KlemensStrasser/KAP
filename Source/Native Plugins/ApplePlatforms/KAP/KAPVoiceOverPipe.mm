@@ -54,6 +54,22 @@ void KAPAddHook(KAPAccessibilityHook hook)
     }
 }
 
+void KAPAddHooks(KAPAccessibilityHook *hooks, int size)
+{
+    KAPVoiceOverBridgeViewController *bridgeViewController = getBridgeViewController();
+
+    for(int i = 0; i < size; i++) {
+        
+        KAPAccessibilityHook hook = hooks[i];
+        NSString *label = NSStringFromCString(hook.label);
+        
+        CGFloat scale = [[UIScreen mainScreen] scale];
+        CGRect frame = CGRectMake(hook.x / scale, hook.y / scale, hook.width / scale, hook.height / scale);
+        
+        [bridgeViewController addCustomViewWithFrame:frame label:label];
+    }
+}
+
 void KAPClearAllHooks()
 {
     KAPVoiceOverBridgeViewController *bridgeViewController = getBridgeViewController();

@@ -12,6 +12,7 @@
 extern "C" {
     
     struct KAPAccessibilityHook {
+        int instanceID;
         float x;
         float y;
         float width;
@@ -22,6 +23,7 @@ extern "C" {
     bool KAPIsScreenReaderRunning();
     
     void KAPAddHook(KAPAccessibilityHook);
+    void KAPAddHooks(KAPAccessibilityHook*, int);
     
     void KAPClearAllHooks();
 }

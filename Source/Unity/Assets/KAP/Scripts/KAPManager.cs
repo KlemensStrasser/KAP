@@ -92,11 +92,13 @@ private Text statusText;
 
         if (nativeScreenReaderBridge.Available())
         {
-            foreach (KAPElement element in accessibilityElements)
-            {
-                Rect frame = new Rect(element.frame.position.x, element.frame.position.y, element.frame.size.x, element.frame.size.y);
-                nativeScreenReaderBridge.AddHook(frame, element.label);
-            }
+            //foreach (KAPElement element in accessibilityElements)
+            //{
+            //    Rect frame = new Rect(element.frame.position.x, element.frame.position.y, element.frame.size.x, element.frame.size.y);
+            //    nativeScreenReaderBridge.AddHook(frame, element.label);
+            //}
+
+            nativeScreenReaderBridge.AddHooksForKAPElements(accessibilityElements);
         } 
     }
 
