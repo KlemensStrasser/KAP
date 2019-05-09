@@ -90,24 +90,14 @@ private Text statusText;
             SortByFrame();
         }
 
-        // TODO: This is just for test, should probably not work. Maybe remove that 
-
-        Debug.Log("Screen Dimension w x h: " + Screen.width + " " + Screen.height);
         if (nativeScreenReaderBridge.Available())
         {
-            int X = 0;
-
             foreach (KAPElement element in accessibilityElements)
             {
                 Rect frame = new Rect(element.frame.position.x, element.frame.position.y, element.frame.size.x, element.frame.size.y);
-
-                Debug.Log("OG - oosition " + frame.ToString());
-
                 nativeScreenReaderBridge.AddHook(frame, element.label);
             }
-        } else {
-            Debug.Log("NAAAAAAT");
-        }
+        } 
     }
 
     void SortByFrame()
