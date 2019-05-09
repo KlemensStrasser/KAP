@@ -39,40 +39,19 @@ KAPVoiceOverBridgeViewController *getBridgeViewController() {
     return bridgeViewController;
 }
 
-
-void KAPAddHookAtPosition(float x, float y, float width, float height, const char *cLabel)
+void KAPAddHook(KAPAccessibilityHook hook)
 {
-    NSString *label = NSStringFromCString(cLabel);
+    NSString *label = NSStringFromCString(hook.label);
     
     KAPVoiceOverBridgeViewController *bridgeViewController = getBridgeViewController();
     if (bridgeViewController != nil) {
         
         // Unity hands over the correct screen coordinates, but on iOS we need the coordinates without the scale applied
         CGFloat scale = [[UIScreen mainScreen] scale];
-        CGRect frame = CGRectMake(x / scale, y / scale, width / scale, height / scale);
-        
-        NSLog(@"Frame: %@", NSStringFromCGRect(frame));
+        CGRect frame = CGRectMake(hook.x / scale, hook.y / scale, hook.width / scale, hook.height / scale);
         
         [bridgeViewController addCustomViewWithFrame:frame label:label];
     }
-    
-//    id<UIApplicationDelegate> appDelegate = [[UIApplication sharedApplication] delegate];
-//
-//    // This is super hacky.
-//    if([appDelegate isKindOfClass:[NSObject class]]) {
-//        NSObject *appDelegateObject = (NSObject *)appDelegate;
-//
-//        // We've set our bridgeViewController as the rootController.
-//        UIViewController *rootViewController = [appDelegateObject valueForKey:@"bridgeViewController"];
-//
-//        if([rootViewController isKindOfClass:[KAPVoiceOverBridgeViewController class]]) {
-//            KAPVoiceOverBridgeViewController *bridgeViewController = (KAPVoiceOverBridgeViewController *)rootViewController;
-//
-//            CGRect frame = CGRectMake(x, y, width, height);
-//
-//            [bridgeViewController addCustomViewWithFrame:frame label:label];
-//        }
-//    }
 }
 
 void KAPClearAllHooks()

@@ -10,9 +10,18 @@
 //typedef void (*INT_CALLBACK)(int);
 
 extern "C" {
+    
+    struct KAPAccessibilityHook {
+        float x;
+        float y;
+        float width;
+        float height;
+        const char *label;
+    };
+    
     bool KAPIsScreenReaderRunning();
     
-    void KAPAddHookAtPosition(float, float, float, float, const char *);
+    void KAPAddHook(KAPAccessibilityHook);
     
     void KAPClearAllHooks();
 }
