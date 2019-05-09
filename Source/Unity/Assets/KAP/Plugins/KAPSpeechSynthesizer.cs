@@ -77,6 +77,7 @@ public class KAPSpeechSynthesizer {
         } 
         else 
         {
+            // TODO: Log Error
             StopSpeaking();
         }
     }

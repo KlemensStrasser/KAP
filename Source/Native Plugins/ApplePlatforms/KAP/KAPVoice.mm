@@ -7,21 +7,12 @@
 //
 
 #include "KAPVoice.h"
+#include "Helpers/KAPStringConversion.mm"
 #ifdef TARGET_MAC
 #include "KAPMacSpeechSynthesizer.h"
 #else
 #include "KAPiOSSpeechSynthesizer.h"
 #endif
-
-// TODO: Probably put that somewhere else
-NSString *stringFromCString(const char *cString)
-{
-    if(cString) {
-        return [NSString stringWithUTF8String:cString];
-    } else {
-        return @"";
-    }
-}
 
 id<KAPSpeechSynthesizer> speechSynthesizer;
 
@@ -37,7 +28,7 @@ void VoiceSetup()
 
 void VoiceStartSpeaking(const char *cString)
 {
-    NSString *text = stringFromCString(cString);
+    NSString *text = NSStringFromCString(cString);
     
     if(!speechSynthesizer) {
         VoiceSetup();

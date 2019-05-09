@@ -9,6 +9,7 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
     private int selectedElementIndex;
     private KAPSpeechSynthesizer speechSynthesizer;
     private KAPVisualizer kapVisualizer;
+    private KAPNativeScreenReaderBridge nativeScreenReaderBridge;
 
     private AudioSource soundEffectAudioSource;
 
@@ -50,6 +51,13 @@ private Text statusText;
             kapVisualizer = visualizerObject.GetComponent<KAPVisualizer>();
         }
 
+        nativeScreenReaderBridge = new KAPNativeScreenReaderBridge();
+
+        if (nativeScreenReaderBridge.Available())
+        {
+            // TODO: If a native screen reader is available, we shouldn't create our own stuff. For testing reasons, we still do
+        }
+
         // Fetch Elements
         LoadAccessibilityElements();
         selectedElementIndex = -1;
@@ -80,6 +88,25 @@ private Text statusText;
         if(accessibilityElements != null) 
         {
             SortByFrame();
+        }
+
+        // TODO: This is just for test, should probably not work. Maybe remove that 
+
+        Debug.Log("Screen Dimension w x h: " + Screen.width + " " + Screen.height);
+        if (nativeScreenReaderBridge.Available())
+        {
+            int X = 0;
+
+            foreach (KAPElement element in accessibilityElements)
+            {
+                Rect frame = new Rect(element.frame.position.x, element.frame.position.y, element.frame.size.x, element.frame.size.y);
+
+                Debug.Log("OG - oosition " + frame.ToString());
+
+                nativeScreenReaderBridge.AddHook(frame, element.label);
+            }
+        } else {
+            Debug.Log("NAAAAAAT");
         }
     }
 
