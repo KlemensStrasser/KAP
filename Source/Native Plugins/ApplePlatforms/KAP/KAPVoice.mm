@@ -7,7 +7,7 @@
 //
 
 #include "KAPVoice.h"
-#include "Helpers/KAPStringConversion.mm"
+#include "Utils/CHelpers/KAPStringConversion.mm"
 #ifdef TARGET_MAC
 #include "KAPMacSpeechSynthesizer.h"
 #else

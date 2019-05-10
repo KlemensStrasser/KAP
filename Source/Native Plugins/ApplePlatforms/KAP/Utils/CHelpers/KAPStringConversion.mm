@@ -6,6 +6,9 @@
 //  Copyright © 2019 KlemensStrasser. All rights reserved.
 //
 
+#ifndef KAPStringConversion_h
+#define KAPStringConversion_h
+
 #include <Foundation/Foundation.h>
 
 NSString *NSStringFromCString(const char *cString)
@@ -16,3 +19,5 @@ NSString *NSStringFromCString(const char *cString)
         return @"";
     }
 }
+
+#endif

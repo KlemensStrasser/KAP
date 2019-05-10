@@ -11,19 +11,12 @@
 
 extern "C" {
     
-    struct KAPAccessibilityHook {
-        int instanceID;
-        float x;
-        float y;
-        float width;
-        float height;
-        const char *label;
-    };
+    #include "Utils/CHelpers/KAPExternalAccessiblityHook.h"
     
     bool KAPIsScreenReaderRunning();
     
-    void KAPAddHook(KAPAccessibilityHook);
-    void KAPAddHooks(KAPAccessibilityHook*, int);
+    void KAPAddHook(KAPExternalAccessibilityHook);
+    void KAPUpdateHooks(KAPExternalAccessibilityHook*, int);
     
     void KAPClearAllHooks();
 }

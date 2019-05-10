@@ -9,9 +9,10 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "KAPVoiceOverBridgeViewController.h"
+#import "KAPInternalAccessibilityHook.h"
 
 #include "KAPVoiceOverPipe.h"
-#include "Helpers/KAPStringConversion.mm"
+#include "Utils/CHelpers/KAPStringConversion.mm"
 
 bool KAPIsScreenReaderRunning()
 {
@@ -39,34 +40,37 @@ KAPVoiceOverBridgeViewController *getBridgeViewController() {
     return bridgeViewController;
 }
 
-void KAPAddHook(KAPAccessibilityHook hook)
+// TODO: Maybe remove that. We shouldn't really add hooks one by one.
+void KAPAddHook(KAPExternalAccessibilityHook hook)
 {
-    NSString *label = NSStringFromCString(hook.label);
-    
     KAPVoiceOverBridgeViewController *bridgeViewController = getBridgeViewController();
     if (bridgeViewController != nil) {
         
-        // Unity hands over the correct screen coordinates, but on iOS we need the coordinates without the scale applied
-        CGFloat scale = [[UIScreen mainScreen] scale];
-        CGRect frame = CGRectMake(hook.x / scale, hook.y / scale, hook.width / scale, hook.height / scale);
-        
-        [bridgeViewController addCustomViewWithFrame:frame label:label];
+//        NSString *label = NSStringFromCString(hook.label);
+//
+//        // Unity hands over the correct screen coordinates, but on iOS we need the coordinates without the scale applied
+//        CGFloat scale = [[UIScreen mainScreen] scale];
+//        CGRect frame = CGRectMake(hook.x / scale, hook.y / scale, hook.width / scale, hook.height / scale);
+//
+//        [bridgeViewController addCustomViewWithFrame:frame label:label];
     }
 }
 
-void KAPAddHooks(KAPAccessibilityHook *hooks, int size)
+void KAPUpdateHooks(KAPExternalAccessibilityHook *externalHooks, int size)
 {
     KAPVoiceOverBridgeViewController *bridgeViewController = getBridgeViewController();
-
-    for(int i = 0; i < size; i++) {
+    
+    if(bridgeViewController != nil) {
+        NSMutableArray <KAPInternalAccessibilityHook *> *internalHooks = [[NSMutableArray alloc] initWithCapacity:size];
         
-        KAPAccessibilityHook hook = hooks[i];
-        NSString *label = NSStringFromCString(hook.label);
+        for(int i = 0; i < size; i++) {
+            KAPExternalAccessibilityHook externalHook = externalHooks[i];
+            KAPInternalAccessibilityHook *internalHook = [[KAPInternalAccessibilityHook alloc] initWithExternalHook:externalHook];
+            
+            [internalHooks addObject:internalHook];
+        }
         
-        CGFloat scale = [[UIScreen mainScreen] scale];
-        CGRect frame = CGRectMake(hook.x / scale, hook.y / scale, hook.width / scale, hook.height / scale);
-        
-        [bridgeViewController addCustomViewWithFrame:frame label:label];
+        [bridgeViewController updateHookViewsForHooks:internalHooks];
     }
 }
 
@@ -75,6 +79,6 @@ void KAPClearAllHooks()
     KAPVoiceOverBridgeViewController *bridgeViewController = getBridgeViewController();
     
     if (bridgeViewController != nil) {
-        [bridgeViewController clearAllElements];
+        [bridgeViewController clearAllHooks];
     }
 }

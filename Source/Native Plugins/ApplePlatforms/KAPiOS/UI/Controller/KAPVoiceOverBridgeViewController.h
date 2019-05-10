@@ -7,14 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "KAPInternalAccessibilityHook.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface KAPVoiceOverBridgeViewController : UIViewController
 
-- (void)addCustomViewWithFrame:(CGRect)rect label:(NSString *)label;
+- (void)updateHookViewsForHooks:(NSArray<KAPInternalAccessibilityHook *> *)hooks;
 
-- (void)clearAllElements;
+- (void)clearAllHooks;
 
 @end
 

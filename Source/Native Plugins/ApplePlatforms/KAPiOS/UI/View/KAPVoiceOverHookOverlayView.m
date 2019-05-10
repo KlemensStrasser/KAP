@@ -6,19 +6,17 @@
 //  Copyright © 2019 KlemensStrasser. All rights reserved.
 //
 
-#import "KAPVoiceOverHookView.h"
+#import "KAPVoiceOverHookOverlayView.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface KAPVoiceOverHookView ()
+@interface KAPVoiceOverHookOverlayView ()
 
 @property (nonatomic, strong) UIView *backgroundView;
 
-@property (nonatomic, strong) NSMutableArray<UIView *> *voiceOverHooks;
-
 @end
 
-@implementation KAPVoiceOverHookView
+@implementation KAPVoiceOverHookOverlayView
 
 - (instancetype)init
 {
@@ -39,12 +37,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 - (void)setupView
-{
-    // Init array
-    
-    NSMutableArray <UIView*> *voiceOverHooks = [[NSMutableArray alloc] init];
-    _voiceOverHooks = voiceOverHooks;
-    
+{   
     // Add background
     UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectZero];
     [backgroundView setTranslatesAutoresizingMaskIntoConstraints:NO];
@@ -61,21 +54,16 @@ NS_ASSUME_NONNULL_BEGIN
 
 // MARK: -
 
-- (void)addCustomViewWithFrame:(CGRect)rect label:(NSString *)label
+- (UIView *)addHookViewWithFrame:(CGRect)frame
 {
-    UIView *custom = [[UIView alloc] initWithFrame:rect];
+    UIView *hookView = [[UIView alloc] initWithFrame:frame];
     
-    [custom setIsAccessibilityElement:YES];
-    [custom setAccessibilityLabel:label];
+    [hookView setIsAccessibilityElement:YES];
     
-    [self addSubview:custom];
-    [custom setBackgroundColor:[UIColor colorWithWhite:1.0 alpha:0.25]];
-}
-
-- (void)clearAllElements
-{
-    [[self voiceOverHooks] makeObjectsPerformSelector:@selector(removeFromSuperview)];
-    [[self voiceOverHooks] removeAllObjects];
+    [self addSubview:hookView];
+    [hookView setBackgroundColor:[UIColor colorWithWhite:1.0 alpha:0.25]];
+    
+    return hookView;
 }
 
 @end

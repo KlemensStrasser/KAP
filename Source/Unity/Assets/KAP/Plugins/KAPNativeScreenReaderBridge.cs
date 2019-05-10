@@ -4,10 +4,10 @@ using UnityEngine;
 using System.Runtime.InteropServices;
 
 [StructLayout(LayoutKind.Sequential)]
-public struct KAPAccessibilityHook
+public struct KAPExternalAccessibilityHook
 {
-    // TODO: Maybe we can wrap this in another struct
     public int instanceID;
+    // TODO: Maybe we can wrap this in another struct
     public float x;
     public float y;
     public float width;
@@ -24,10 +24,10 @@ public class KAPNativeScreenReaderBridge
     private static extern bool KAPIsScreenReaderRunning();
 
     [DllImport("__Internal")]
-    private static extern void KAPAddHook(KAPAccessibilityHook hook);
+    private static extern void KAPAddHook(KAPExternalAccessibilityHook hook);
 
     [DllImport("__Internal")]
-    private static extern void KAPAddHooks(KAPAccessibilityHook[] hooks, int size);
+    private static extern void KAPUpdateHooks(KAPExternalAccessibilityHook[] hooks, int size);
 
     [DllImport("__Internal")]
     private static extern void KAPClearAllHooks();
@@ -38,9 +38,9 @@ public class KAPNativeScreenReaderBridge
     // TODO: Return UNKOWN instead of false. 
     private bool KAPIsScreenReaderRunning() { return false; }
 
-    private void KAPAddHook(KAPAccessibilityHook hook) { }
+    private void KAPAddHook(KAPExternalAccessibilityHook hook) { }
 
-    private void KAPAddHooks(KAPAccessibilityHook[] hooks, int size) { }
+    private void KAPUpdateHooks(KAPExternalAccessibilityHook[] hooks, int size) { }
 
     private void KAPClearAllHooks() { }
 
@@ -56,7 +56,7 @@ public class KAPNativeScreenReaderBridge
     {
         if (accessibilityElement.label != null && accessibilityElement.label.Length > 0)
         {
-            KAPAccessibilityHook hook = new KAPAccessibilityHook() {
+            KAPExternalAccessibilityHook hook = new KAPExternalAccessibilityHook() {
                 instanceID = accessibilityElement.gameObject.GetInstanceID(),
                 x = accessibilityElement.frame.x,
                 y = accessibilityElement.frame.y,
@@ -75,13 +75,13 @@ public class KAPNativeScreenReaderBridge
 
     public void AddHooksForKAPElements(KAPElement[] accessibilityElements)
     {
-        KAPAccessibilityHook[] hooks = new KAPAccessibilityHook[accessibilityElements.Length];
+        KAPExternalAccessibilityHook[] hooks = new KAPExternalAccessibilityHook[accessibilityElements.Length];
 
         // TODO: Error handling
         for(int i = 0; i < accessibilityElements.Length; i++)
         {
             KAPElement element = accessibilityElements[i];
-            KAPAccessibilityHook hook = new KAPAccessibilityHook()
+            KAPExternalAccessibilityHook hook = new KAPExternalAccessibilityHook()
             {
                 instanceID = element.gameObject.GetInstanceID(),
                 x = element.frame.x,
@@ -96,7 +96,7 @@ public class KAPNativeScreenReaderBridge
 
         //// Not possible because: Object contains non - primitive or non-blittable data
         // GCHandle arrayHandle = GCHandle.Alloc(hooks, GCHandleType.Pinned); ;
-        KAPAddHooks(hooks, hooks.Length);
+        KAPUpdateHooks(hooks, hooks.Length);
     }
 
     public void ClearAllHooks()
