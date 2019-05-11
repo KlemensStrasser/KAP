@@ -10,9 +10,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class KAPVoiceOverHookView;
+
 @interface KAPVoiceOverHookOverlayView : UIView
 
-- (UIView *)addHookViewWithFrame:(CGRect)frame;
+- (KAPVoiceOverHookView *)addHookViewWithFrame:(CGRect)frame instanceID:(NSNumber *)instanceID;
 
 @end
 

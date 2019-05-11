@@ -11,7 +11,7 @@ public class KAPButton : KAPElement
         this.trait = KAPTrait.Button;
     }
 
-    private void Start()
+    private void Awake()
     {
         this.button = gameObject.GetComponent<Button>();
 

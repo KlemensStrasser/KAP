@@ -10,7 +10,7 @@ public class KAPText : KAPElement
         this.trait = KAPTrait.Text;
     }
 
-    private void Start()
+    private void Awake()
     {
         this.text = gameObject.GetComponent<Text>();
         SetupLabel();

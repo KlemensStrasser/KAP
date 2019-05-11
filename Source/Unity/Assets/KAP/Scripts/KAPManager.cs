@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+// TODO: Make this a singleton?
 public class KAPManager : MonoBehaviour, IKAPInputReceiver
 {
     private int selectedElementIndex;
@@ -20,8 +21,25 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
     KAPInput input;
     KAPElement[] accessibilityElements;
 
-// Only for testing, remove this in the future
-private Text statusText;
+    // Only for testing, remove this in the future
+    private Text statusText;
+
+    // Singleton
+    // Based on: https://gamedev.stackexchange.com/questions/116009/in-unity-how-do-i-correctly-implement-the-singleton-pattern
+    private static KAPManager _instance;
+    public static KAPManager Instance { get { return _instance; } }
+
+    private void Awake()
+    {
+        if(_instance != null && _instance != this) 
+        {
+            Destroy(this.gameObject);    
+        }
+        else
+        {
+            _instance = this;
+        }
+    }
 
     void Start()
     {
@@ -307,6 +325,22 @@ private Text statusText;
     public void VisibleElementsDidChange() 
     {
         LoadAccessibilityElements();
+    }
+
+    #endregion
+
+    #region Public Helpers (Native screenreader available)
+
+    public void InvokeSelectionSilentlyOfElementWithID(int instanceID)
+    {
+        foreach (KAPElement element in accessibilityElements) 
+        {
+            if(element.gameObject.GetInstanceID() == instanceID)
+            {
+                element.InvokeSelection();
+                break;    
+            }
+        }
     }
 
     #endregion

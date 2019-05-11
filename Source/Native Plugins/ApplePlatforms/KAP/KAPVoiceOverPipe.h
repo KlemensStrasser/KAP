@@ -6,9 +6,6 @@
 //  Copyright © 2019 KlemensStrasser. All rights reserved.
 //
 
-// TODO: Callback for Activation
-//typedef void (*INT_CALLBACK)(int);
-
 extern "C" {
     
     #include "Utils/CHelpers/KAPExternalAccessiblityHook.h"

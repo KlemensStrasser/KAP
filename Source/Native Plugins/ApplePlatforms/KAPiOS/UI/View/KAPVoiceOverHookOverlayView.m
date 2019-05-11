@@ -7,6 +7,7 @@
 //
 
 #import "KAPVoiceOverHookOverlayView.h"
+#import "KAPVoiceOverHookView.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -52,17 +53,17 @@ NS_ASSUME_NONNULL_BEGIN
     [[[backgroundView bottomAnchor] constraintEqualToAnchor:[self bottomAnchor]] setActive:YES];
 }
 
-// MARK: -
+# pragma mark -
 
-- (UIView *)addHookViewWithFrame:(CGRect)frame
+- (KAPVoiceOverHookView *)addHookViewWithFrame:(CGRect)frame instanceID:(NSNumber *)instanceID
 {
-    UIView *hookView = [[UIView alloc] initWithFrame:frame];
+    KAPVoiceOverHookView *hookView = [[KAPVoiceOverHookView alloc] initWithFrame:frame instanceID:instanceID];
     
     [hookView setIsAccessibilityElement:YES];
-    
-    [self addSubview:hookView];
     [hookView setBackgroundColor:[UIColor colorWithWhite:1.0 alpha:0.25]];
     
+    [self addSubview:hookView];
+
     return hookView;
 }
 

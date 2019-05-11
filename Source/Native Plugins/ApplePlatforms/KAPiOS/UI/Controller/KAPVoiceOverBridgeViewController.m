@@ -8,13 +8,14 @@
 
 #import "KAPVoiceOverBridgeViewController.h"
 #import "KAPVoiceOverHookOverlayView.h"
+#import "KAPVoiceOverHookView.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface KAPVoiceOverBridgeViewController ()
+@interface KAPVoiceOverBridgeViewController () <KAPVoiceOverHookViewDelegate>
 
 @property (nonatomic, strong) KAPVoiceOverHookOverlayView *hookOverlayView;
-@property (nonatomic, strong) NSMutableDictionary<NSNumber*, UIView *> *hookViews;
+@property (nonatomic, strong) NSMutableDictionary<NSNumber*, KAPVoiceOverHookView *> *hookViews;
 
 @end
 
@@ -24,7 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 {
     [super viewDidLoad];
     
-    NSMutableDictionary<NSNumber*, UIView *> *hookViews = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary<NSNumber*, KAPVoiceOverHookView *> *hookViews = [[NSMutableDictionary alloc] init];
     _hookViews = hookViews;
     
     // View init
@@ -57,14 +58,14 @@ NS_ASSUME_NONNULL_BEGIN
     [[self hookOverlayView] setHidden:!UIAccessibilityIsVoiceOverRunning()];
 }
 
-// MARK - Notifications
+# pragma mark - Notifications
 
 - (void)voiceOverStatusDidChange:(NSNotification *)notification
 {
     [[self hookOverlayView] setHidden:!UIAccessibilityIsVoiceOverRunning()];
 }
 
-// MARK -
+# pragma mark -
 
 - (void)updateHookViewsForHooks:(NSArray<KAPInternalAccessibilityHook *> *)hooks
 {
@@ -85,19 +86,24 @@ NS_ASSUME_NONNULL_BEGIN
     
     // Then update/create all other hooks
     for(KAPInternalAccessibilityHook *hook in hooks) {
-        UIView *hookView = [[self hookViews] objectForKey:[hook instanceID]];
+        KAPVoiceOverHookView *hookView = [[self hookViews] objectForKey:[hook instanceID]];
         
         // Only create if needed
         if(hookView == nil) {
-            hookView = [[self hookOverlayView] addHookViewWithFrame:[hook frame]];
+            hookView = [[self hookOverlayView] addHookViewWithFrame:[hook frame] instanceID:[hook instanceID]];
             NSLog(@"Create a new view");
         } else {
             [hookView setFrame:[hook frame]];
             NSLog(@"Updated a view");
         }
         
+        [hookView setDelegate:self];
+        
         // Update values
-        hookView.accessibilityLabel = [hook label];
+        [hookView setAccessibilityLabel:[hook label]];
+        [hookView setAccessibilityValue:[hook value]];
+        [hookView setAccessibilityHint:[hook hint]];
+        [hookView setInvokeSelectionCallback:[hook selectionCallback]];
         
         [[self hookViews] setObject:hookView forKey:[hook instanceID]];
     }

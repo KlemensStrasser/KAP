@@ -43,7 +43,7 @@ public class KAPElement : MonoBehaviour
         this.isFocused = false;
     }
 
-    void Start()
+    void Awake()
     {
         SetupLabel();
     }
@@ -59,7 +59,7 @@ public class KAPElement : MonoBehaviour
     /// Label value if none was set.
     /// This would be the text of a button for example.
     /// Should be overridden by the subclasses.
-    protected virtual string ImplicitLabelValue() 
+    protected virtual string ImplicitLabelValue()
     {
         return "";
     }
@@ -67,9 +67,9 @@ public class KAPElement : MonoBehaviour
 
     /// Selecting the element
     /// This could trigger button press, switch change...
-    public virtual void InvokeSelection() 
+    public virtual void InvokeSelection()
     {
-        if(this.onClick != null) 
+        if (this.onClick != null)
         {
             onClick.Invoke();
         }
@@ -80,7 +80,7 @@ public class KAPElement : MonoBehaviour
     public void DidBecomeFocused()
     {
         this.isFocused = true;
-        if(this.becomeFocusedEvent != null) 
+        if (this.becomeFocusedEvent != null)
         {
             becomeFocusedEvent.Invoke();
         }
@@ -103,26 +103,26 @@ public class KAPElement : MonoBehaviour
 
     #endregion
 
-    #region Public Helpers
+    #region Public Helpers (No native screenreader available)
 
     public string FullLabel()
     {
         string fullString;
 
-        if(description != null && description.Length > 0)
+        if (description != null && description.Length > 0)
         {
             string lableWithTrait = LabelWithTraitAndValue();
 
-            if(lableWithTrait != null && lableWithTrait.Length > 0)
+            if (lableWithTrait != null && lableWithTrait.Length > 0)
             {
                 fullString = LabelWithTraitAndValue() + ". " + description;
-            } 
+            }
             else
             {
-                fullString = description;    
+                fullString = description;
             }
         }
-        else 
+        else
         {
             fullString = LabelWithTraitAndValue();
         }
@@ -140,13 +140,13 @@ public class KAPElement : MonoBehaviour
         string fullString;
         string[] strings;
 
-        if(trait != null)
+        if (trait != null)
         {
             strings = (new[] { label, trait.Value, value });
         }
-        else 
+        else
         {
-            strings = (new[] { label, value });   
+            strings = (new[] { label, value });
         }
 
         fullString = String.Join(". ", strings.Where(str => str != null && str.Length > 0).ToArray());
@@ -158,6 +158,11 @@ public class KAPElement : MonoBehaviour
 
         return fullString;
     }
+
+    #endregion
+
+    #region Public Helpers (Native screenreader available)
+
 
     #endregion
 

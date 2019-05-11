@@ -19,6 +19,7 @@
 		66BA333A225364520034572D /* KAPiOSSpeechSynthesizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 66BA3338225364170034572D /* KAPiOSSpeechSynthesizer.m */; };
 		66BA333B2253A7D90034572D /* KAPVoice.mm in Sources */ = {isa = PBXBuildFile; fileRef = 66A55EA821E49936008D29A2 /* KAPVoice.mm */; };
 		66E5A8BC22856B070070F838 /* KAPInternalAccessibilityHook.m in Sources */ = {isa = PBXBuildFile; fileRef = 66E5A8BA22856B000070F838 /* KAPInternalAccessibilityHook.m */; };
+		66E5A8BF2285A3290070F838 /* KAPVoiceOverHookView.m in Sources */ = {isa = PBXBuildFile; fileRef = 66E5A8BE2285A3290070F838 /* KAPVoiceOverHookView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -60,6 +61,8 @@
 		66E5A8B8228567C60070F838 /* KAPExternalAccessiblityHook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KAPExternalAccessiblityHook.h; sourceTree = "<group>"; };
 		66E5A8B922856B000070F838 /* KAPInternalAccessibilityHook.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KAPInternalAccessibilityHook.h; sourceTree = "<group>"; };
 		66E5A8BA22856B000070F838 /* KAPInternalAccessibilityHook.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KAPInternalAccessibilityHook.m; sourceTree = "<group>"; };
+		66E5A8BD2285A3290070F838 /* KAPVoiceOverHookView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KAPVoiceOverHookView.h; sourceTree = "<group>"; };
+		66E5A8BE2285A3290070F838 /* KAPVoiceOverHookView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KAPVoiceOverHookView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,6 +97,8 @@
 			children = (
 				669AE42E2282D04A009F1BF0 /* KAPVoiceOverHookOverlayView.h */,
 				669AE42F2282D04A009F1BF0 /* KAPVoiceOverHookOverlayView.m */,
+				66E5A8BD2285A3290070F838 /* KAPVoiceOverHookView.h */,
+				66E5A8BE2285A3290070F838 /* KAPVoiceOverHookView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -325,6 +330,7 @@
 				66BA333A225364520034572D /* KAPiOSSpeechSynthesizer.m in Sources */,
 				669AE4302282D04A009F1BF0 /* KAPVoiceOverHookOverlayView.m in Sources */,
 				66E5A8BC22856B070070F838 /* KAPInternalAccessibilityHook.m in Sources */,
+				66E5A8BF2285A3290070F838 /* KAPVoiceOverHookView.m in Sources */,
 				66BA333B2253A7D90034572D /* KAPVoice.mm in Sources */,
 				669AE4342282DD65009F1BF0 /* KAPVoiceOverPipe.mm in Sources */,
 				66BA3333225360650034572D /* KAPSpeechSynthesizer.m in Sources */,

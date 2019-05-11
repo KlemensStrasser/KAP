@@ -23,7 +23,10 @@
         _frame = frame;
         
         _label = NSStringFromCString(externalHook.label);
+        _value = NSStringFromCString(externalHook.value);
+        _hint = NSStringFromCString(externalHook.hint);
         
+        _selectionCallback = externalHook.selectionCallback;
     }
     return self;
 }

@@ -9,6 +9,8 @@
 #ifndef KAPExternalAccessiblityHook_h
 #define KAPExternalAccessiblityHook_h
 
+typedef void (*InvokeSelectionCallback)(int);
+
 typedef struct KAPExternalAccessibilityHook {
     int instanceID;
     float x;
@@ -16,6 +18,9 @@ typedef struct KAPExternalAccessibilityHook {
     float width;
     float height;
     const char *label;
+    const char *value;
+    const char *hint;
+    InvokeSelectionCallback selectionCallback;
 } KAPExternalAccessibilityHook;
 
 #endif /* KAPExternalAccessiblityHook_h */
