@@ -14,13 +14,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol KAPVoiceOverHookViewDelegate <NSObject>
 
+- (void)voiceOverHookWasAccessibilityActivated:(KAPVoiceOverHookView *)hook;
+
 @end
 
 @interface KAPVoiceOverHookView : UIView
 
 @property (nonatomic, weak) id<KAPVoiceOverHookViewDelegate> delegate;
 @property (nonatomic, readonly) NSNumber *instanceID;
-@property (nonatomic) void (*invokeSelectionCallback)(int);
 
 - (instancetype)initWithFrame:(CGRect)frame instanceID:(NSNumber *)instanceID  NS_DESIGNATED_INITIALIZER;
 

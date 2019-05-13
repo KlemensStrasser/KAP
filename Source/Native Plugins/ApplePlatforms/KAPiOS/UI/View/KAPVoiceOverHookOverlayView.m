@@ -8,12 +8,14 @@
 
 #import "KAPVoiceOverHookOverlayView.h"
 #import "KAPVoiceOverHookView.h"
+#import "KAPInternalAccessibilityHook.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface KAPVoiceOverHookOverlayView ()
+@interface KAPVoiceOverHookOverlayView ()  <KAPVoiceOverHookViewDelegate>
 
 @property (nonatomic, strong) UIView *backgroundView;
+@property (nonatomic, strong) NSMutableDictionary<NSNumber*, KAPVoiceOverHookView *> *hookViews;
 
 @end
 
@@ -55,16 +57,47 @@ NS_ASSUME_NONNULL_BEGIN
 
 # pragma mark -
 
-- (KAPVoiceOverHookView *)addHookViewWithFrame:(CGRect)frame instanceID:(NSNumber *)instanceID
+- (void)updateHookViewForAccessibilityHook:(KAPInternalAccessibilityHook *)hook
 {
-    KAPVoiceOverHookView *hookView = [[KAPVoiceOverHookView alloc] initWithFrame:frame instanceID:instanceID];
+    KAPVoiceOverHookView *hookView = [[self hookViews] objectForKey:[hook instanceID]];
     
-    [hookView setIsAccessibilityElement:YES];
-    [hookView setBackgroundColor:[UIColor colorWithWhite:1.0 alpha:0.25]];
+    if(hookView == nil){
+        hookView = [[KAPVoiceOverHookView alloc] initWithFrame:[hook frame] instanceID:[hook instanceID]];
+    } else {
+        [hookView setFrame:[hookView frame]];
+    }
+    
+    [hookView setAccessibilityLabel:[hook label]];
+    [hookView setAccessibilityValue:[hook value]];
+    [hookView setAccessibilityHint:[hook hint]];
+    
+    [hookView setDelegate:self];
     
     [self addSubview:hookView];
+    
+    [[self hookViews] setObject:hookView forKey:[hookView instanceID]];
+}
 
-    return hookView;
+- (void)removeHookWithID:(NSNumber *)instanceID
+{
+    KAPVoiceOverHookView *invalidHookView = [[self hookViews] objectForKey:instanceID];
+    [invalidHookView removeFromSuperview];
+    [[self hookViews] removeObjectForKey:instanceID];
+}
+
+- (void)clear
+{
+    [[[self hookViews] allValues] makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    [[self hookViews] removeAllObjects];
+}
+
+# pragma mark - KAPVoiceOverHookViewDelegate
+
+- (void)voiceOverHookWasAccessibilityActivated:(KAPVoiceOverHookView *)hook
+{
+    if([[self delegate] respondsToSelector:@selector(triggerCallbackOfHookWithID:)]) {
+        [[self delegate] triggerCallbackOfHookWithID:[hook instanceID]];
+    }
 }
 
 @end

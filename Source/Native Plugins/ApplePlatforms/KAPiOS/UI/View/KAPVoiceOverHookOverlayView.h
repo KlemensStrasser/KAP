@@ -11,10 +11,21 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @class KAPVoiceOverHookView;
+@class KAPInternalAccessibilityHook;
+
+@protocol KAPVoiceOverHookOverlayViewDelegate <NSObject>
+
+- (void)triggerCallbackOfHookWithID:(NSNumber *)instanceID;
+
+@end
 
 @interface KAPVoiceOverHookOverlayView : UIView
 
-- (KAPVoiceOverHookView *)addHookViewWithFrame:(CGRect)frame instanceID:(NSNumber *)instanceID;
+@property (nonatomic, weak) id<KAPVoiceOverHookOverlayViewDelegate> delegate;
+
+- (void)updateHookViewForAccessibilityHook:(KAPInternalAccessibilityHook *)hook;
+- (void)removeHookWithID:(NSNumber *)instanceID;
+- (void)clear;
 
 @end
 

@@ -12,10 +12,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface KAPVoiceOverBridgeViewController () <KAPVoiceOverHookViewDelegate>
+@interface KAPVoiceOverBridgeViewController () <KAPVoiceOverHookOverlayViewDelegate>
 
 @property (nonatomic, strong) KAPVoiceOverHookOverlayView *hookOverlayView;
-@property (nonatomic, strong) NSMutableDictionary<NSNumber*, KAPVoiceOverHookView *> *hookViews;
+@property (nonatomic, strong) NSMutableDictionary<NSNumber*, KAPInternalAccessibilityHook *> *hookDictionary;
 
 @end
 
@@ -25,13 +25,14 @@ NS_ASSUME_NONNULL_BEGIN
 {
     [super viewDidLoad];
     
-    NSMutableDictionary<NSNumber*, KAPVoiceOverHookView *> *hookViews = [[NSMutableDictionary alloc] init];
-    _hookViews = hookViews;
+    NSMutableDictionary<NSNumber*, KAPInternalAccessibilityHook *> *hookDictionary = [[NSMutableDictionary alloc] init];
+    _hookDictionary = hookDictionary;
     
     // View init
     KAPVoiceOverHookOverlayView *hookOverlayView = [[KAPVoiceOverHookOverlayView alloc] initWithFrame:CGRectZero];
     [hookOverlayView setTranslatesAutoresizingMaskIntoConstraints:NO];
     [hookOverlayView setHidden:!UIAccessibilityIsVoiceOverRunning()];
+    [hookOverlayView setDelegate:self];
     [[self view] addSubview:hookOverlayView];
     
     _hookOverlayView = hookOverlayView;
@@ -71,41 +72,18 @@ NS_ASSUME_NONNULL_BEGIN
 {
     // First remove all views that are not available anymore
     NSSet<NSNumber *> *validKeySet = [NSSet setWithArray:[hooks valueForKey:@"instanceID"]];
-    NSArray *availableKeys = [[self hookViews] allKeys];
-    
-    // TODO: Remove debug stuff
+    NSArray *availableKeys = [[self hookDictionary] allKeys];
     
     for(NSNumber *hookKey in availableKeys) {
         if(![validKeySet containsObject:hookKey]) {
-            UIView *invalidHookView = [[self hookViews] objectForKey:hookKey];
-            [invalidHookView removeFromSuperview];
-            [[self hookViews] removeObjectForKey:hookKey];
-            NSLog(@"Removed a view");
+            [[self hookOverlayView] removeHookWithID:hookKey];
         }
     }
     
     // Then update/create all other hooks
     for(KAPInternalAccessibilityHook *hook in hooks) {
-        KAPVoiceOverHookView *hookView = [[self hookViews] objectForKey:[hook instanceID]];
-        
-        // Only create if needed
-        if(hookView == nil) {
-            hookView = [[self hookOverlayView] addHookViewWithFrame:[hook frame] instanceID:[hook instanceID]];
-            NSLog(@"Create a new view");
-        } else {
-            [hookView setFrame:[hook frame]];
-            NSLog(@"Updated a view");
-        }
-        
-        [hookView setDelegate:self];
-        
-        // Update values
-        [hookView setAccessibilityLabel:[hook label]];
-        [hookView setAccessibilityValue:[hook value]];
-        [hookView setAccessibilityHint:[hook hint]];
-        [hookView setInvokeSelectionCallback:[hook selectionCallback]];
-        
-        [[self hookViews] setObject:hookView forKey:[hook instanceID]];
+        [[self hookOverlayView] updateHookViewForAccessibilityHook:hook];
+        [[self hookDictionary] setObject:hook forKey:[hook instanceID]];
     }
     
     [[NSNotificationCenter defaultCenter] postNotificationName:UIAccessibilityVoiceOverStatusDidChangeNotification object:nil];
@@ -113,8 +91,20 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)clearAllHooks
 {
-    [[[self hookViews] allValues] makeObjectsPerformSelector:@selector(removeFromSuperview)];
-    [[self hookViews] removeAllObjects];
+    [[[self hookDictionary] allValues] makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    [[self hookDictionary] removeAllObjects];
+    [[self hookOverlayView] clear];
+}
+
+#pragma mark - KAPVoiceOverHookOverlayViewDelegate
+
+- (void)triggerCallbackOfHookWithID:(NSNumber *)instanceID
+{
+    KAPInternalAccessibilityHook *hook = [[self hookDictionary] objectForKey:instanceID];
+    
+    if(hook) {
+        [hook selectionCallback]((int)[instanceID integerValue]);
+    }
 }
 
 @end
