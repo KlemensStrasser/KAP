@@ -27,9 +27,13 @@ Here are some useful links!
 - [Making Games Better for Players with Cognitive Disabilities](https://www.youtube.com/watch?v=ObhvacfIOg0&list=PLc38fcMFcV_vvWOhMDriBlVocTZ8mKQzR&index=4)
 
 [Accessible Media Inc.: Gaming Blind](https://www.ami.ca/category/documentaries/media/gaming-blind)
+
 [HBO: This Is How To Play Video Games If You're Totally Blind](https://www.youtube.com/watch?v=aX0oPwQPo9A)
+
 [Extra Credits: Accessibility - The Curb Cut Effect](https://www.youtube.com/watch?v=PJoax1Z1x4Y)
+
 [GDC: AAA Gaming While Blind](https://www.youtube.com/watch?v=YaDR4hJkskc)
+
 
 ### Communities
 
