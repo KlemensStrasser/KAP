@@ -68,6 +68,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 # pragma mark -
 
+- (void)updateHookViewForHook:(KAPInternalAccessibilityHook *)hook
+{
+    [[self hookOverlayView] updateHookViewForAccessibilityHook:hook];
+}
+
 - (void)updateHookViewsForHooks:(NSArray<KAPInternalAccessibilityHook *> *)hooks
 {
     // First remove all views that are not available anymore

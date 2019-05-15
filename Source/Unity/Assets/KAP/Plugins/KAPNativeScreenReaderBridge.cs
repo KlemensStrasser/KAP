@@ -33,6 +33,9 @@ public class KAPNativeScreenReaderBridge
     private static extern bool KAPIsScreenReaderRunning();
 
     [DllImport("__Internal")]
+    private static extern void KAPUpdateHook(KAPExternalAccessibilityHook hooks);
+
+    [DllImport("__Internal")]
     private static extern void KAPUpdateHooks(KAPExternalAccessibilityHook[] hooks, int size);
 
     [DllImport("__Internal")]
@@ -44,8 +47,8 @@ public class KAPNativeScreenReaderBridge
     // TODO: Return UNKOWN instead of false. 
     private bool KAPIsScreenReaderRunning() { return false; }
 
+    private void KAPUpdateHook(KAPExternalAccessibilityHook hook) { }
     private void KAPUpdateHooks(KAPExternalAccessibilityHook[] hooks, int size) { }
-
     private void KAPClearAllHooks() { }
 
     private bool NativeScreenReaderAvailable() { return false; }
@@ -56,7 +59,14 @@ public class KAPNativeScreenReaderBridge
         return NativeScreenReaderAvailable();
     }
 
-    public void AddHooksForKAPElements(KAPElement[] accessibilityElements)
+    // This might be used in rare cases. 
+    public void UpdateHookForKAPElements(KAPElement accessibilityElement)
+    {
+        KAPExternalAccessibilityHook hook = this.AccessibilityHookForElement(accessibilityElement);
+        KAPUpdateHook(hook);
+    }
+
+    public void UpdateHooksForKAPElements(KAPElement[] accessibilityElements)
     {
         KAPExternalAccessibilityHook[] hooks = new KAPExternalAccessibilityHook[accessibilityElements.Length];
 
@@ -64,20 +74,7 @@ public class KAPNativeScreenReaderBridge
         for(int i = 0; i < accessibilityElements.Length; i++)
         {
             KAPElement accessibilityElement = accessibilityElements[i];
-            KAPExternalAccessibilityHook hook = new KAPExternalAccessibilityHook()
-            {
-                instanceID = accessibilityElement.gameObject.GetInstanceID(),
-                x = accessibilityElement.frame.x,
-                y = accessibilityElement.frame.y,
-                width = accessibilityElement.frame.width,
-                height = accessibilityElement.frame.height,
-                label = accessibilityElement.label,
-                value = accessibilityElement.value,
-                hint = accessibilityElement.description,
-                trait = accessibilityElement.trait.Value,
-
-                selectionCallback = InvokeSelectionCallback,
-            };
+            KAPExternalAccessibilityHook hook = this.AccessibilityHookForElement(accessibilityElement);
 
             hooks[i] = hook;
         }
@@ -98,6 +95,29 @@ public class KAPNativeScreenReaderBridge
     public static void InvokeSelectionCallback(int instanceID)
     {
         KAPManager.Instance.InvokeSelectionSilentlyOfElementWithID(instanceID);
+    }
+    #endregion
+
+    #region Private Helpers
+
+    KAPExternalAccessibilityHook AccessibilityHookForElement(KAPElement accessibilityElement) {
+
+        KAPExternalAccessibilityHook hook = new KAPExternalAccessibilityHook()
+        {
+            instanceID = accessibilityElement.gameObject.GetInstanceID(),
+            x = accessibilityElement.frame.x,
+            y = accessibilityElement.frame.y,
+            width = accessibilityElement.frame.width,
+            height = accessibilityElement.frame.height,
+            label = accessibilityElement.label,
+            value = accessibilityElement.value,
+            hint = accessibilityElement.description,
+            trait = accessibilityElement.trait.Value,
+
+            selectionCallback = InvokeSelectionCallback,
+        };
+
+        return hook;
     }
 
     #endregion

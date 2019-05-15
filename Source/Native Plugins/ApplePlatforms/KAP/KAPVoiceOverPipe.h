@@ -12,7 +12,7 @@ extern "C" {
     
     bool KAPIsScreenReaderRunning();
     
+    void KAPUpdateHook(KAPExternalAccessibilityHook);
     void KAPUpdateHooks(KAPExternalAccessibilityHook*, int);
-    
     void KAPClearAllHooks();
 }

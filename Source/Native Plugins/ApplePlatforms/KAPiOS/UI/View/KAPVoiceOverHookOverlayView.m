@@ -25,7 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 {
     self = [super init];
     if (self) {
-        [self setupView];
+        [self setup];
     }
     return self;
 }
@@ -34,13 +34,16 @@ NS_ASSUME_NONNULL_BEGIN
 {
     self = [super initWithFrame:frame];
     if (self) {
-        [self setupView];
+        [self setup];
     }
     return self;
 }
 
-- (void)setupView
-{   
+- (void)setup
+{
+    NSMutableDictionary *hookViews = [[NSMutableDictionary alloc] init];
+    _hookViews = hookViews;
+    
     // Add background
     UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectZero];
     [backgroundView setTranslatesAutoresizingMaskIntoConstraints:NO];
@@ -77,6 +80,8 @@ NS_ASSUME_NONNULL_BEGIN
     [self addSubview:hookView];
     
     [[self hookViews] setObject:hookView forKey:[hookView instanceID]];
+    
+    
 }
 
 - (void)removeHookWithID:(NSNumber *)instanceID

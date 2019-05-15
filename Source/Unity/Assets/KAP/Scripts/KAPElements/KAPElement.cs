@@ -18,7 +18,7 @@ public class KAPElement : MonoBehaviour
     }
 
     /// Value
-    public string value = "";
+    public virtual string value { get; set; }
 
     /// Detailed description of the function of the element
     public string description = "";
@@ -143,7 +143,8 @@ public class KAPElement : MonoBehaviour
         if (trait != null)
         {
             // TODO: Add something to get the string for the trait here
-            strings = (new[] { label, "Button", value });
+
+            strings = (new[] { label, trait.ToString(), value });
         }
         else
         {

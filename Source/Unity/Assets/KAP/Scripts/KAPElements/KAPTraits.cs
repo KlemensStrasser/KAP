@@ -12,6 +12,7 @@ public class KAPTrait
     // TODO: Support for those should definitley be implemented at some point.
     public static KAPTrait None         { get { return new KAPTrait(0x0000000000000000); } }
     public static KAPTrait Button       { get { return new KAPTrait(0x0000000000000001); } }
+    public static KAPTrait Toggle       { get { return new KAPTrait(0x0020000000000001); } }
     public static KAPTrait Link         { get { return new KAPTrait(0x0000000000000002); } }
     public static KAPTrait Image        { get { return new KAPTrait(0x0000000000000004); } }
     public static KAPTrait Selected     { get { return new KAPTrait(0x0000000000000008); } }
@@ -30,4 +31,19 @@ public class KAPTrait
     public static KAPTrait StartsMediaSession { get { return new KAPTrait(0x0000000000000800); } }
     public static KAPTrait CausesPageTurn { get { return new KAPTrait(0x0000000000004000); } }
 
+    // TODO: This is just temporary. A element can have mutliple traits that are used in different parts of the description. Therefore, having a single ToString value makes no sense
+    override public string ToString()
+    {
+        // TODO: Localize
+        if (this.Value == KAPTrait.Toggle.Value)
+        {
+            return "Toggle";
+        }
+        else if (this.Value == KAPTrait.Button.Value)
+        {
+            return "Button";
+        }
+
+        return "";
+    }
 }

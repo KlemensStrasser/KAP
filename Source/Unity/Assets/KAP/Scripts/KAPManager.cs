@@ -21,8 +21,8 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
     KAPInput input;
     KAPElement[] accessibilityElements;
 
-    // Only for testing, remove this in the future
-    private Text statusText;
+    // Boolean indicating if the elements need to be updated
+    private bool needsUpdateElements;
 
     // Singleton
     // Based on: https://gamedev.stackexchange.com/questions/116009/in-unity-how-do-i-correctly-implement-the-singleton-pattern
@@ -86,13 +86,6 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
             UpdateSelectedElementIndex(0);
             AnnouceElementAtSelectedIndex(true);
         }
-
-        // Testing. TODO: Remove!
-        GameObject textObject = GameObject.Find("StatusText");
-        if(textObject != null)
-        {
-            statusText = textObject.GetComponent<Text>();
-        }
     }
 
     void LoadAccessibilityElements()
@@ -110,13 +103,7 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
 
         if (nativeScreenReaderBridge.Available())
         {
-            //foreach (KAPElement element in accessibilityElements)
-            //{
-            //    Rect frame = new Rect(element.frame.position.x, element.frame.position.y, element.frame.size.x, element.frame.size.y);
-            //    nativeScreenReaderBridge.AddHook(frame, element.label);
-            //}
-
-            nativeScreenReaderBridge.AddHooksForKAPElements(accessibilityElements);
+            nativeScreenReaderBridge.UpdateHooksForKAPElements(accessibilityElements);
         } 
     }
 
@@ -324,7 +311,7 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
     /// level changes (but scene stays), ...
     public void VisibleElementsDidChange() 
     {
-        LoadAccessibilityElements();
+        SetNeedsUpdateElements();
     }
 
     #endregion
@@ -343,6 +330,15 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
         }
     }
 
+    #endregion
+
+    #region Public Helpers (Overall)
+
+    // TODO: Maybe move into notifications section
+    public void SetNeedsUpdateElements() 
+    {
+        needsUpdateElements = true;
+    }
     #endregion
 
     #region Private Helpers
@@ -385,15 +381,10 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
 
     private void Update()
     {
-        if(statusText != null && input != null) 
+        if(needsUpdateElements)
         {
-            string currentStatusString = statusText.text;
-            string newStatusString = input.GetStatusText();
-
-            if(currentStatusString == null || !currentStatusString.Equals(newStatusString)) 
-            {
-                statusText.text = newStatusString;
-            }
+            LoadAccessibilityElements();
+            needsUpdateElements = false;
         }
     }
 }

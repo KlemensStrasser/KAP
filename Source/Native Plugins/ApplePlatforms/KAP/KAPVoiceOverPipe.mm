@@ -40,6 +40,15 @@ KAPVoiceOverBridgeViewController *getBridgeViewController() {
     return bridgeViewController;
 }
 
+void KAPUpdateHook(KAPExternalAccessibilityHook externalHook)
+{
+    KAPVoiceOverBridgeViewController *bridgeViewController = getBridgeViewController();
+    
+    if(bridgeViewController != nil) {
+        KAPInternalAccessibilityHook *internalHook = [[KAPInternalAccessibilityHook alloc] initWithExternalHook:externalHook];
+    }
+}
+
 void KAPUpdateHooks(KAPExternalAccessibilityHook *externalHooks, int size)
 {
     KAPVoiceOverBridgeViewController *bridgeViewController = getBridgeViewController();
