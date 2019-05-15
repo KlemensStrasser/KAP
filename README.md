@@ -20,13 +20,16 @@ Here are some useful links!
 
 ### Videos
 
-[Extra Credits: Accessibility - The Curb Cut Effect](https://www.youtube.com/watch?v=PJoax1Z1x4Y)
-
 #### Game Maker's Toolkit: Designing for Disability
 - [Making Games Better for Players with Motor Disabilities](https://www.youtube.com/watch?v=Ufe0i26DGiA&list=PLc38fcMFcV_vvWOhMDriBlVocTZ8mKQzR)
 - [Making Games Better for Gamers with Colourblindness & Low Vision](https://www.youtube.com/watch?v=xrqdU4cZaLw&index=2&list=PLc38fcMFcV_vvWOhMDriBlVocTZ8mKQzR)
 - [Making Games Better for the Deaf and Hard of Hearing](https://www.youtube.com/watch?v=4NGe4dzlukc&index=3&list=PLc38fcMFcV_vvWOhMDriBlVocTZ8mKQzR)
 - [Making Games Better for Players with Cognitive Disabilities](https://www.youtube.com/watch?v=ObhvacfIOg0&list=PLc38fcMFcV_vvWOhMDriBlVocTZ8mKQzR&index=4)
+
+[Accessible Media Inc.: Gaming Blind](https://www.ami.ca/category/documentaries/media/gaming-blind)
+[HBO: This Is How To Play Video Games If You're Totally Blind](https://www.youtube.com/watch?v=aX0oPwQPo9A)
+[Extra Credits: Accessibility - The Curb Cut Effect](https://www.youtube.com/watch?v=PJoax1Z1x4Y)
+[GDC: AAA Gaming While Blind](https://www.youtube.com/watch?v=YaDR4hJkskc)
 
 ### Communities
 
