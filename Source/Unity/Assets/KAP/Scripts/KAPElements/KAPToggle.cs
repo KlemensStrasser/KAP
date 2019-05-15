@@ -78,6 +78,7 @@ public class KAPToggle : KAPElement
             this.onClick.Invoke();
         }
 
+        // TODO: This is not the right place for the update call because its only needed when we have a native plugin. But not sure where the right place is.
         KAPManager.Instance.SetNeedsUpdateElements();
     }
 }
