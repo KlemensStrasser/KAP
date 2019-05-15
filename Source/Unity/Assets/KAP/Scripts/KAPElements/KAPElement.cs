@@ -142,7 +142,8 @@ public class KAPElement : MonoBehaviour
 
         if (trait != null)
         {
-            strings = (new[] { label, trait.Value, value });
+            // TODO: Add something to get the string for the trait here
+            strings = (new[] { label, "Button", value });
         }
         else
         {

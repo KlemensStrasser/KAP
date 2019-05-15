@@ -70,6 +70,7 @@ NS_ASSUME_NONNULL_BEGIN
     [hookView setAccessibilityLabel:[hook label]];
     [hookView setAccessibilityValue:[hook value]];
     [hookView setAccessibilityHint:[hook hint]];
+    [hookView setAccessibilityTraits:[hook trait]];
     
     [hookView setDelegate:self];
     

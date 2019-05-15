@@ -19,6 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (readonly, nonatomic) NSString *label;
 @property (readonly, nonatomic) NSString *value;
 @property (readonly, nonatomic) NSString *hint;
+@property (readonly, nonatomic) uint64_t trait;
 @property (readonly, nonatomic) InvokeSelectionCallback selectionCallback;
 
 - (instancetype)initWithExternalHook:(KAPExternalAccessibilityHook)externalHook NS_DESIGNATED_INITIALIZER;

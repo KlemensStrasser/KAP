@@ -7,7 +7,7 @@ public class KAPText : KAPElement
 
     public KAPText() : base()
     {
-        this.trait = KAPTrait.Text;
+        this.trait = KAPTrait.StaticText;
     }
 
     private void Awake()

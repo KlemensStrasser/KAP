@@ -20,6 +20,8 @@ public struct KAPExternalAccessibilityHook
     public string value;
     public string hint;
 
+    public ulong  trait;
+
     public KAPInvokeSelectionCallback selectionCallback;
 }
 
@@ -29,9 +31,6 @@ public class KAPNativeScreenReaderBridge
 
     [DllImport("__Internal")]
     private static extern bool KAPIsScreenReaderRunning();
-
-    [DllImport("__Internal")]
-    private static extern void KAPAddHook(KAPExternalAccessibilityHook hook);
 
     [DllImport("__Internal")]
     private static extern void KAPUpdateHooks(KAPExternalAccessibilityHook[] hooks, int size);
@@ -45,8 +44,6 @@ public class KAPNativeScreenReaderBridge
     // TODO: Return UNKOWN instead of false. 
     private bool KAPIsScreenReaderRunning() { return false; }
 
-    private void KAPAddHook(KAPExternalAccessibilityHook hook) { }
-
     private void KAPUpdateHooks(KAPExternalAccessibilityHook[] hooks, int size) { }
 
     private void KAPClearAllHooks() { }
@@ -57,30 +54,6 @@ public class KAPNativeScreenReaderBridge
     public bool Available()
     {
         return NativeScreenReaderAvailable();
-    }
-
-    public void AddHook(KAPElement accessibilityElement)
-    {
-        if (accessibilityElement.label != null && accessibilityElement.label.Length > 0)
-        {
-            KAPExternalAccessibilityHook hook = new KAPExternalAccessibilityHook() {
-                instanceID = accessibilityElement.gameObject.GetInstanceID(),
-                x = accessibilityElement.frame.x,
-                y = accessibilityElement.frame.y,
-                width = accessibilityElement.frame.width,
-                height = accessibilityElement.frame.height,
-                label = accessibilityElement.label,
-                value = accessibilityElement.value,
-                hint = accessibilityElement.description,
-
-                selectionCallback = InvokeSelectionCallback,
-            };
-            KAPAddHook(hook);
-        }
-        else 
-        {
-            Debug.LogError("Label for hook is invalid");
-        }
     }
 
     public void AddHooksForKAPElements(KAPElement[] accessibilityElements)
@@ -101,6 +74,7 @@ public class KAPNativeScreenReaderBridge
                 label = accessibilityElement.label,
                 value = accessibilityElement.value,
                 hint = accessibilityElement.description,
+                trait = accessibilityElement.trait.Value,
 
                 selectionCallback = InvokeSelectionCallback,
             };

@@ -20,6 +20,7 @@ typedef struct KAPExternalAccessibilityHook {
     const char *label;
     const char *value;
     const char *hint;
+    const uint64_t trait;
     InvokeSelectionCallback selectionCallback;
 } KAPExternalAccessibilityHook;
 

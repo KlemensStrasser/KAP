@@ -26,6 +26,8 @@
         _value = NSStringFromCString(externalHook.value);
         _hint = NSStringFromCString(externalHook.hint);
         
+        _trait = externalHook.trait;
+        
         _selectionCallback = externalHook.selectionCallback;
     }
     return self;

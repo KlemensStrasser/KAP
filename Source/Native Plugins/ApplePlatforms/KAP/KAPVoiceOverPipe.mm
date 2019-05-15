@@ -40,22 +40,6 @@ KAPVoiceOverBridgeViewController *getBridgeViewController() {
     return bridgeViewController;
 }
 
-// TODO: Maybe remove that. We shouldn't really add hooks one by one.
-void KAPAddHook(KAPExternalAccessibilityHook hook)
-{
-    KAPVoiceOverBridgeViewController *bridgeViewController = getBridgeViewController();
-    if (bridgeViewController != nil) {
-        
-//        NSString *label = NSStringFromCString(hook.label);
-//
-//        // Unity hands over the correct screen coordinates, but on iOS we need the coordinates without the scale applied
-//        CGFloat scale = [[UIScreen mainScreen] scale];
-//        CGRect frame = CGRectMake(hook.x / scale, hook.y / scale, hook.width / scale, hook.height / scale);
-//
-//        [bridgeViewController addCustomViewWithFrame:frame label:label];
-    }
-}
-
 void KAPUpdateHooks(KAPExternalAccessibilityHook *externalHooks, int size)
 {
     KAPVoiceOverBridgeViewController *bridgeViewController = getBridgeViewController();
