@@ -43,6 +43,10 @@ public class KAPTrait
         {
             return "Button";
         }
+        else if (this.Value == KAPTrait.Image.Value)
+        {
+            return "Image";
+        }
 
         return "";
     }
