@@ -169,11 +169,11 @@ public class KAPElement : MonoBehaviour
         string fullString;
         string[] strings;
 
-        if (trait != null)
+        if (traits != null)
         {
             // TODO: Add something to get the string for the trait here
 
-            strings = (new[] { label, trait.ToString(), value });
+            strings = (new[] { label, traits.ToString(), value });
         }
         else
         {

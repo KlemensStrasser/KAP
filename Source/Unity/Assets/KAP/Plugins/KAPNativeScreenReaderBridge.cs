@@ -112,7 +112,7 @@ public class KAPNativeScreenReaderBridge
             label = accessibilityElement.label,
             value = accessibilityElement.value,
             hint = accessibilityElement.description,
-            trait = accessibilityElement.trait.Value,
+            trait = accessibilityElement.traits.Value,
 
             selectionCallback = InvokeSelectionCallback,
         };
