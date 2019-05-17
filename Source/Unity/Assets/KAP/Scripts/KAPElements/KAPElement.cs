@@ -23,11 +23,40 @@ public class KAPElement : MonoBehaviour
     /// Detailed description of the function of the element
     public string description = "";
 
-    /// Indication on how the accessibilityElement should be treated
-    [HideInInspector]
-    public KAPTrait trait = KAPTrait.None;
 
-    // TODO: shouldGroupAccessibilityChildren
+    protected virtual KAPTrait defaultTraits
+    {
+        get
+        {
+            return KAPTrait.None;
+        }
+    }
+    private KAPTrait _traits;
+
+    /// Indication on how the accessibilityElement should be treated.
+    /// Only set for standard elements if you know what you're doing
+    [HideInInspector]
+    public KAPTrait traits
+    { 
+        get 
+        { 
+            if(_traits != null) 
+            {
+                return _traits;
+            }
+            else
+            {
+                return defaultTraits;
+            }
+        }
+
+        set
+        {
+            _traits = value;
+        }
+    }
+
+    public UnityEvent onClick = new UnityEvent();
 
     /// Event that gets invoked when the element was focused by the manager
     public UnityEvent becomeFocusedEvent = new UnityEvent();
@@ -36,7 +65,7 @@ public class KAPElement : MonoBehaviour
     /// Indicates if the element currently has focus.
     bool isFocused;
 
-    public UnityEvent onClick = new UnityEvent();
+    // TODO: shouldGroupAccessibilityChildren
 
     public KAPElement()
     {

@@ -16,6 +16,7 @@ public class KAPToggle : KAPElement
         {
             if (toggle != null)
             {
+                // TODO: Localize correctly, only works on iOS right now
                 return (toggle.isOn ? "1" : "0");
             }
             else
@@ -30,9 +31,16 @@ public class KAPToggle : KAPElement
         }
     }
 
+    override protected KAPTrait defaultTraits
+    {
+        get
+        {
+            return KAPTrait.Toggle;
+        }
+    }
+
     public KAPToggle() : base()
     {
-        this.trait = KAPTrait.Toggle;
     }
 
     private void Awake()

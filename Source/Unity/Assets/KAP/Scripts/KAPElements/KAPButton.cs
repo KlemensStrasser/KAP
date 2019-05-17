@@ -6,9 +6,16 @@ public class KAPButton : KAPElement
     private Button button;
     private Text buttonText;
 
+    override protected KAPTrait defaultTraits
+    {
+        get
+        {
+            return KAPTrait.Button;
+        }
+    }
+
     public KAPButton() : base()
     {
-        this.trait = KAPTrait.Button;
     }
 
     private void Awake()

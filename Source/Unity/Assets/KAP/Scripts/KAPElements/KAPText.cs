@@ -5,9 +5,16 @@ public class KAPText : KAPElement
     /// The Text that might be attached to the same GameObject as this component
     private Text text;
 
+    override protected KAPTrait defaultTraits
+    {
+        get
+        {
+            return KAPTrait.StaticText;
+        }
+    }
+
     public KAPText() : base()
     {
-        this.trait = KAPTrait.StaticText;
     }
 
     private void Awake()
