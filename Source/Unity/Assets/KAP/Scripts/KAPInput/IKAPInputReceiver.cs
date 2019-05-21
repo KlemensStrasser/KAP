@@ -17,6 +17,12 @@ public interface IKAPInputReceiver
     /// Select the focused element (aka click a button...)
     void SelectFocusedElement();
 
+    /// Increment the value of the focused element (aka change a slider value)
+    void IncrementValueOfFocuedElement();
+
+    /// Decrement the value of the focused element (aka change a slider value)
+    void DecrementValueOfFocuedElement();
+
     /// Escpae gesture is 
     void HandleEscapeGesture();
 

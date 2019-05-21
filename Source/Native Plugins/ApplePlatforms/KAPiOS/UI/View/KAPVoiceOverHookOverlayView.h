@@ -15,7 +15,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol KAPVoiceOverHookOverlayViewDelegate <NSObject>
 
-- (void)triggerCallbackOfHookWithID:(NSNumber *)instanceID;
+- (void)triggerActivateCallbackOfHookWithID:(NSNumber *)instanceID;
+- (void)triggerIncrementCallbackOfHookWithID:(NSNumber *)instanceID;
+- (void)triggerDecrementCallbackOfHookWithID:(NSNumber *)instanceID;
 
 @end
 

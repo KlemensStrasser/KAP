@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using AOT;
 
 public delegate void KAPInvokeSelectionCallback(int instancdeID);
+public delegate void KAPInvokeValueChangeCallback(int instancdeID, int modifier);
 
 [StructLayout(LayoutKind.Sequential)]
 public struct KAPExternalAccessibilityHook
@@ -23,6 +24,7 @@ public struct KAPExternalAccessibilityHook
     public ulong  trait;
 
     public KAPInvokeSelectionCallback selectionCallback;
+    public KAPInvokeValueChangeCallback valueChangeCallback;
 }
 
 public class KAPNativeScreenReaderBridge
@@ -79,8 +81,6 @@ public class KAPNativeScreenReaderBridge
             hooks[i] = hook;
         }
 
-        //// Not possible because: Object contains non - primitive or non-blittable data
-        // GCHandle arrayHandle = GCHandle.Alloc(hooks, GCHandleType.Pinned); ;
         KAPUpdateHooks(hooks, hooks.Length);
     }
 
@@ -96,6 +96,13 @@ public class KAPNativeScreenReaderBridge
     {
         KAPManager.Instance.InvokeSelectionSilentlyOfElementWithID(instanceID);
     }
+
+    [MonoPInvokeCallback(typeof(KAPInvokeValueChangeCallback))]
+    public static void InvokeValueChangeCallback(int instanceID, int modifier)
+    {
+        KAPManager.Instance.InvokeValueChangeSilentlyOfElementWithID(instanceID, modifier);
+    }
+
     #endregion
 
     #region Private Helpers
@@ -115,6 +122,7 @@ public class KAPNativeScreenReaderBridge
             trait = accessibilityElement.traits.Value,
 
             selectionCallback = InvokeSelectionCallback,
+            valueChangeCallback = InvokeValueChangeCallback,
         };
 
         return hook;

@@ -103,12 +103,32 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - KAPVoiceOverHookOverlayViewDelegate
 
-- (void)triggerCallbackOfHookWithID:(NSNumber *)instanceID
+- (void)triggerActivateCallbackOfHookWithID:(NSNumber *)instanceID
 {
     KAPInternalAccessibilityHook *hook = [[self hookDictionary] objectForKey:instanceID];
     
     if(hook) {
         [hook selectionCallback]((int)[instanceID integerValue]);
+    }
+}
+    
+- (void)triggerIncrementCallbackOfHookWithID:(NSNumber *)instanceID
+{
+    KAPInternalAccessibilityHook *hook = [[self hookDictionary] objectForKey:instanceID];
+    
+    if(hook) {
+        NSLog(@"Should call Increment");
+        [hook valueChangeCallback]((int)[instanceID integerValue], 1);
+    }
+}
+    
+- (void)triggerDecrementCallbackOfHookWithID:(NSNumber *)instanceID
+{
+    KAPInternalAccessibilityHook *hook = [[self hookDictionary] objectForKey:instanceID];
+    
+    if(hook) {
+        NSLog(@"Should call Decrement");
+        [hook valueChangeCallback]((int)[instanceID integerValue], -1);
     }
 }
 

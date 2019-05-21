@@ -36,5 +36,19 @@
     
     return YES;
 }
+    
+- (void)accessibilityIncrement
+{
+    if([[self delegate] respondsToSelector:@selector(voiceOverHookWasAccessibilityIncremented:)]) {
+        [[self delegate] voiceOverHookWasAccessibilityIncremented:self];
+    }
+}
 
+- (void)accessibilityDecrement
+{
+    if([[self delegate] respondsToSelector:@selector(voiceOverHookWasAccessibilityDecremented:)]) {
+        [[self delegate] voiceOverHookWasAccessibilityDecremented:self];
+    }
+}
+    
 @end

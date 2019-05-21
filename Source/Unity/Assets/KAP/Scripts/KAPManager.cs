@@ -153,6 +153,16 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
         }
     }
 
+    private void AnnouceValueOfSelectedElement()
+    {
+        KAPElement selectedElement = this.SelectedElement();
+        if (speechSynthesizer != null && selectedElement != null && selectedElement.value != null)
+        {
+            string text = selectedElement.value;
+            speechSynthesizer.StartSpeaking(text);
+        }
+    }
+
     private void PlayFocusSound() 
     {
         soundEffectAudioSource.Stop();
@@ -231,6 +241,39 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
         }
     }
 
+    public void IncrementValueOfFocuedElement()
+    {
+        KAPElement selectedElement = this.SelectedElement();
+        if (selectedElement)
+        {
+            string oldValue = selectedElement.value;
+            selectedElement.InvokeIncrement();
+            string newValue = selectedElement.value;
+
+            if (oldValue == newValue)
+            {
+                PlayBlockingSound();
+            }
+            AnnouceElementAtSelectedIndex(true);
+        }
+    }
+
+    public void DecrementValueOfFocuedElement()
+    {
+        KAPElement selectedElement = this.SelectedElement();
+        if (selectedElement)
+        {
+            string oldValue = selectedElement.value;
+            selectedElement.InvokeDecrement();
+            string newValue = selectedElement.value;
+
+            if (oldValue == newValue)
+            {
+                PlayBlockingSound();
+            }
+            AnnouceElementAtSelectedIndex(true);
+        }
+    }
 
     public void FocusElementAtPosition(Vector2 position)
     {
@@ -326,6 +369,30 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
             {
                 element.InvokeSelection();
                 break;    
+            }
+        }
+    }
+
+    /// Invokes the value change silently of element with identifier.
+    /// <param name="instanceID">Instance identifier.</param>
+    /// <param name="modifier">1 = Increment, -1 = decrement</param>
+    public void InvokeValueChangeSilentlyOfElementWithID(int instanceID, int modifier)
+    {
+        foreach (KAPElement element in accessibilityElements)
+        {
+            if (element.gameObject.GetInstanceID() == instanceID)
+            {
+                // TOOD: Maybe move this to the bridge
+                if(modifier == -1) 
+                {
+                    element.InvokeDecrement();
+                }
+                else if(modifier == 1)
+                {
+                    element.InvokeIncrement();
+                }
+
+                break;
             }
         }
     }

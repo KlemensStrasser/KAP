@@ -101,8 +101,22 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)voiceOverHookWasAccessibilityActivated:(KAPVoiceOverHookView *)hook
 {
-    if([[self delegate] respondsToSelector:@selector(triggerCallbackOfHookWithID:)]) {
-        [[self delegate] triggerCallbackOfHookWithID:[hook instanceID]];
+    if([[self delegate] respondsToSelector:@selector(triggerActivateCallbackOfHookWithID:)]) {
+        [[self delegate] triggerActivateCallbackOfHookWithID:[hook instanceID]];
+    }
+}
+
+- (void)voiceOverHookWasAccessibilityIncremented:(KAPVoiceOverHookView *)hook
+{
+    if([[self delegate] respondsToSelector:@selector(triggerIncrementCallbackOfHookWithID:)]) {
+        [[self delegate] triggerIncrementCallbackOfHookWithID:[hook instanceID]];
+    }
+}
+
+- (void)voiceOverHookWasAccessibilityDecremented:(KAPVoiceOverHookView *)hook
+{
+    if([[self delegate] respondsToSelector:@selector(triggerDecrementCallbackOfHookWithID:)]) {
+        [[self delegate] triggerDecrementCallbackOfHookWithID:[hook instanceID]];
     }
 }
 

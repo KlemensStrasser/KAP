@@ -8,8 +8,13 @@ public class KAPDesktopInput : KAPInput {
     public KeyCode previousElementKey;
     /// Keycode of the key used to trigger the escape gesture
     public KeyCode escapeKey;
+
     /// Keycode for the key used to trigger a selection
     public KeyCode selectKey;
+    /// Keycode for the key used to increment the value of the focused element
+    public KeyCode incrementValueKey;
+    /// Keycode for the key used to decrement the value of the focused element
+    public KeyCode decrementValueKey;
 
     void Start ()
     {
@@ -17,7 +22,10 @@ public class KAPDesktopInput : KAPInput {
         nextElementKey = KeyCode.RightArrow;
         previousElementKey = KeyCode.LeftArrow;
         escapeKey = KeyCode.Escape;
+
         selectKey = KeyCode.Space;
+        incrementValueKey = KeyCode.UpArrow;
+        decrementValueKey = KeyCode.DownArrow;
     }
 
 	void Update ()
@@ -40,7 +48,14 @@ public class KAPDesktopInput : KAPInput {
             {
                 inputReceiver.SelectFocusedElement();
             }
-            // TODO: Implement the rest?
+            else if (Input.GetKeyDown(incrementValueKey))
+            {
+                inputReceiver.IncrementValueOfFocuedElement();
+            }
+            else if (Input.GetKeyDown(decrementValueKey))
+            {
+                inputReceiver.DecrementValueOfFocuedElement();
+            }
         } else {
             Debug.LogWarning("The KAPKeyboardInput has no input receiver and thus, cannot forward any input.");
         }

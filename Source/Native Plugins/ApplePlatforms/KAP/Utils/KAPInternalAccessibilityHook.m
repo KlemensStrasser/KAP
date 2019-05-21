@@ -29,6 +29,7 @@
         _trait = externalHook.trait;
         
         _selectionCallback = externalHook.selectionCallback;
+        _valueChangeCallback = externalHook.valueChangeCallback;
     }
     return self;
 }

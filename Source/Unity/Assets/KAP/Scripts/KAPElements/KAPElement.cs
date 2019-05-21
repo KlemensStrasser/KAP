@@ -58,6 +58,9 @@ public class KAPElement : MonoBehaviour
 
     public UnityEvent onClick = new UnityEvent();
 
+    public UnityEvent onIncrement = new UnityEvent();
+    public UnityEvent onDecrement = new UnityEvent();
+
     /// Event that gets invoked when the element was focused by the manager
     public UnityEvent becomeFocusedEvent = new UnityEvent();
     /// Event that gets invoked when the element loses focus
@@ -101,6 +104,24 @@ public class KAPElement : MonoBehaviour
         if (this.onClick != null)
         {
             onClick.Invoke();
+        }
+    }
+
+    /// Increment value
+    public virtual void InvokeIncrement()
+    {
+        if (this.onIncrement != null)
+        {
+            onIncrement.Invoke();
+        }    
+    }
+
+    /// Decrement value
+    public virtual void InvokeDecrement()
+    {
+        if (this.onDecrement != null)
+        {
+            onDecrement.Invoke();
         }
     }
 

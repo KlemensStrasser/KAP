@@ -15,6 +15,8 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol KAPVoiceOverHookViewDelegate <NSObject>
 
 - (void)voiceOverHookWasAccessibilityActivated:(KAPVoiceOverHookView *)hook;
+- (void)voiceOverHookWasAccessibilityIncremented:(KAPVoiceOverHookView *)hook;
+- (void)voiceOverHookWasAccessibilityDecremented:(KAPVoiceOverHookView *)hook;
 
 @end
 
