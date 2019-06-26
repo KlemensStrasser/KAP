@@ -1,9 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
+[AddComponentMenu("KAP/UI/KAPToggle")]
 public class KAPToggle : KAPElement
 {
     /// The Text that might be attached to the same GameObject as this component
@@ -37,10 +36,6 @@ public class KAPToggle : KAPElement
         {
             return KAPTrait.Toggle;
         }
-    }
-
-    public KAPToggle() : base()
-    {
     }
 
     private void Awake()
@@ -87,6 +82,6 @@ public class KAPToggle : KAPElement
         }
 
         // TODO: This is not the right place for the update call because its only needed when we have a native plugin. But not sure where the right place is.
-        KAPManager.Instance.SetNeedsUpdateElements();
+        KAPUIManager.Instance.SetNeedsUpdateElements();
     }
 }

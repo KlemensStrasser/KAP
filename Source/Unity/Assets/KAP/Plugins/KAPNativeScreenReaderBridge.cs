@@ -94,13 +94,13 @@ public class KAPNativeScreenReaderBridge
     [MonoPInvokeCallback(typeof(KAPInvokeSelectionCallback))]
     public static void InvokeSelectionCallback(int instanceID)
     {
-        KAPManager.Instance.InvokeSelectionSilentlyOfElementWithID(instanceID);
+        KAPUIManager.Instance.InvokeSelectionSilentlyOfElementWithID(instanceID);
     }
 
     [MonoPInvokeCallback(typeof(KAPInvokeValueChangeCallback))]
     public static void InvokeValueChangeCallback(int instanceID, int modifier)
     {
-        KAPManager.Instance.InvokeValueChangeSilentlyOfElementWithID(instanceID, modifier);
+        KAPUIManager.Instance.InvokeValueChangeSilentlyOfElementWithID(instanceID, modifier);
     }
 
     #endregion

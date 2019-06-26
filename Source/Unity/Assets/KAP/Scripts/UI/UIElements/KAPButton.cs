@@ -1,6 +1,8 @@
-﻿using UnityEngine.UI;
+﻿using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
+[AddComponentMenu("KAP/UI/KAPButton")]
 public class KAPButton : KAPElement
 {
     private Button button;
@@ -12,10 +14,6 @@ public class KAPButton : KAPElement
         {
             return KAPTrait.Button;
         }
-    }
-
-    public KAPButton() : base()
-    {
     }
 
     private void Awake()

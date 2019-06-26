@@ -4,12 +4,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-// TODO: Make this a singleton?
-public class KAPManager : MonoBehaviour, IKAPInputReceiver
+public class KAPUIManager : MonoBehaviour, IKAPInputReceiver
 {
     private int selectedElementIndex;
     private KAPSpeechSynthesizer speechSynthesizer;
-    private KAPVisualizer kapVisualizer;
+    private KAPUIVisualizer kapVisualizer;
     private KAPNativeScreenReaderBridge nativeScreenReaderBridge;
 
     private AudioSource soundEffectAudioSource;
@@ -26,8 +25,8 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
 
     // Singleton
     // Based on: https://gamedev.stackexchange.com/questions/116009/in-unity-how-do-i-correctly-implement-the-singleton-pattern
-    private static KAPManager _instance;
-    public static KAPManager Instance { get { return _instance; } }
+    private static KAPUIManager _instance;
+    public static KAPUIManager Instance { get { return _instance; } }
 
     private void Awake()
     {
@@ -61,12 +60,12 @@ public class KAPManager : MonoBehaviour, IKAPInputReceiver
         speechSynthesizer = new KAPSpeechSynthesizer();
 
         // Initialize Visualizer
-        GameObject visualizerObject = Resources.Load<GameObject>("Prefabs/KAPVisualizer");
+        GameObject visualizerObject = Resources.Load<GameObject>("Prefabs/UI/KAPUIVisualizer");
         visualizerObject = Instantiate<GameObject>(visualizerObject);
-        visualizerObject.name = "KAPVisualizer";
+        visualizerObject.name = "KAPUIVisualizer";
         if(visualizerObject != null) 
         {
-            kapVisualizer = visualizerObject.GetComponent<KAPVisualizer>();
+            kapVisualizer = visualizerObject.GetComponent<KAPUIVisualizer>();
         }
 
         nativeScreenReaderBridge = new KAPNativeScreenReaderBridge();

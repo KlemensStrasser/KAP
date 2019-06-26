@@ -1,7 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
+[AddComponentMenu("KAP/UI/KAPImage")]
 public class KAPImage : KAPElement
 {
     override protected KAPTrait defaultTraits
@@ -10,9 +9,5 @@ public class KAPImage : KAPElement
         {
             return KAPTrait.Image;
         }
-    }
-
-    public KAPImage() : base()
-    {
     }
 }

@@ -1,5 +1,7 @@
-﻿using UnityEngine.UI;
+﻿using UnityEngine;
+using UnityEngine.UI;
 
+[AddComponentMenu("KAP/UI/KAPText")]
 public class KAPText : KAPElement
 {
     /// The Text that might be attached to the same GameObject as this component
@@ -11,10 +13,6 @@ public class KAPText : KAPElement
         {
             return KAPTrait.StaticText;
         }
-    }
-
-    public KAPText() : base()
-    {
     }
 
     private void Awake()

@@ -5,6 +5,7 @@ using System.Linq;
 
 /// Basic Element
 /// Used for custom GameObject that should be made accessible
+[AddComponentMenu("KAP/KAPElement")]
 public class KAPElement : MonoBehaviour
 {
     public string label = "";

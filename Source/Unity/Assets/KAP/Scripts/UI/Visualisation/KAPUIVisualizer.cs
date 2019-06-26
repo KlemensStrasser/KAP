@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class KAPVisualizer : MonoBehaviour
+public class KAPUIVisualizer : MonoBehaviour
 {
     public void DrawIndicatorForElement(KAPElement element) 
     {
@@ -10,7 +10,7 @@ public class KAPVisualizer : MonoBehaviour
         {
             float borderWidth = 2;
             Rect frame = element.frame;
-            KAPVisulizationDrawer.DrawRectBorder(frame, borderWidth, Color.black);
+            KAPUIVisulizationDrawer.DrawRectBorder(frame, borderWidth, Color.black);
 
             Rect outerFrame = new Rect(
                 frame.x - borderWidth,
@@ -18,7 +18,7 @@ public class KAPVisualizer : MonoBehaviour
                 frame.width + borderWidth * 2,
                 frame.height + borderWidth * 2);
 
-            KAPVisulizationDrawer.DrawRectBorder(outerFrame, borderWidth, Color.white);
+            KAPUIVisulizationDrawer.DrawRectBorder(outerFrame, borderWidth, Color.white);
         }
     }
 }

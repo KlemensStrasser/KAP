@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1814152405061503483}
   - component: {fileID: 1814152405061503460}
   m_Layer: 0
-  m_Name: KAPVisualizer
+  m_Name: KAPUIVisualizer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -41,7 +41,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1814152405061503461}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dd4815103695a4236b45315b95457da7, type: 3}
+  m_Script: {fileID: 11500000, guid: 9914ff17a468141198ac1a8b06c96ca6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1814152406177923224

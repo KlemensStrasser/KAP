@@ -1,8 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
+[AddComponentMenu("KAP/UI/KAPSlider")]
 public class KAPSlider : KAPElement
 {
     /// The slider that should be attached to the same gameObject
@@ -73,7 +72,7 @@ public class KAPSlider : KAPElement
 
             Debug.Log(newValue + " " + roundedValue);
             // TODO: This is not the right place for the update call because its only needed when we have a native plugin. But not sure where the right place is.
-            KAPManager.Instance.SetNeedsUpdateElements();
+            KAPUIManager.Instance.SetNeedsUpdateElements();
         }
     }
 
@@ -102,7 +101,7 @@ public class KAPSlider : KAPElement
             slider.value = (float)roundedValue;
 
             // TODO: This is not the right place for the update call because its only needed when we have a native plugin. But not sure where the right place is.
-            KAPManager.Instance.SetNeedsUpdateElements();
+            KAPUIManager.Instance.SetNeedsUpdateElements();
         }
     }
 }
