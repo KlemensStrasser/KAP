@@ -211,7 +211,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 906444439}
-  lighthouseManager: {fileID: 1518072125}
+  sonarManager: {fileID: 1518072125}
   playerTransform: {fileID: 1112826212}
 --- !u!4 &320641687
 Transform:

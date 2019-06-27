@@ -1,0 +1,18 @@
+# Asset Attribution
+
+## Test Scenes:
+
+SonarNavigationTestScene: https://github.com/Brackeys/NavMesh-Tutorial
+
+## Music
+
+All music is under a CC0 license.
+
+kap_block: https://freesound.org/people/jobro/sounds/33775/
+kap_focus: https://freesound.org/people/Breviceps/sounds/448081/
+kap_select: https://freesound.org/people/dland/sounds/320181/
+
+kap_SonarPing: https://freesound.org/people/unfa/sounds/215416/
+kap_SonarPingLong: https://freesound.org/people/Argitoth/sounds/38703/
+kap_SonarReached: https://freesound.org/people/kickhat/sounds/264446/
+kap_SonarGoal: https://freesound.org/people/Wagna/sounds/325805/
