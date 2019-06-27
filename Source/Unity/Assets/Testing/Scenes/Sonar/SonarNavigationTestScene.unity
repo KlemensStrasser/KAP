@@ -632,16 +632,31 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 451540385288090790, guid: e96394753472f4c4fb1b6647569a3f85,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 4
-      objectReference: {fileID: 0}
     - target: {fileID: 451540385288090809, guid: e96394753472f4c4fb1b6647569a3f85,
         type: 3}
       propertyPath: playerTransform
       value: 
       objectReference: {fileID: 1112826212}
+    - target: {fileID: 451540385288090809, guid: e96394753472f4c4fb1b6647569a3f85,
+        type: 3}
+      propertyPath: straightLineThreshhold
+      value: 0.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 451540385288090809, guid: e96394753472f4c4fb1b6647569a3f85,
+        type: 3}
+      propertyPath: isValidDiagonalThreshhold
+      value: 0.35
+      objectReference: {fileID: 0}
+    - target: {fileID: 451540385288090809, guid: e96394753472f4c4fb1b6647569a3f85,
+        type: 3}
+      propertyPath: shouldStraightenDiagonals
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 451540385288090790, guid: e96394753472f4c4fb1b6647569a3f85,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 9134237079793960831, guid: e96394753472f4c4fb1b6647569a3f85,
         type: 3}
       propertyPath: m_Name

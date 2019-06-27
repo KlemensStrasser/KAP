@@ -1,12 +1,10 @@
 ﻿using UnityEngine;
-using UnityEngine.AI;
 
 public class KAPSonarPathDrawer : MonoBehaviour
 {
     public Camera cam;
     public KAPSonarManager sonarManager;
     public Transform playerTransform;
-    private NavMeshPath path;
     private float elapsed = 0.0f;
 
     bool clickedOnce = false;
@@ -14,7 +12,6 @@ public class KAPSonarPathDrawer : MonoBehaviour
 
     void Start()
     {
-        path = new NavMeshPath();
         elapsed = 0.0f;
     }
 
@@ -31,8 +28,8 @@ public class KAPSonarPathDrawer : MonoBehaviour
 
                 if (sonarManager != null)
                 {
-                    sonarManager.SetTargetPosition(targetPosition);
-                    NavMesh.CalculatePath(playerTransform.position, targetPosition, NavMesh.AllAreas, path);
+                    sonarManager.StartGuideToTargetPosition(targetPosition);
+                    //NavMesh.CalculatePath(playerTransform.position, targetPosition, NavMesh.AllAreas, path);
                 }
 
                 clickedOnce = true;
@@ -47,11 +44,11 @@ public class KAPSonarPathDrawer : MonoBehaviour
 
         }
 
-        if (path != null)
+        if (sonarManager.pathPoints != null)
         {
-            for (int i = 0; i < path.corners.Length - 1; i++)
+            for (int i = 0; i < sonarManager.pathPoints.Count - 1; i++)
             {
-                Debug.DrawLine(path.corners[i], path.corners[i + 1], Color.red);
+                Debug.DrawLine(sonarManager.pathPoints[i], sonarManager.pathPoints[i + 1], Color.red);
             }
         }
     }
