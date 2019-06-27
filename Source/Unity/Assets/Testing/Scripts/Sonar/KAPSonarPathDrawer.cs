@@ -4,7 +4,7 @@ using UnityEngine.AI;
 public class KAPSonarPathDrawer : MonoBehaviour
 {
     public Camera cam;
-    public KAPSonarManager lighthouseManager;
+    public KAPSonarManager sonarManager;
     public Transform playerTransform;
     private NavMeshPath path;
     private float elapsed = 0.0f;
@@ -29,9 +29,9 @@ public class KAPSonarPathDrawer : MonoBehaviour
             {
                 targetPosition = hit.point;
 
-                if(lighthouseManager != null)
+                if (sonarManager != null)
                 {
-                    lighthouseManager.SetTargetPosition(targetPosition);
+                    sonarManager.SetTargetPosition(targetPosition);
                     NavMesh.CalculatePath(playerTransform.position, targetPosition, NavMesh.AllAreas, path);
                 }
 
