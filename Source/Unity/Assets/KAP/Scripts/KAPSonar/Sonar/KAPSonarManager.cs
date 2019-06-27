@@ -30,6 +30,7 @@ public class KAPSonarManager : MonoBehaviour, IKAPSonarEventReceiver
 
     private AudioSource soundEffectAudioSource;
     private AudioClip sonarReachedAudioClip;
+    private AudioClip targetReachedAudioClip;
 
     private void Awake()
     {
@@ -38,8 +39,11 @@ public class KAPSonarManager : MonoBehaviour, IKAPSonarEventReceiver
         sonar.name = "KAPSonar";
         sonar.transform.SetParent(this.transform);
 
-        // To have some kind of valid position before the fun beginds
-        targetPosition = playerTransform.position;
+        // To have some kind of valid position before the fun begins
+        if (playerTransform != null)
+        {
+            targetPosition = playerTransform.position;
+        }
         sonarController = sonar.GetComponent<KAPSonarController>();
         sonarController.eventReceiver = this;
         sonar.SetActive(false);
@@ -47,11 +51,10 @@ public class KAPSonarManager : MonoBehaviour, IKAPSonarEventReceiver
         path = new NavMeshPath();
 
         soundEffectAudioSource = gameObject.AddComponent<AudioSource>();
-
-        // TODO: Adjust volume correctly
         soundEffectAudioSource.volume = 0.75f;
 
         sonarReachedAudioClip = Resources.Load("Audio/Sonar/kap_SonarReached") as AudioClip;
+        targetReachedAudioClip = Resources.Load("Audio/Sonar/kap_SonarGoal") as AudioClip;
     }
 
     private bool RecalculatePath()
@@ -108,18 +111,22 @@ public class KAPSonarManager : MonoBehaviour, IKAPSonarEventReceiver
     {
         if (cornerIndex == path.corners.Length - 1)
         {
-            // TODO: Play different sound
             this.sonar.SetActive(false);
+
+            if (soundEffectAudioSource != null && targetReachedAudioClip != null)
+            {
+                soundEffectAudioSource.PlayOneShot(targetReachedAudioClip);
+            }
         }
         else
         {
             cornerIndex += 1;
             RepositionLighthhouse();
-        }
 
-        if (soundEffectAudioSource != null && sonarReachedAudioClip != null)
-        {
-            soundEffectAudioSource.PlayOneShot(sonarReachedAudioClip);
+            if (soundEffectAudioSource != null && sonarReachedAudioClip != null)
+            {
+                soundEffectAudioSource.PlayOneShot(sonarReachedAudioClip);
+            }
         }
     }
     #endregion
