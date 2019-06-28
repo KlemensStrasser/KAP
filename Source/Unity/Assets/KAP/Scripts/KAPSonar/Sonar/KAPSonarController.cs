@@ -21,11 +21,10 @@ public class KAPSonarController : MonoBehaviour
     private Collider playerCollider;
 
     private AudioSource audioSource;
-    private BoxCollider boxCollider;
 
     private void Awake()
     {
-        audioSource = this.GetComponent<AudioSource>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     /// <summary>

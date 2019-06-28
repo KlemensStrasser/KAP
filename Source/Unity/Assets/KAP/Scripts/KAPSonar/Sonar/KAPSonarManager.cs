@@ -388,9 +388,6 @@ public class KAPSonarManager : MonoBehaviour, IKAPSonarEventReceiver
             // Distance is needed to make sure the sound can be heard
             float distance = Vector3.Distance(sonarPosition, playerTransform.position);
             sonarController.UpdatePosition(sonarPosition, distance);
-
-            // TODO: Maybe we should get rid of the playerPosition here and use the first positon of the lightHouse to calculate the distance
-            //       In that case, we need the very first point in the points too!!!
         }
     }
 
@@ -442,11 +439,12 @@ public class KAPSonarManager : MonoBehaviour, IKAPSonarEventReceiver
             cornerIndex += 1;
 
             // Deactivate so that if the sonar is placed within the character, the collider triggers again
+
             sonar.SetActive(false);
             RepositionSonar();
             sonar.SetActive(true);
-
-            if(!manuallyTriggerSonarSignal) 
+            // TODO: This method makes the sonar sound stop, so we start it again. BUT this leads to the sound beign weird, so we need to find a different method!
+            if (!manuallyTriggerSonarSignal) 
             {
                 sonarController.StartSignal();
             }
