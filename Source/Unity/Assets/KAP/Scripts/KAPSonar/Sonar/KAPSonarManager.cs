@@ -173,11 +173,9 @@ public class KAPSonarManager : MonoBehaviour, IKAPSonarEventReceiver
     /// 1. Take a look at the line from the previous to the current point
     /// 2. If the line is (almost) horizontal or (almost) vertical -> continue
     /// 3. If the line is diagonal, split it at the center.
-    /// 4. Call RecursiveSplitDiagonal on the first segment
+    /// 4. Call RecursiveSplitDiagonal on previous and current point
     /// 4.1 Add all these points to the straight path points
-    /// 5. Add the center point to the straight path points
-    /// 6. Call RecursiveSplitDiagonal on the second segment
-    /// 6.1 Add all these points to the straight path points
+    /// 5. Add the current point to the straight path points
     /// 7. Continue with the next point 
     /// 
     /// End when all corners of the path have been looked at.
@@ -201,13 +199,7 @@ public class KAPSonarManager : MonoBehaviour, IKAPSonarEventReceiver
             }
             else
             {
-                Vector3 center = new Vector3((previousCorner.x + currentCorner.x) / 2.0f, previousCorner.y, (previousCorner.z + currentCorner.z) / 2.0f);
-
-
-                straightPathPoints.AddRange(RecursiveSplitDiagonal(previousCorner, center, 0));
-                straightPathPoints.Add(center);
-                straightPathPoints.AddRange(RecursiveSplitDiagonal(center, currentCorner, 0));
-
+                straightPathPoints.AddRange(RecursiveSplitDiagonal(previousCorner, currentCorner, 0));
                 straightPathPoints.Add(currentCorner);
             }
         }
@@ -329,6 +321,7 @@ public class KAPSonarManager : MonoBehaviour, IKAPSonarEventReceiver
             Vector3 sonarPosition = new Vector3(currentCornerPosition.x, playerTransform.position.y, currentCornerPosition.z);
 
             // Distance is needed to make sure the sound can be heard
+            // TODO: Maybe make a min distance? 
             float distance = Vector3.Distance(sonarPosition, playerTransform.position);
             sonarController.UpdatePosition(sonarPosition, distance);
 
