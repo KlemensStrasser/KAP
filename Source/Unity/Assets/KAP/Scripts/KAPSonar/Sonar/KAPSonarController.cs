@@ -15,6 +15,11 @@ public class KAPSonarController : MonoBehaviour
     /// </summary>
     public float minDistance = 4.0f;
 
+    /// <summary>
+    /// Collider of the Player
+    /// </summary>
+    private Collider playerCollider;
+
     private AudioSource audioSource;
     private BoxCollider boxCollider;
 
@@ -39,6 +44,14 @@ public class KAPSonarController : MonoBehaviour
             audioSource.maxDistance = suggestedDistance < minDistance ? minDistance : suggestedDistance;
         }
     }
+
+    public void SetPlayerCollider(Collider collider)
+    {
+        playerCollider = collider;
+    }
+
+    #region Signaling
+
     /// <summary>
     /// Starts the signal. Loops depending on ShouldLoop was called or not
     /// </summary>
@@ -50,11 +63,11 @@ public class KAPSonarController : MonoBehaviour
         }
         else if(audioSource == null) 
         {
-            Debug.LogError("KAPSonar: Audiosource is null");
+            Debug.LogError("KAPSonarController: Audiosource is null");
         }
         else if(audioSource.isPlaying) 
         {
-            Debug.LogWarning("KAPSonar: Audiosource is already playing");
+            Debug.LogWarning("KAPSonarController: Audiosource is already playing");
         }
     }
 
@@ -66,7 +79,7 @@ public class KAPSonarController : MonoBehaviour
         }
         else
         {
-            Debug.LogError("KAPSonar: Audiosource is null");
+            Debug.LogError("KAPSonarController: Audiosource is null");
         }
     }
 
@@ -87,19 +100,24 @@ public class KAPSonarController : MonoBehaviour
         }
         else if (audioSource == null)
         {
-            Debug.LogError("KAPSonar: Audiosource is null");
+            Debug.LogError("KAPSonarController: Audiosource is null");
         }
     }
 
+    #endregion
+
+    /// <summary>
+    /// Trigger sonar reached of the event receiver
+    /// </summary>
     private void OnTriggerEnter(Collider other)
     {
-        if(eventReceiver != null)
+        if(eventReceiver != null && other == playerCollider)
         {
             eventReceiver.SonarReached();
         }
         else 
         {
-            Debug.LogError("KAPSonar: EventReceiver is null");
+            Debug.LogError("KAPSonarController: EventReceiver is null");
         }
     }
 }

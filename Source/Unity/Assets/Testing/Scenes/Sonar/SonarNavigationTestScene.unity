@@ -652,6 +652,11 @@ PrefabInstance:
       propertyPath: shouldStraightenDiagonals
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 451540385288090809, guid: e96394753472f4c4fb1b6647569a3f85,
+        type: 3}
+      propertyPath: _player
+      value: 
+      objectReference: {fileID: 1112826208}
     - target: {fileID: 451540385288090790, guid: e96394753472f4c4fb1b6647569a3f85,
         type: 3}
       propertyPath: m_RootOrder

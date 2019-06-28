@@ -11,14 +11,34 @@ using System.Collections.Generic;
 /// 
 /// Other preconditions are:
 /// - A player that either has a camera or a audiolistener attached. (Don't forget to remove the audiolistener from the camera, if the audiolistener is directly attached)
-/// - A player with a rigidbody attached
-/// - The transform of this player needs to be given here.
+/// - A player with a collider/rigidbody
+/// - The player gameObject needs to be given here
 public class KAPSonarManager : MonoBehaviour, IKAPSonarEventReceiver
 {
+
     /// <summary>
-    /// Transform of the Player
+    /// The Player gameObject
     /// </summary>
-    public Transform playerTransform;
+    /// We need it to extract the transform and the colider
+    public GameObject player 
+    { 
+        set 
+        {
+            _player = value;
+            ExtractValuesFromPlayer();
+        }
+        get
+        {
+            return _player;
+        }
+    }
+
+    /// <summary>
+    /// Needed in case the player gets assigned before the sonar was created
+    /// </summary>
+
+    [SerializeField]
+    private GameObject _player;
 
     /// <summary>
     /// Decide if the algorithm to straigth the diagonals should be applied
@@ -53,6 +73,11 @@ public class KAPSonarManager : MonoBehaviour, IKAPSonarEventReceiver
     private bool manuallyTriggerSonarSignal = false;
 
     /// <summary>
+    /// Transform of the Player
+    /// </summary>
+    private Transform playerTransform;
+
+    /// <summary>
     /// List of all points where the sonar will be placed
     /// </summary>
     private List<Vector3> pathPoints;
@@ -69,6 +94,14 @@ public class KAPSonarManager : MonoBehaviour, IKAPSonarEventReceiver
     private AudioClip sonarReachedAudioClip;
     private AudioClip targetReachedAudioClip;
 
+    void OnValidate()
+    {
+        if(_player != null) 
+        {
+            ExtractValuesFromPlayer();
+        }
+    }
+
     private void Awake()
     {
         // Create and setup the sonar
@@ -79,8 +112,14 @@ public class KAPSonarManager : MonoBehaviour, IKAPSonarEventReceiver
         sonar.SetActive(false);
 
         sonarController = sonar.GetComponent<KAPSonarController>();
-        sonarController.eventReceiver = this;
-        sonarController.ShouldLoop(!manuallyTriggerSonarSignal);
+
+        if (sonarController != null)
+        {
+            sonarController.eventReceiver = this;
+            sonarController.ShouldLoop(!manuallyTriggerSonarSignal);
+
+            ExtractValuesFromPlayer();
+        }
 
         // Setup the sound stuff
         soundEffectAudioSource = gameObject.AddComponent<AudioSource>();
@@ -88,6 +127,28 @@ public class KAPSonarManager : MonoBehaviour, IKAPSonarEventReceiver
 
         sonarReachedAudioClip = Resources.Load("Audio/Sonar/kap_SonarReached") as AudioClip;
         targetReachedAudioClip = Resources.Load("Audio/Sonar/kap_SonarGoal") as AudioClip;
+    }
+
+    /// <summary>
+    /// Helper method to extract needed values from _player
+    /// </summary>
+    private void ExtractValuesFromPlayer()
+    {
+        if (_player != null)
+        {
+            Collider pCollider = _player.GetComponent<Collider>();
+            Transform pTransform = _player.GetComponent<Transform>();
+
+            if (pCollider != null && sonarController != null)
+            {
+                sonarController.SetPlayerCollider(pCollider);
+            }
+
+            if (pTransform != null)
+            {
+                playerTransform = pTransform;
+            }
+        }
     }
 
     /// <summary>
@@ -136,27 +197,31 @@ public class KAPSonarManager : MonoBehaviour, IKAPSonarEventReceiver
     /// </summary>
     private List<Vector3> RecalculatePath(Vector3 targetPosition)
     {
-        List<Vector3> points;
+        List<Vector3> points = new List<Vector3>(); ;
 
         NavMeshPath path = new NavMeshPath();
-        if (NavMesh.CalculatePath(playerTransform.position, targetPosition, NavMesh.AllAreas, path))
-        {
-            if (shouldStraightenDiagonals)
-            {
-                points = StraightenDiagonalsInPath(path);
 
-            } else 
+        if (playerTransform != null)
+        {
+            if (NavMesh.CalculatePath(playerTransform.position, targetPosition, NavMesh.AllAreas, path))
             {
-                points = new List<Vector3>();
-                for (int i = 1; i < path.corners.Length; i++)
+                if (shouldStraightenDiagonals)
                 {
-                    points.Add(path.corners[i]);
+                    points = StraightenDiagonalsInPath(path);
+
+                }
+                else
+                {
+                    for (int i = 1; i < path.corners.Length; i++)
+                    {
+                        points.Add(path.corners[i]);
+                    }
                 }
             }
-        } else 
+        } 
+        else
         {
-            // Empty List
-            points = new List<Vector3>();
+            Debug.LogError("KAPSonarManager: PlayerTransform is null, cannot recalculate path!");
         }
 
         cornerIndex = 0;
@@ -321,7 +386,6 @@ public class KAPSonarManager : MonoBehaviour, IKAPSonarEventReceiver
             Vector3 sonarPosition = new Vector3(currentCornerPosition.x, playerTransform.position.y, currentCornerPosition.z);
 
             // Distance is needed to make sure the sound can be heard
-            // TODO: Maybe make a min distance? 
             float distance = Vector3.Distance(sonarPosition, playerTransform.position);
             sonarController.UpdatePosition(sonarPosition, distance);
 
@@ -353,7 +417,9 @@ public class KAPSonarManager : MonoBehaviour, IKAPSonarEventReceiver
     #endregion
 
     #region IKAPSonarEventReceiver
-
+    /// <summary>
+    /// Plays a sound to indicate that the sonar is reached and repositions it (if needed)
+    /// </summary>
     void IKAPSonarEventReceiver.SonarReached()
     {
         if (cornerIndex == pathPoints.Count - 1)
@@ -368,12 +434,21 @@ public class KAPSonarManager : MonoBehaviour, IKAPSonarEventReceiver
         }
         else
         {
-            cornerIndex += 1;
-            RepositionSonar();
-
             if (soundEffectAudioSource != null && sonarReachedAudioClip != null)
             {
                 soundEffectAudioSource.PlayOneShot(sonarReachedAudioClip);
+            }
+
+            cornerIndex += 1;
+
+            // Deactivate so that if the sonar is placed within the character, the collider triggers again
+            sonar.SetActive(false);
+            RepositionSonar();
+            sonar.SetActive(true);
+
+            if(!manuallyTriggerSonarSignal) 
+            {
+                sonarController.StartSignal();
             }
         }
     }
