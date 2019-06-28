@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
 public class KAPSonarPathDrawer : MonoBehaviour
 {
@@ -44,12 +45,11 @@ public class KAPSonarPathDrawer : MonoBehaviour
 
         }
 
-        if (sonarManager.pathPoints != null)
+        List<Vector3> pathPoints = sonarManager.PathPoints();
+        for (int i = 0; i < pathPoints.Count - 1; i++)
         {
-            for (int i = 0; i < sonarManager.pathPoints.Count - 1; i++)
-            {
-                Debug.DrawLine(sonarManager.pathPoints[i], sonarManager.pathPoints[i + 1], Color.red);
-            }
+            Debug.DrawLine(pathPoints[i], pathPoints[i + 1], Color.red);
         }
+        
     }
 }

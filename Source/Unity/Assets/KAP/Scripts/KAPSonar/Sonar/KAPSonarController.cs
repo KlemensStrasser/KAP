@@ -2,7 +2,7 @@
 
 public interface IKAPSonarEventReceiver
 {
-    void LighthouseReached();
+    void SonarReached();
 }
 
 public class KAPSonarController : MonoBehaviour
@@ -33,7 +33,9 @@ public class KAPSonarController : MonoBehaviour
             audioSource.maxDistance = distance * 1.5f;
         }
     }
-
+    /// <summary>
+    /// Starts the signal. Loops depending on ShouldLoop was called or not
+    /// </summary>
     public void StartSignal()
     {
         if(audioSource != null && !audioSource.isPlaying)
@@ -42,11 +44,11 @@ public class KAPSonarController : MonoBehaviour
         }
         else if(audioSource == null) 
         {
-            Debug.LogError("KAPLighthouse: Audiosource is null");
+            Debug.LogError("KAPSonar: Audiosource is null");
         }
         else if(audioSource.isPlaying) 
         {
-            Debug.LogWarning("KAPLighthouse: Audiosource is already playing");
+            Debug.LogWarning("KAPSonar: Audiosource is already playing");
         }
     }
 
@@ -58,7 +60,28 @@ public class KAPSonarController : MonoBehaviour
         }
         else
         {
-            Debug.LogError("KAPLighthouse: Audiosource is null");
+            Debug.LogError("KAPSonar: Audiosource is null");
+        }
+    }
+
+    public void ShouldLoop(bool shouldLoop)
+    {
+        if (audioSource != null)
+        {
+            audioSource.loop = shouldLoop;
+
+            if(shouldLoop)
+            {
+                StartSignal();
+            } 
+            else
+            {
+                StopSignal();
+            }
+        }
+        else if (audioSource == null)
+        {
+            Debug.LogError("KAPSonar: Audiosource is null");
         }
     }
 
@@ -66,11 +89,11 @@ public class KAPSonarController : MonoBehaviour
     {
         if(eventReceiver != null)
         {
-            eventReceiver.LighthouseReached();
+            eventReceiver.SonarReached();
         }
         else 
         {
-            Debug.LogError("KAPLighthouse: EventReceiver is null");
+            Debug.LogError("KAPSonar: EventReceiver is null");
         }
     }
 }
