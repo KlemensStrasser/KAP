@@ -10,6 +10,11 @@ public class KAPSonarController : MonoBehaviour
     [HideInInspector]
     public IKAPSonarEventReceiver eventReceiver;
 
+    /// <summary>
+    /// Minimal distance from where the audiosource should be heard
+    /// </summary>
+    public float minDistance = 4.0f;
+
     private AudioSource audioSource;
     private BoxCollider boxCollider;
 
@@ -22,7 +27,7 @@ public class KAPSonarController : MonoBehaviour
     /// Updates the position.
     /// </summary>
     /// <param name="position">New position of the lighthouse</param>
-    /// <param name="distance">Distance from the lighthouse to the player.</param>
+    /// <param name="distance">Distance from the sonar to the player.</param>
     public void UpdatePosition(Vector3 position, float distance) 
     {
         this.transform.position = position;
@@ -30,7 +35,8 @@ public class KAPSonarController : MonoBehaviour
         if (audioSource != null)
         {
             // Ensure that the audiosource can be heard
-            audioSource.maxDistance = distance * 1.5f;
+            float suggestedDistance = distance * 1.5f;
+            audioSource.maxDistance = suggestedDistance < minDistance ? minDistance : suggestedDistance;
         }
     }
     /// <summary>
