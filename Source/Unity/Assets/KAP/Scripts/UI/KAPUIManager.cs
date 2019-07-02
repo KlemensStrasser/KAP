@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 
 public class KAPUIManager : MonoBehaviour, IKAPInputReceiver
 {
@@ -18,15 +19,40 @@ public class KAPUIManager : MonoBehaviour, IKAPInputReceiver
     private AudioClip selectAudioClip;
 
     KAPInput input;
+
+    /// <summary>
+    /// Array of the KAPElements that are currently visible to the screen reader
+    /// </summary>
     KAPElement[] accessibilityElements;
 
-    // Boolean indicating if the elements need to be updated
+    /// <summary>
+    /// Boolean indicating if the accessibility elements need to be updated
+    /// </summary>
     private bool needsUpdateElements;
 
-    // Singleton
-    // Based on: https://gamedev.stackexchange.com/questions/116009/in-unity-how-do-i-correctly-implement-the-singleton-pattern
+    /// <summary>
+    /// Boolean indicating if the selectedElementIndex should be retained when elements are updated
+    /// </summary>
+    private bool retainSelectedElementIndex;
+
     private static KAPUIManager _instance;
-    public static KAPUIManager Instance { get { return _instance; } }
+    /// <summary>
+    /// KAPUIManager Singleton
+    /// Based on: https://gamedev.stackexchange.com/questions/116009/in-unity-how-do-i-correctly-implement-the-singleton-pattern
+    /// </summary>
+    public static KAPUIManager Instance 
+    { 
+        get 
+        {
+            if (_instance == null)
+            {
+                GameObject instanceObject = Resources.Load<GameObject>("Prefabs/UI/KAPUIManager");
+                _instance = Instantiate<GameObject>(instanceObject).GetComponent<KAPUIManager>();
+            } 
+
+            return _instance;
+        } 
+    }
 
     private void Awake()
     {
@@ -70,20 +96,18 @@ public class KAPUIManager : MonoBehaviour, IKAPInputReceiver
 
         nativeScreenReaderBridge = new KAPNativeScreenReaderBridge();
 
-        if (nativeScreenReaderBridge.Available())
+        if (!nativeScreenReaderBridge.Available())
         {
-            // TODO: If a native screen reader is available, we shouldn't create our own stuff. For testing reasons, we still do
-        }
+            // Fetch Elements
+            LoadAccessibilityElements();
+            selectedElementIndex = -1;
 
-        // Fetch Elements
-        LoadAccessibilityElements();
-        selectedElementIndex = -1;
-
-        // Annouce the very first one.
-        if (accessibilityElements != null && accessibilityElements.Length > 0)
-        {
-            UpdateSelectedElementIndex(0);
-            AnnouceElementAtSelectedIndex(true);
+            // Annouce the very first one.
+            if (accessibilityElements != null && accessibilityElements.Length > 0)
+            {
+                UpdateSelectedElementIndex(0);
+                AnnouceElementAtSelectedIndex(true);
+            }
         }
     }
 
@@ -91,11 +115,13 @@ public class KAPUIManager : MonoBehaviour, IKAPInputReceiver
     {
         accessibilityElements = FindObjectsOfType<KAPElement>();
 
-        // TODO: This should do more in the future, like:
-        //       - Respect shouldGroupAccessibilityChildren
-        //       - Handle Popovers
+        KAPElement[] popovers = accessibilityElements.Where(c => c is KAPPopover).ToArray();
+        if(popovers != null && popovers.Length > 0)
+        {
+            accessibilityElements = GetAccessibilityElementsFromPopover((KAPPopover)popovers[0]);
+        }
 
-        if(accessibilityElements != null) 
+        if (accessibilityElements != null) 
         {
             SortByFrame();
         }
@@ -104,6 +130,60 @@ public class KAPUIManager : MonoBehaviour, IKAPInputReceiver
         {
             nativeScreenReaderBridge.UpdateHooksForKAPElements(accessibilityElements);
         } 
+    }
+
+
+    /// <summary>
+    /// Gets the accessibility elements from the top popover.
+    /// </summary>
+    /// <returns>The accessibility elements from the top popover.</returns>
+    /// <param name="popover">The popover we start with</param>
+    KAPElement[] GetAccessibilityElementsFromPopover(KAPPopover popover)
+    {
+        KAPElement[] topAccessibilityElements;
+
+        if (popover != null)
+        {
+
+            KAPPopover topPopover = popover;
+
+            // As described in KAPPopover, popovers should only appear in the same hierachy (See KAPPopover.cs for an example)
+            // Thus, any popOver we find in the children of the topPopover should be at least one step up this hierachy
+            // It could be multiple steps, depending on the order we get the popovers
+
+            bool searchForChildPopOvers = true;
+            KAPPopover[] childPopovers;
+            do
+            {
+                // Get all child popOvers
+                childPopovers = topPopover.gameObject.GetComponentsInChildren<KAPPopover>();
+                // Filter out the current topPopover
+                childPopovers = childPopovers.Where(go => go.gameObject != topPopover.gameObject).ToArray();
+
+                if (childPopovers != null && childPopovers.Length > 0)
+                {
+                    // No matter which object we use, we get at least one step down the hierachy
+                    topPopover = childPopovers[0];
+                }
+                else
+                {
+                    // We are at the top -> Break!
+                    searchForChildPopOvers = false;
+                }
+
+            } while (searchForChildPopOvers);
+
+
+            topAccessibilityElements = topPopover.gameObject.GetComponentsInChildren<KAPElement>();
+            // Filter out the popover
+            topAccessibilityElements = topAccessibilityElements.Where(go => go.gameObject != topPopover.gameObject).ToArray();
+        } 
+        else
+        {
+            topAccessibilityElements = new KAPElement[0];
+        }
+
+        return topAccessibilityElements;
     }
 
     void SortByFrame()
@@ -299,10 +379,6 @@ public class KAPUIManager : MonoBehaviour, IKAPInputReceiver
                 {
                     index = i;
                 }
-                else
-                {
-                    // TODO: If both elments Overlap, get the one that is in front!
-                }
             }
         }
 
@@ -311,7 +387,7 @@ public class KAPUIManager : MonoBehaviour, IKAPInputReceiver
 
     public void HandleEscapeGesture()
     {
-        throw new System.NotImplementedException();
+        Debug.LogWarning("KAPUIManager: Escape Gesture is not implemented yet");
     }
 
     #endregion
@@ -349,11 +425,16 @@ public class KAPUIManager : MonoBehaviour, IKAPInputReceiver
         }
     }
 
-    /// Should be called when a popover appears,
-    /// level changes (but scene stays), ...
+    /// Should be called when a popover appears,level changes (but scene stays), ...
     public void VisibleElementsDidChange() 
     {
-        SetNeedsUpdateElements();
+        SetNeedsUpdateElements(false);
+    }
+
+    public void SetNeedsUpdateElements(bool keepHighlightedElement = true)
+    {
+        needsUpdateElements = true;
+        retainSelectedElementIndex = keepHighlightedElement;
     }
 
     #endregion
@@ -396,15 +477,6 @@ public class KAPUIManager : MonoBehaviour, IKAPInputReceiver
         }
     }
 
-    #endregion
-
-    #region Public Helpers (Overall)
-
-    // TODO: Maybe move into notifications section
-    public void SetNeedsUpdateElements() 
-    {
-        needsUpdateElements = true;
-    }
     #endregion
 
     #region Private Helpers
@@ -451,6 +523,20 @@ public class KAPUIManager : MonoBehaviour, IKAPInputReceiver
         {
             LoadAccessibilityElements();
             needsUpdateElements = false;
+
+            if (!retainSelectedElementIndex || selectedElementIndex >= accessibilityElements.Length)
+            {
+                selectedElementIndex = -1;
+
+                // Annouce the very first one.
+                if (accessibilityElements != null && accessibilityElements.Length > 0)
+                {
+                    UpdateSelectedElementIndex(0);
+                    AnnouceElementAtSelectedIndex(true);
+                }
+
+                retainSelectedElementIndex = true;
+            }
         }
     }
 }

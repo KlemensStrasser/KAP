@@ -3,30 +3,18 @@
 public class KAPDesktopInput : KAPInput {
     
     /// Keycode of the key used to move to the next element
-    public KeyCode nextElementKey;
+    public KeyCode nextElementKey = KeyCode.RightArrow;
     /// Keycode of the key used to move to the previous element
-    public KeyCode previousElementKey;
+    public KeyCode previousElementKey = KeyCode.LeftArrow;
     /// Keycode of the key used to trigger the escape gesture
-    public KeyCode escapeKey;
+    public KeyCode escapeKey = KeyCode.E;
 
     /// Keycode for the key used to trigger a selection
-    public KeyCode selectKey;
+    public KeyCode selectKey = KeyCode.Space;
     /// Keycode for the key used to increment the value of the focused element
-    public KeyCode incrementValueKey;
+    public KeyCode incrementValueKey = KeyCode.UpArrow;
     /// Keycode for the key used to decrement the value of the focused element
-    public KeyCode decrementValueKey;
-
-    void Start ()
-    {
-        // TODO: Config
-        nextElementKey = KeyCode.RightArrow;
-        previousElementKey = KeyCode.LeftArrow;
-        escapeKey = KeyCode.Escape;
-
-        selectKey = KeyCode.Space;
-        incrementValueKey = KeyCode.UpArrow;
-        decrementValueKey = KeyCode.DownArrow;
-    }
+    public KeyCode decrementValueKey = KeyCode.DownArrow;
 
 	void Update ()
     {
