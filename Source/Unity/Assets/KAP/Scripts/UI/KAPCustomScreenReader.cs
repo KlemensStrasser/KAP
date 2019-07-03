@@ -95,6 +95,8 @@ public class KAPCustomScreenReader : MonoBehaviour, IKAPInputReceiver, IKAPScree
     {
         if (message != null && speechSynthesizer != null)
         {
+            // This might not work
+            // TODO: Add queue to speechSynthesizer
             speechSynthesizer.StartSpeaking(message);
         }
     }

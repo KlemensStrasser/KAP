@@ -7,14 +7,15 @@
 //
 
 #import "KAPVoiceOverBridgeViewController.h"
-#import "KAPVoiceOverHookOverlayView.h"
-#import "KAPVoiceOverHookView.h"
+#import "KAPVoiceOverHookOverlayUIView.h"
+#import "KAPVoiceOverHookUIView.h"
+#import "KAPVoiceOverHookOverlaySKView.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface KAPVoiceOverBridgeViewController () <KAPVoiceOverHookOverlayViewDelegate>
 
-@property (nonatomic, strong) KAPVoiceOverHookOverlayView *hookOverlayView;
+@property (nonatomic, strong) id<KAPVoiceOverHookOverlayView> hookOverlayView;
 @property (nonatomic, strong) NSMutableDictionary<NSNumber*, KAPInternalAccessibilityHook *> *hookDictionary;
 
 @end
@@ -29,10 +30,15 @@ NS_ASSUME_NONNULL_BEGIN
     _hookDictionary = hookDictionary;
     
     // View init
-    KAPVoiceOverHookOverlayView *hookOverlayView = [[KAPVoiceOverHookOverlayView alloc] initWithFrame:CGRectZero];
+    // UIKit
+//    KAPVoiceOverHookOverlayUIView *hookOverlayView = [[KAPVoiceOverHookOverlayUIView alloc] initWithFrame:CGRectZero];
+    
+    // SpriteKit
+    KAPVoiceOverHookOverlaySKView *hookOverlayView = [[KAPVoiceOverHookOverlaySKView alloc] initWithFrame:CGRectZero];
+    
     [hookOverlayView setTranslatesAutoresizingMaskIntoConstraints:NO];
     [hookOverlayView setHidden:!UIAccessibilityIsVoiceOverRunning()];
-    [hookOverlayView setDelegate:self];
+    [hookOverlayView setViewDelegate:self];
     [[self view] addSubview:hookOverlayView];
     
     _hookOverlayView = hookOverlayView;
@@ -56,14 +62,14 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [[self hookOverlayView] setHidden:!UIAccessibilityIsVoiceOverRunning()];
+    [[self hookOverlayView] makeHidden:!UIAccessibilityIsVoiceOverRunning()];
 }
 
 # pragma mark - Notifications
 
 - (void)voiceOverStatusDidChange:(NSNotification *)notification
 {
-    [[self hookOverlayView] setHidden:!UIAccessibilityIsVoiceOverRunning()];
+    [[self hookOverlayView] makeHidden:!UIAccessibilityIsVoiceOverRunning()];
 }
 
 # pragma mark -
@@ -91,7 +97,7 @@ NS_ASSUME_NONNULL_BEGIN
         [[self hookDictionary] setObject:hook forKey:[hook instanceID]];
     }
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:UIAccessibilityVoiceOverStatusDidChangeNotification object:nil];
+    UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, nil);
 }
 
 - (void)clearAllHooks
@@ -117,7 +123,6 @@ NS_ASSUME_NONNULL_BEGIN
     KAPInternalAccessibilityHook *hook = [[self hookDictionary] objectForKey:instanceID];
     
     if(hook) {
-        NSLog(@"Should call Increment");
         [hook valueChangeCallback]((int)[instanceID integerValue], 1);
     }
 }
@@ -127,7 +132,6 @@ NS_ASSUME_NONNULL_BEGIN
     KAPInternalAccessibilityHook *hook = [[self hookDictionary] objectForKey:instanceID];
     
     if(hook) {
-        NSLog(@"Should call Decrement");
         [hook valueChangeCallback]((int)[instanceID integerValue], -1);
     }
 }

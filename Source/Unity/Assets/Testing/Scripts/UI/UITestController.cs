@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class UITestController : MonoBehaviour {
 
+    public Button popupButton;
     public Button alertButton;
 
     public GameObject mainMenu;
@@ -13,9 +14,14 @@ public class UITestController : MonoBehaviour {
 
 	void Awake ()
     {
-        if (alertButton != null)
+        if (popupButton != null)
         {
-            alertButton.onClick.AddListener(ShowPopover);
+            popupButton.onClick.AddListener(ShowPopover);
+        }
+
+        if(alertButton != null)
+        {
+            alertButton.onClick.AddListener(SpeakAlert);
         }
 
         if (popover != null)
@@ -55,5 +61,10 @@ public class UITestController : MonoBehaviour {
             popover.SetActive(true);
             KAPUIManager.Instance.VisibleElementsDidChange();
         }
+    }
+
+    void SpeakAlert()
+    {
+        KAPUIManager.Instance.AnnouceMessage("This an important announcement");
     }
 }

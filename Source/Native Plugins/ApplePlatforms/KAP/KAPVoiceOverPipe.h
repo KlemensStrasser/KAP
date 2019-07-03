@@ -15,4 +15,6 @@ extern "C" {
     void KAPUpdateHook(KAPExternalAccessibilityHook);
     void KAPUpdateHooks(KAPExternalAccessibilityHook*, int);
     void KAPClearAllHooks();
+    
+    void KAPAnnoucnceVoiceOverMessage(const char *);
 }

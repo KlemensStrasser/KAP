@@ -1,14 +1,14 @@
 //
-//  KAPVoiceOverHookView.m
+//  KAPVoiceOverHookUIView.m
 //  KAPiOS
 //
 //  Created by Klemens Strasser on 10.05.19.
 //  Copyright © 2019 KlemensStrasser. All rights reserved.
 //
 
-#import "KAPVoiceOverHookView.h"
+#import "KAPVoiceOverHookUIView.h"
 
-@implementation KAPVoiceOverHookView
+@implementation KAPVoiceOverHookUIView
 
 - (instancetype)initWithFrame:(CGRect)frame instanceID:(NSNumber *)instanceID
 {
@@ -26,7 +26,7 @@
     [self setBackgroundColor:[UIColor colorWithWhite:1.0 alpha:0.25]];
 }
 
-# pragma mark -
+# pragma mark - Accessibility Instance Methods
 
 - (BOOL)accessibilityActivate
 {

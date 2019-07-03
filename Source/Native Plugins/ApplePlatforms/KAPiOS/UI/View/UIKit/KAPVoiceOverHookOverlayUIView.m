@@ -1,25 +1,25 @@
 //
-//  KAPVoiceOverHookView.m
+//  KAPVoiceOverHookOverlayUIView.m
 //  KAPiOS
 //
 //  Created by Klemens Strasser on 08.05.19.
 //  Copyright © 2019 KlemensStrasser. All rights reserved.
 //
 
-#import "KAPVoiceOverHookOverlayView.h"
-#import "KAPVoiceOverHookView.h"
+#import "KAPVoiceOverHookOverlayUIView.h"
+#import "KAPVoiceOverHookUIView.h"
 #import "KAPInternalAccessibilityHook.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface KAPVoiceOverHookOverlayView ()  <KAPVoiceOverHookViewDelegate>
+@interface KAPVoiceOverHookOverlayUIView ()  <KAPVoiceOverHookUIViewDelegate>
 
 @property (nonatomic, strong) UIView *backgroundView;
-@property (nonatomic, strong) NSMutableDictionary<NSNumber*, KAPVoiceOverHookView *> *hookViews;
+@property (nonatomic, strong) NSMutableDictionary<NSNumber*, KAPVoiceOverHookUIView *> *hookViews;
 
 @end
 
-@implementation KAPVoiceOverHookOverlayView
+@implementation KAPVoiceOverHookOverlayUIView
 
 - (instancetype)init
 {
@@ -58,35 +58,36 @@ NS_ASSUME_NONNULL_BEGIN
     [[[backgroundView bottomAnchor] constraintEqualToAnchor:[self bottomAnchor]] setActive:YES];
 }
 
-# pragma mark -
+# pragma mark - KAPVoiceOverHookOverlayViewDelegate
+
+- (void)makeHidden:(bool)hidden
+{
+    [self setHidden:hidden];
+}
 
 - (void)updateHookViewForAccessibilityHook:(KAPInternalAccessibilityHook *)hook
 {
-    KAPVoiceOverHookView *hookView = [[self hookViews] objectForKey:[hook instanceID]];
+    KAPVoiceOverHookUIView *hookView = [[self hookViews] objectForKey:[hook instanceID]];
     
     if(hookView == nil){
-        hookView = [[KAPVoiceOverHookView alloc] initWithFrame:[hook frame] instanceID:[hook instanceID]];
+        hookView = [[KAPVoiceOverHookUIView alloc] initWithFrame:[hook frame] instanceID:[hook instanceID]];
+        [hookView setDelegate:self];
+        
+        [self addSubview:hookView];
+        [[self hookViews] setObject:hookView forKey:[hookView instanceID]];
     } else {
-        [hookView setFrame:[hookView frame]];
+        [hookView setFrame:[hook frame]];
     }
     
     [hookView setAccessibilityLabel:[hook label]];
     [hookView setAccessibilityValue:[hook value]];
     [hookView setAccessibilityHint:[hook hint]];
     [hookView setAccessibilityTraits:[hook trait]];
-    
-    [hookView setDelegate:self];
-    
-    [self addSubview:hookView];
-    
-    [[self hookViews] setObject:hookView forKey:[hookView instanceID]];
-    
-    
 }
 
 - (void)removeHookWithID:(NSNumber *)instanceID
 {
-    KAPVoiceOverHookView *invalidHookView = [[self hookViews] objectForKey:instanceID];
+    KAPVoiceOverHookUIView *invalidHookView = [[self hookViews] objectForKey:instanceID];
     [invalidHookView removeFromSuperview];
     [[self hookViews] removeObjectForKey:instanceID];
 }
@@ -99,24 +100,24 @@ NS_ASSUME_NONNULL_BEGIN
 
 # pragma mark - KAPVoiceOverHookViewDelegate
 
-- (void)voiceOverHookWasAccessibilityActivated:(KAPVoiceOverHookView *)hook
+- (void)voiceOverHookWasAccessibilityActivated:(KAPVoiceOverHookUIView *)hook
 {
-    if([[self delegate] respondsToSelector:@selector(triggerActivateCallbackOfHookWithID:)]) {
-        [[self delegate] triggerActivateCallbackOfHookWithID:[hook instanceID]];
+    if([[self viewDelegate] respondsToSelector:@selector(triggerActivateCallbackOfHookWithID:)]) {
+        [[self viewDelegate] triggerActivateCallbackOfHookWithID:[hook instanceID]];
     }
 }
 
-- (void)voiceOverHookWasAccessibilityIncremented:(KAPVoiceOverHookView *)hook
+- (void)voiceOverHookWasAccessibilityIncremented:(KAPVoiceOverHookUIView *)hook
 {
-    if([[self delegate] respondsToSelector:@selector(triggerIncrementCallbackOfHookWithID:)]) {
-        [[self delegate] triggerIncrementCallbackOfHookWithID:[hook instanceID]];
+    if([[self viewDelegate] respondsToSelector:@selector(triggerIncrementCallbackOfHookWithID:)]) {
+        [[self viewDelegate] triggerIncrementCallbackOfHookWithID:[hook instanceID]];
     }
 }
 
-- (void)voiceOverHookWasAccessibilityDecremented:(KAPVoiceOverHookView *)hook
+- (void)voiceOverHookWasAccessibilityDecremented:(KAPVoiceOverHookUIView *)hook
 {
-    if([[self delegate] respondsToSelector:@selector(triggerDecrementCallbackOfHookWithID:)]) {
-        [[self delegate] triggerDecrementCallbackOfHookWithID:[hook instanceID]];
+    if([[self viewDelegate] respondsToSelector:@selector(triggerDecrementCallbackOfHookWithID:)]) {
+        [[self viewDelegate] triggerDecrementCallbackOfHookWithID:[hook instanceID]];
     }
 }
 

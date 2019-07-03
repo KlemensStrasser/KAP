@@ -44,6 +44,7 @@ void KAPUpdateHook(KAPExternalAccessibilityHook externalHook)
 {
     KAPVoiceOverBridgeViewController *bridgeViewController = getBridgeViewController();
     
+    // TODO: Implement again
     if(bridgeViewController != nil) {
         KAPInternalAccessibilityHook *internalHook = [[KAPInternalAccessibilityHook alloc] initWithExternalHook:externalHook];
     }
@@ -73,5 +74,14 @@ void KAPClearAllHooks()
     
     if (bridgeViewController != nil) {
         [bridgeViewController clearAllHooks];
+    }
+}
+
+void KAPAnnoucnceVoiceOverMessage(const char *cString)
+{
+    NSString *text = NSStringFromCString(cString);
+    
+    if(text){
+        UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, text);
     }
 }

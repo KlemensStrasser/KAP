@@ -2,32 +2,28 @@
 //  KAPVoiceOverHookOverlayView.h
 //  KAPiOS
 //
-//  Created by Klemens Strasser on 08.05.19.
+//  Created by Klemens Strasser on 03.07.19.
 //  Copyright © 2019 KlemensStrasser. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-
 NS_ASSUME_NONNULL_BEGIN
 
-@class KAPVoiceOverHookView;
 @class KAPInternalAccessibilityHook;
+
+@protocol KAPVoiceOverHookOverlayView
+
+- (void)makeHidden:(bool)hidden;
+- (void)updateHookViewForAccessibilityHook:(KAPInternalAccessibilityHook *)hook;
+- (void)removeHookWithID:(NSNumber *)instanceID;
+- (void)clear;
+
+@end
 
 @protocol KAPVoiceOverHookOverlayViewDelegate <NSObject>
 
 - (void)triggerActivateCallbackOfHookWithID:(NSNumber *)instanceID;
 - (void)triggerIncrementCallbackOfHookWithID:(NSNumber *)instanceID;
 - (void)triggerDecrementCallbackOfHookWithID:(NSNumber *)instanceID;
-
-@end
-
-@interface KAPVoiceOverHookOverlayView : UIView
-
-@property (nonatomic, weak) id<KAPVoiceOverHookOverlayViewDelegate> delegate;
-
-- (void)updateHookViewForAccessibilityHook:(KAPInternalAccessibilityHook *)hook;
-- (void)removeHookWithID:(NSNumber *)instanceID;
-- (void)clear;
 
 @end
 

@@ -43,6 +43,9 @@ public class KAPNativeScreenReaderBridge : IKAPScreenReader
     [DllImport("__Internal")]
     private static extern void KAPClearAllHooks();
 
+    [DllImport("__Internal")]
+    private static extern void KAPAnnoucnceVoiceOverMessage(string cString);
+
     private bool NativeScreenReaderAvailable() { return true; }
 #else
 
@@ -52,6 +55,8 @@ public class KAPNativeScreenReaderBridge : IKAPScreenReader
     private void KAPUpdateHook(KAPExternalAccessibilityHook hook) { }
     private void KAPUpdateHooks(KAPExternalAccessibilityHook[] hooks, int size) { }
     private void KAPClearAllHooks() { }
+
+    private void KAPAnnoucnceVoiceOverMessage(string cString) { }
 
     private bool NativeScreenReaderAvailable() { return false; }
 #endif
@@ -79,9 +84,12 @@ public class KAPNativeScreenReaderBridge : IKAPScreenReader
         KAPUpdateHooks(hooks, hooks.Length);
     }
 
-    public void AnnounceMessage(string Message)
-    { 
-        // TODO: Implement!
+    public void AnnounceMessage(string message)
+    {
+        if (message != null && message.Length > 0)
+        {
+            KAPAnnoucnceVoiceOverMessage(message);
+        }
     }
 
     public void FocusElementWithID(int instanceID)
