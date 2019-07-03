@@ -24,6 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)triggerActivateCallbackOfHookWithID:(NSNumber *)instanceID;
 - (void)triggerIncrementCallbackOfHookWithID:(NSNumber *)instanceID;
 - (void)triggerDecrementCallbackOfHookWithID:(NSNumber *)instanceID;
+- (void)triggerDidBecomeFocusedCallbackOfHookWithID:(NSNumber *)instanceID;
 
 @end
 

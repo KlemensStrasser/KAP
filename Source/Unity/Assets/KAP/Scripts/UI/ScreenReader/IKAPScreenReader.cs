@@ -8,5 +8,5 @@ public interface IKAPScreenReader
 
     void AnnounceMessage(string Message);
 
-    void FocusElementWithID(int instanceID);
+    void FocusElement(KAPScreenReaderElement elementToFocus);
 }

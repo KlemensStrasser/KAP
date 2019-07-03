@@ -101,15 +101,14 @@ public class KAPCustomScreenReader : MonoBehaviour, IKAPInputReceiver, IKAPScree
         }
     }
 
-    public void FocusElementWithID(int instanceID)
+    public void FocusElement(KAPScreenReaderElement elementToFocus)
     {
-        int index = 0;
-
-        int instanceIndex = Array.FindIndex(accessibilityElements, element => element.gameObject.GetInstanceID() == instanceID);
+        int targetInstanceID = elementToFocus.gameObject.GetInstanceID();
+        int instanceIndex = Array.FindIndex(accessibilityElements, element => element.gameObject.GetInstanceID() == targetInstanceID);
 
         if (instanceIndex != -1)
         {
-            UpdateFocusedElementIndex(index);
+            UpdateFocusedElementIndex(instanceIndex);
             AnnouceElementAtFocusedIndex(true);
         } 
         else

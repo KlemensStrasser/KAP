@@ -17,6 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)voiceOverHookWasAccessibilityActivated:(KAPVoiceOverHookSKNode *)hook;
 - (void)voiceOverHookWasAccessibilityIncremented:(KAPVoiceOverHookSKNode *)hook;
 - (void)voiceOverHookWasAccessibilityDecremented:(KAPVoiceOverHookSKNode *)hook;
+- (void)voiceOverHookDidBecomeAccessibilityFocused:(KAPVoiceOverHookSKNode *)hook;
 
 @end
 

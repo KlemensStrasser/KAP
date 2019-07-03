@@ -7,11 +7,6 @@ public class KAPUIManager : MonoBehaviour
     private IKAPScreenReader screenReader;
 
     /// <summary>
-    /// Array of the KAPScreenReaderElement that are currently visible to the screen reader
-    /// </summary>
-    KAPScreenReaderElement[] accessibilityElements;
-
-    /// <summary>
     /// Boolean indicating if the accessibility elements need to be updated
     /// </summary>
     private bool needsUpdateElements;
@@ -79,7 +74,7 @@ public class KAPUIManager : MonoBehaviour
         }
 
         // Fetch Elements
-        accessibilityElements = LoadAccessibilityElements();
+        KAPScreenReaderElement[] accessibilityElements = LoadAccessibilityElements();
 
         screenReader.UpdateWithScreenReaderElements(accessibilityElements);
     }
@@ -184,16 +179,7 @@ public class KAPUIManager : MonoBehaviour
     /// </summary>
     public void FocusElement(KAPScreenReaderElement element) 
     {
-        int index = Array.IndexOf(accessibilityElements, element);
-        if(index != -1) 
-        {
-            int instanceID = accessibilityElements[index].gameObject.GetInstanceID();
-            screenReader.FocusElementWithID(instanceID);
-        }
-        else
-        {
-            Debug.LogWarning("KAPUIManager: AccessibilityElement is not in the accessiblity elements. Call SetNeedsUpdateElements first!");
-        }
+        screenReader.FocusElement(element);
     }
 
     /// <summary>
@@ -201,15 +187,15 @@ public class KAPUIManager : MonoBehaviour
     /// </summary>
     public void FocusGameObject(GameObject gObject)
     {
-        int index = Array.FindIndex(accessibilityElements, element => element.gameObject == gObject);
-        if (index != -1)
+        KAPScreenReaderElement element = gObject.GetComponent<KAPScreenReaderElement>();
+
+        if (element != null)
         {
-            int instanceID = accessibilityElements[index].gameObject.GetInstanceID();
-            screenReader.FocusElementWithID(instanceID);
+            this.FocusElement(element);
         }
         else
         {
-            Debug.LogWarning("KAPUIManager: AccessibilityElement of given GameObject is not in the accessiblity elements. Call SetNeedsUpdateElements first!");
+            Debug.LogWarning("KAPUIManager: Given GameObject has no KAPScreenReaderElement attached!");
         }
     }
 
@@ -227,52 +213,6 @@ public class KAPUIManager : MonoBehaviour
 
     #endregion
 
-    #region Public Helpers
-
-    /// <summary>
-    /// Invokes the selection silently of element with identifier.
-    /// </summary>
-    /// <param name="instanceID">Instance identifier.</param>
-    public void InvokeSelectionSilentlyOfElementWithID(int instanceID)
-    {
-        foreach (KAPScreenReaderElement element in accessibilityElements) 
-        {
-            if(element.gameObject.GetInstanceID() == instanceID)
-            {
-                element.InvokeSelection();
-                break;    
-            }
-        }
-    }
-
-    /// <summary>
-    /// Invokes the value change silently of element with identifier.
-    /// </summary>
-    /// <param name="instanceID">Instance identifier.</param>
-    /// <param name="modifier">1 = Increment, -1 = decrement</param>
-    public void InvokeValueChangeSilentlyOfElementWithID(int instanceID, int modifier)
-    {
-        foreach (KAPScreenReaderElement element in accessibilityElements)
-        {
-            if (element.gameObject.GetInstanceID() == instanceID)
-            {
-                // TOOD: Maybe move this to the bridge
-                if(modifier == -1) 
-                {
-                    element.InvokeDecrement();
-                }
-                else if(modifier == 1)
-                {
-                    element.InvokeIncrement();
-                }
-
-                break;
-            }
-        }
-    }
-
-    #endregion
-
     /// <summary>
     /// If needsUpdateElements is set, reloads the accessibility elements and updates the screen readers
     /// </summary>
@@ -280,7 +220,7 @@ public class KAPUIManager : MonoBehaviour
     {
         if(needsUpdateElements)
         {
-            accessibilityElements = LoadAccessibilityElements();
+            KAPScreenReaderElement[] accessibilityElements = LoadAccessibilityElements();
             screenReader.UpdateWithScreenReaderElements(accessibilityElements, retainSelectedElementIndex);
 
             needsUpdateElements = false;

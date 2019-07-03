@@ -18,6 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)voiceOverHookWithIDWasAccessibilityActivated:(NSNumber *)instanceID;
 - (void)voiceOverHookWithIDWasAccessibilityIncremented:(NSNumber *)instanceID;
 - (void)voiceOverHookWithIDWasAccessibilityDecremented:(NSNumber *)instanceID;
+- (void)voiceOverHookWithIDDidBecomeAccessibilityFocused:(NSNumber *)instanceID;
 
 @end
 

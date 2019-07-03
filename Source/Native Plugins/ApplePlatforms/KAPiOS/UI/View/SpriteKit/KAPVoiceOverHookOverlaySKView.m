@@ -106,6 +106,12 @@ NS_ASSUME_NONNULL_BEGIN
     }
 }
 
+- (void)voiceOverHookWithIDDidBecomeAccessibilityFocused:(NSNumber *)instanceID
+{
+    if([[self viewDelegate] respondsToSelector:@selector(triggerDidBecomeFocusedCallbackOfHookWithID:)]) {
+        [[self viewDelegate] triggerDidBecomeFocusedCallbackOfHookWithID:instanceID];
+    }
+}
 
 @end
 

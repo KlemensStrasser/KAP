@@ -50,5 +50,12 @@
         [[self delegate] voiceOverHookWasAccessibilityDecremented:self];
     }
 }
+
+- (void)accessibilityElementDidBecomeFocused
+{
+    if([[self delegate] respondsToSelector:@selector(voiceOverHookDidBecomeAccessibilityFocused:)]) {
+        [[self delegate] voiceOverHookDidBecomeAccessibilityFocused:self];
+    }
+}
     
 @end

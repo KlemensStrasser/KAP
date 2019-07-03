@@ -21,6 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (readonly, nonatomic) NSString *hint;
 @property (readonly, nonatomic) uint64_t trait;
 @property (readonly, nonatomic) InvokeSelectionCallback selectionCallback;
+@property (readonly, nonatomic) InvokeFocusCallback focusCallback;
 @property (readonly, nonatomic) InvokeValueChangeCallback valueChangeCallback;
 
 - (instancetype)initWithExternalHook:(KAPExternalAccessibilityHook)externalHook NS_DESIGNATED_INITIALIZER;

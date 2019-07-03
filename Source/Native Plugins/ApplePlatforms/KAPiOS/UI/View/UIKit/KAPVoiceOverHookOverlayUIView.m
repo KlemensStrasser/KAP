@@ -121,6 +121,12 @@ NS_ASSUME_NONNULL_BEGIN
     }
 }
 
+- (void)voiceOverHookDidBecomeAccessibilityFocused:(KAPVoiceOverHookUIView *)hook {
+    if([[self viewDelegate] respondsToSelector:@selector(triggerDidBecomeFocusedCallbackOfHookWithID:)]) {
+        [[self viewDelegate] triggerDidBecomeFocusedCallbackOfHookWithID:[hook instanceID]];
+    }
+}
+
 @end
 
 NS_ASSUME_NONNULL_END

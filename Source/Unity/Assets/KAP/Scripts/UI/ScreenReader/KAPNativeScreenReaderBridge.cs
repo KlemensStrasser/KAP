@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Runtime.InteropServices;
 using AOT;
+using System;
 
-public delegate void KAPInvokeSelectionCallback(int instancdeID);
-public delegate void KAPInvokeValueChangeCallback(int instancdeID, int modifier);
+public delegate void KAPInvokeSelectionCallback(int instanceID);
+public delegate void KAPInvokeFocusCallback(int instanceID);
+public delegate void KAPInvokeValueChangeCallback(int instanceID, int modifier);
 
 [StructLayout(LayoutKind.Sequential)]
 public struct KAPExternalAccessibilityHook
@@ -24,6 +26,7 @@ public struct KAPExternalAccessibilityHook
     public ulong  trait;
 
     public KAPInvokeSelectionCallback selectionCallback;
+    public KAPInvokeFocusCallback focusCallback;
     public KAPInvokeValueChangeCallback valueChangeCallback;
 }
 
@@ -70,6 +73,8 @@ public class KAPNativeScreenReaderBridge : IKAPScreenReader
 
     public void UpdateWithScreenReaderElements(KAPScreenReaderElement[] accessibilityElements, bool tryRetainingIndex = false)
     {
+        KAPNativeScreenReaderBridgeElementStorage.Instance.SetAccessibilityElements(accessibilityElements);
+
         KAPExternalAccessibilityHook[] hooks = new KAPExternalAccessibilityHook[accessibilityElements.Length];
 
         // TODO: Error handling
@@ -92,9 +97,16 @@ public class KAPNativeScreenReaderBridge : IKAPScreenReader
         }
     }
 
-    public void FocusElementWithID(int instanceID)
-    { 
-        // TODO: Implement
+    /// <summary>
+    /// Focuses the given element.
+    /// </summary>
+    /// <param name="elementToFocus">Element to focus.</param>
+    /// 
+    /// This needs to call the native plugin to change the focus of the native screen reader, which will trigger the InvokeFocuseCallback
+    public void FocusElement(KAPScreenReaderElement elementToFocus)
+    {
+        // TODO: IMPLEMENT FULLY
+        int targetInstanceID = elementToFocus.gameObject.GetInstanceID();
     }
 
     #endregion
@@ -109,13 +121,20 @@ public class KAPNativeScreenReaderBridge : IKAPScreenReader
     [MonoPInvokeCallback(typeof(KAPInvokeSelectionCallback))]
     public static void InvokeSelectionCallback(int instanceID)
     {
-        KAPUIManager.Instance.InvokeSelectionSilentlyOfElementWithID(instanceID);
+        KAPNativeScreenReaderBridgeElementStorage.Instance.InvokeSelectionOfElementWithID(instanceID);
     }
 
     [MonoPInvokeCallback(typeof(KAPInvokeValueChangeCallback))]
     public static void InvokeValueChangeCallback(int instanceID, int modifier)
     {
-        KAPUIManager.Instance.InvokeValueChangeSilentlyOfElementWithID(instanceID, modifier);
+        KAPNativeScreenReaderBridgeElementStorage.Instance.InvokeValueChangeOfElementWithID(instanceID, modifier);
+    }
+
+    [MonoPInvokeCallback(typeof(KAPInvokeFocusCallback))]
+    public static void InvokeFocuseCallback(int instanceID)
+    {
+        // TODO: CALL INVOKEFOCUSSTZFF
+        KAPNativeScreenReaderBridgeElementStorage.Instance.SetFocusOnElementWithID(instanceID);
     }
 
     #endregion
@@ -137,6 +156,7 @@ public class KAPNativeScreenReaderBridge : IKAPScreenReader
             trait = accessibilityElement.traits.Value,
 
             selectionCallback = InvokeSelectionCallback,
+            focusCallback = InvokeFocuseCallback,
             valueChangeCallback = InvokeValueChangeCallback,
         };
 

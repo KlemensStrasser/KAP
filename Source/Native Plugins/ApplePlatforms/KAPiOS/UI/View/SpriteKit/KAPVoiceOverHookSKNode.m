@@ -86,6 +86,13 @@ NS_ASSUME_NONNULL_BEGIN
     }
 }
 
+- (void)accessibilityElementDidBecomeFocused
+{
+    if([[self delegate] respondsToSelector:@selector(voiceOverHookDidBecomeAccessibilityFocused:)]) {
+        [[self delegate] voiceOverHookDidBecomeAccessibilityFocused:self];
+    }
+}
+
 - (CGRect)accessibilityFrame
 {
     return [[self shapeNode] accessibilityFrame];

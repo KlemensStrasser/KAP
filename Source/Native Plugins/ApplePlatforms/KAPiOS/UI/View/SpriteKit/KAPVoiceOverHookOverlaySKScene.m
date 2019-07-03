@@ -136,6 +136,13 @@ NS_ASSUME_NONNULL_BEGIN
     }
 }
 
+- (void)voiceOverHookDidBecomeAccessibilityFocused:(KAPVoiceOverHookSKNode *)hook
+{
+    if([[self sceneOverlayDelegate] respondsToSelector:@selector(voiceOverHookWithIDDidBecomeAccessibilityFocused:)]){
+        [[self sceneOverlayDelegate] voiceOverHookWithIDDidBecomeAccessibilityFocused:[hook instanceID]];
+    }
+}
+
 # pragma mark - Accessibility
 
 - (NSInteger)accessibilityElementCount

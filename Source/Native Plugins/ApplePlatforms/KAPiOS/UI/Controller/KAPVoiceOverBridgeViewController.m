@@ -136,6 +136,15 @@ NS_ASSUME_NONNULL_BEGIN
     }
 }
 
+- (void)triggerDidBecomeFocusedCallbackOfHookWithID:(NSNumber *)instanceID
+{
+    KAPInternalAccessibilityHook *hook = [[self hookDictionary] objectForKey:instanceID];
+    
+    if(hook) {
+        [hook focusCallback]((int)[instanceID integerValue]);
+    }
+}
+
 @end
 
 NS_ASSUME_NONNULL_END
