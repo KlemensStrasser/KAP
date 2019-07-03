@@ -67,10 +67,8 @@ public class KAPSlider : KAPElement
             slider.value = newValue;
 
             double roundedValue = System.Math.Round((double)newValue, accuracy);
-
             slider.value = (float)roundedValue;
 
-            Debug.Log(newValue + " " + roundedValue);
             // TODO: This is not the right place for the update call because its only needed when we have a native plugin. But not sure where the right place is.
             KAPUIManager.Instance.SetNeedsUpdateElements();
         }
@@ -95,9 +93,6 @@ public class KAPSlider : KAPElement
 
 
             double roundedValue = System.Math.Round((double)newValue, accuracy);
-
-            Debug.Log(newValue + " " + roundedValue);
-
             slider.value = (float)roundedValue;
 
             // TODO: This is not the right place for the update call because its only needed when we have a native plugin. But not sure where the right place is.
