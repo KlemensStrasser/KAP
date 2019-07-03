@@ -1,24 +1,10 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using System.Linq;
 
-public class KAPUIManager : MonoBehaviour, IKAPInputReceiver
+public class KAPUIManager : MonoBehaviour
 {
-    private int selectedElementIndex;
-    private KAPSpeechSynthesizer speechSynthesizer;
-    private KAPUIVisualizer kapVisualizer;
-    private KAPNativeScreenReaderBridge nativeScreenReaderBridge;
-
-    private AudioSource soundEffectAudioSource;
-
-    private AudioClip focusAudioClip;
-    private AudioClip blockAudioClip;
-    private AudioClip selectAudioClip;
-
-    KAPInput input;
+    private IKAPScreenReader screenReader;
 
     /// <summary>
     /// Array of the KAPElements that are currently visible to the screen reader
@@ -54,6 +40,9 @@ public class KAPUIManager : MonoBehaviour, IKAPInputReceiver
         } 
     }
 
+    /// <summary>
+    /// Makes sure that there is only one instance of the KAPUIManager
+    /// </summary>
     private void Awake()
     {
         if(_instance != null && _instance != this) 
@@ -66,70 +55,63 @@ public class KAPUIManager : MonoBehaviour, IKAPInputReceiver
         }
     }
 
+    /// <summary>
+    /// Creates the screenreader and triggers fetching the accessibility elements
+    /// </summary>
     void Start()
     {
-        // Create the correct Input depending on the available device
-#if UNITY_STANDALONE || UNITY_EDITOR
-        input = gameObject.AddComponent<KAPDesktopInput>();
-        input.inputReceiver = this;
-#elif UNITY_IOS || UNITY_ANDROID
-        input = gameObject.AddComponent<KAPMobileInput>();
-        input.inputReceiver = this;
-#endif
-        // Initialize Sounds
-        soundEffectAudioSource = gameObject.AddComponent<AudioSource>();
-        focusAudioClip = Resources.Load("Audio/kap_focus") as AudioClip;
-        blockAudioClip = Resources.Load("Audio/kap_block") as AudioClip;
-        selectAudioClip = Resources.Load("Audio/kap_select") as AudioClip;
+        // TODO: Add settings to the screen readers like a prefered language
+        KAPNativeScreenReaderBridge nativeScreenReaderBridge = new KAPNativeScreenReaderBridge();
 
-        // TODO: Settings, like language, volume etc.
-        speechSynthesizer = new KAPSpeechSynthesizer();
-
-        // Initialize Visualizer
-        GameObject visualizerObject = Resources.Load<GameObject>("Prefabs/UI/KAPUIVisualizer");
-        visualizerObject = Instantiate<GameObject>(visualizerObject);
-        visualizerObject.name = "KAPUIVisualizer";
-        if(visualizerObject != null) 
+        if(nativeScreenReaderBridge.Available())
         {
-            kapVisualizer = visualizerObject.GetComponent<KAPUIVisualizer>();
+            screenReader = nativeScreenReaderBridge;
         }
-
-        nativeScreenReaderBridge = new KAPNativeScreenReaderBridge();
-
-        if (!nativeScreenReaderBridge.Available())
+        else
         {
-            // Fetch Elements
-            LoadAccessibilityElements();
-            selectedElementIndex = -1;
-
-            // Annouce the very first one.
-            if (accessibilityElements != null && accessibilityElements.Length > 0)
+            GameObject screenReaderObject = Resources.Load<GameObject>("Prefabs/UI/KAPScreenReader");
+            screenReaderObject = Instantiate<GameObject>(screenReaderObject);
+            screenReaderObject.name = "KAPScreenReader";
+            if (screenReaderObject != null)
             {
-                UpdateSelectedElementIndex(0);
-                AnnouceElementAtSelectedIndex(true);
+                screenReader = screenReaderObject.GetComponent<IKAPScreenReader>();
             }
         }
+
+        // Fetch Elements
+        accessibilityElements = LoadAccessibilityElements();
+
+        screenReader.UpdateWithKAPElements(accessibilityElements);
     }
 
-    void LoadAccessibilityElements()
+    /// <summary>
+    /// Fetches the accessibility elements in the scene and sorts them by frame
+    /// </summary>
+    KAPElement[] LoadAccessibilityElements()
     {
-        accessibilityElements = FindObjectsOfType<KAPElement>();
+        KAPElement[] elements = FindObjectsOfType<KAPElement>();
 
-        KAPElement[] popovers = accessibilityElements.Where(c => c is KAPPopover).ToArray();
+        KAPElement[] popovers = elements.Where(c => c is KAPPopover).ToArray();
         if(popovers != null && popovers.Length > 0)
         {
-            accessibilityElements = GetAccessibilityElementsFromPopover((KAPPopover)popovers[0]);
+            elements = GetAccessibilityElementsFromPopover((KAPPopover)popovers[0]);
         }
 
-        if (accessibilityElements != null) 
+        if (elements != null) 
         {
-            SortByFrame();
+            // Sort by frame
+            Array.Sort(elements, delegate (KAPElement element1, KAPElement element2)
+            {
+                int comparrisonResult = element1.frame.y.CompareTo(element2.frame.y);
+                if (comparrisonResult == 0)
+                {
+                    comparrisonResult = element1.frame.x.CompareTo(element2.frame.x);
+                }
+                return comparrisonResult;
+            });
         }
 
-        if (nativeScreenReaderBridge.Available())
-        {
-            nativeScreenReaderBridge.UpdateHooksForKAPElements(accessibilityElements);
-        } 
+        return elements;
     }
 
 
@@ -186,242 +168,48 @@ public class KAPUIManager : MonoBehaviour, IKAPInputReceiver
         return topAccessibilityElements;
     }
 
-    void SortByFrame()
-    {
-        Array.Sort(accessibilityElements, delegate (KAPElement element1, KAPElement element2)
-        {
-            int comparrisonResult = element1.frame.y.CompareTo(element2.frame.y);
-            if (comparrisonResult == 0)
-            {
-                comparrisonResult = element1.frame.x.CompareTo(element2.frame.x);
-            }
-            return comparrisonResult;
-        });
-    }
-
-    #region Sounds
-
-    private void AnnouceElementAtSelectedIndex(bool includeDescription)
-    {
-        if (speechSynthesizer != null)
-        {
-            KAPElement element = this.SelectedElement();
-
-            if (element != null)
-            {
-                string text;
-                if(includeDescription)
-                {
-                    text = element.FullLabel();
-                }
-                else 
-                {
-                    text = element.LabelWithTraitAndValue();
-                }
-
-                speechSynthesizer.StartSpeaking(text);
-            }
-            else
-            {
-                Debug.LogWarning("KAP Element at the selectedElementIndex is null!");
-            }
-        }
-        else
-        {
-            Debug.LogWarning("The speechSynthesizer is null!");
-        }
-    }
-
-    private void AnnouceValueOfSelectedElement()
-    {
-        KAPElement selectedElement = this.SelectedElement();
-        if (speechSynthesizer != null && selectedElement != null && selectedElement.value != null)
-        {
-            string text = selectedElement.value;
-            speechSynthesizer.StartSpeaking(text);
-        }
-    }
-
-    private void PlayFocusSound() 
-    {
-        soundEffectAudioSource.Stop();
-        soundEffectAudioSource.PlayOneShot(focusAudioClip);
-    }
-
-    private void PlayBlockingSound()
-    {
-        soundEffectAudioSource.Stop();
-        soundEffectAudioSource.PlayOneShot(blockAudioClip);
-    }
-
-    private void PlaySelectSound()
-    {
-        soundEffectAudioSource.Stop();
-        soundEffectAudioSource.PlayOneShot(selectAudioClip);
-    }
-
-    #endregion
-
-    #region Visualization
-
-    private void OnGUI()
-    {
-        // Update visualizer
-        KAPElement selectedElement = SelectedElement();
-
-        if(selectedElement != null && kapVisualizer != null)
-        {
-            kapVisualizer.DrawIndicatorForElement(selectedElement);
-        }
-    }
-
-    #endregion
-
-    #region IKAPInputReceiver
-
-    public void FocusNextElement()
-    {
-        if (selectedElementIndex + 1 < accessibilityElements.Length)
-        {
-            UpdateSelectedElementIndex(selectedElementIndex + 1);
-            PlayFocusSound();
-            AnnouceElementAtSelectedIndex(true);
-        }
-        else
-        {
-            PlayBlockingSound();
-            AnnouceElementAtSelectedIndex(false);
-        }
-    }
-
-    public void FocusPreviousElement()
-    {
-        if (selectedElementIndex > 0)
-        {
-            UpdateSelectedElementIndex(selectedElementIndex - 1);
-            PlayFocusSound();
-            AnnouceElementAtSelectedIndex(true);
-        }
-        else
-        {
-            PlayBlockingSound();
-            AnnouceElementAtSelectedIndex(false);
-        }
-    }
-
-    public void SelectFocusedElement()
-    {
-        KAPElement selectedElement = this.SelectedElement();
-        if (selectedElement)
-        {
-            selectedElement.InvokeSelection();
-            PlaySelectSound();
-            AnnouceElementAtSelectedIndex(true);
-        }
-    }
-
-    public void IncrementValueOfFocuedElement()
-    {
-        KAPElement selectedElement = this.SelectedElement();
-        if (selectedElement)
-        {
-            string oldValue = selectedElement.value;
-            selectedElement.InvokeIncrement();
-            string newValue = selectedElement.value;
-
-            if (oldValue == newValue)
-            {
-                PlayBlockingSound();
-            }
-            AnnouceElementAtSelectedIndex(true);
-        }
-    }
-
-    public void DecrementValueOfFocuedElement()
-    {
-        KAPElement selectedElement = this.SelectedElement();
-        if (selectedElement)
-        {
-            string oldValue = selectedElement.value;
-            selectedElement.InvokeDecrement();
-            string newValue = selectedElement.value;
-
-            if (oldValue == newValue)
-            {
-                PlayBlockingSound();
-            }
-            AnnouceElementAtSelectedIndex(true);
-        }
-    }
-
-    public void FocusElementAtPosition(Vector2 position)
-    {
-        int touchedElementIndex = IndexForTopElementAtPosition(position);
-
-        if (touchedElementIndex != -1 && selectedElementIndex != touchedElementIndex)
-        {
-            UpdateSelectedElementIndex(touchedElementIndex);
-            PlayFocusSound();
-            AnnouceElementAtSelectedIndex(true);
-        }
-    }
-
-    private int IndexForTopElementAtPosition(Vector2 position)
-    {
-        int index = -1;
-
-        for(int i = 0; i < accessibilityElements.Length; i++) 
-        {
-            KAPElement element = accessibilityElements[i];
-            if(element.frame.Contains(position))
-            {
-                if(index == -1)
-                {
-                    index = i;
-                }
-            }
-        }
-
-        return index;
-    }
-
-    public void HandleEscapeGesture()
-    {
-        Debug.LogWarning("KAPUIManager: Escape Gesture is not implemented yet");
-    }
-
-    #endregion
 
     #region "Notifications"
 
+    /// <summary>
     /// Stops any text that is currently spoken and annouces the given message
+    /// </summary>
     public void AnnouceMessage(string message) 
     {
-        if (message != null && speechSynthesizer != null)
-        {
-            speechSynthesizer.StartSpeaking(message);
-        }
+        screenReader.AnnounceMessage(message);
     }
 
+    /// <summary>
     /// Tries to set the focus on a given KAPElement
+    /// </summary>
     public void FocusElement(KAPElement element) 
     {
         int index = Array.IndexOf(accessibilityElements, element);
-        if(index != -1) {
-            UpdateSelectedElementIndex(index);
-            AnnouceElementAtSelectedIndex(true);
+        if(index != -1) 
+        {
+            int instanceID = accessibilityElements[index].gameObject.GetInstanceID();
+            screenReader.FocusElementWithID(instanceID);
+        }
+        else
+        {
+            Debug.LogWarning("KAPUIManager: AccessibilityElement is not in the accessiblity elements. Call SetNeedsUpdateElements first!");
         }
     }
 
-    /// Tries to set the focus on a KAPElement that is attached to the given
-    /// GameObject
+    /// <summary>
+    /// Tries to set the focus on a KAPElement that is attached to the given GameObject
+    /// </summary>
     public void FocusGameObject(GameObject gObject)
     {
         int index = Array.FindIndex(accessibilityElements, element => element.gameObject == gObject);
         if (index != -1)
         {
-            UpdateSelectedElementIndex(index);
-            AnnouceElementAtSelectedIndex(true);
+            int instanceID = accessibilityElements[index].gameObject.GetInstanceID();
+            screenReader.FocusElementWithID(instanceID);
+        }
+        else
+        {
+            Debug.LogWarning("KAPUIManager: AccessibilityElement of given GameObject is not in the accessiblity elements. Call SetNeedsUpdateElements first!");
         }
     }
 
@@ -439,8 +227,12 @@ public class KAPUIManager : MonoBehaviour, IKAPInputReceiver
 
     #endregion
 
-    #region Public Helpers (Native screenreader available)
+    #region Public Helpers
 
+    /// <summary>
+    /// Invokes the selection silently of element with identifier.
+    /// </summary>
+    /// <param name="instanceID">Instance identifier.</param>
     public void InvokeSelectionSilentlyOfElementWithID(int instanceID)
     {
         foreach (KAPElement element in accessibilityElements) 
@@ -453,7 +245,9 @@ public class KAPUIManager : MonoBehaviour, IKAPInputReceiver
         }
     }
 
+    /// <summary>
     /// Invokes the value change silently of element with identifier.
+    /// </summary>
     /// <param name="instanceID">Instance identifier.</param>
     /// <param name="modifier">1 = Increment, -1 = decrement</param>
     public void InvokeValueChangeSilentlyOfElementWithID(int instanceID, int modifier)
@@ -479,64 +273,18 @@ public class KAPUIManager : MonoBehaviour, IKAPInputReceiver
 
     #endregion
 
-    #region Private Helpers
-
-    private KAPElement SelectedElement() 
-    {
-        KAPElement element;
-        if(selectedElementIndex >= 0 && selectedElementIndex < accessibilityElements.Length) 
-        {
-            element = accessibilityElements[selectedElementIndex];
-        } 
-        else 
-        {
-            element = null;
-        }
-        return element;
-    }
-
-    private void UpdateSelectedElementIndex(int newSelectedElementIndex) 
-    {
-        if(selectedElementIndex != newSelectedElementIndex) 
-        {
-            KAPElement previousSelectedElement = SelectedElement();
-            if(previousSelectedElement != null) 
-            {
-                previousSelectedElement.DidLoseFocus();
-            }
-
-            selectedElementIndex = newSelectedElementIndex;
-
-            KAPElement newSelectedElement = SelectedElement();
-            if (newSelectedElement != null)
-            {
-                newSelectedElement.DidBecomeFocused();
-            }
-        }
-    }
-
-    #endregion
-
+    /// <summary>
+    /// If needsUpdateElements is set, reloads the accessibility elements and updates the screen readers
+    /// </summary>
     private void Update()
     {
         if(needsUpdateElements)
         {
-            LoadAccessibilityElements();
+            accessibilityElements = LoadAccessibilityElements();
+            screenReader.UpdateWithKAPElements(accessibilityElements, retainSelectedElementIndex);
+
             needsUpdateElements = false;
-
-            if (!retainSelectedElementIndex || selectedElementIndex >= accessibilityElements.Length)
-            {
-                selectedElementIndex = -1;
-
-                // Annouce the very first one.
-                if (accessibilityElements != null && accessibilityElements.Length > 0)
-                {
-                    UpdateSelectedElementIndex(0);
-                    AnnouceElementAtSelectedIndex(true);
-                }
-
-                retainSelectedElementIndex = true;
-            }
+            retainSelectedElementIndex = true;
         }
     }
 }

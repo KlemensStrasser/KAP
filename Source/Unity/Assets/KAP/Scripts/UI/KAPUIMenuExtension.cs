@@ -1,8 +1,9 @@
 ﻿using UnityEditor;
 using UnityEngine;
+
+#if UNITY_EDITOR
 public class KAPUIMenuExtension : MonoBehaviour
 {
-
     [MenuItem("GameObject/KAP/KAPUI/KAPUIManager", false, 10)]
     static void CreateKAPUIManager(MenuCommand menuCommand)
     {
@@ -15,3 +16,5 @@ public class KAPUIMenuExtension : MonoBehaviour
         Selection.activeObject = managerGameObject;
     }
 }
+
+#endif

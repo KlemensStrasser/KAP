@@ -27,7 +27,7 @@ public struct KAPExternalAccessibilityHook
     public KAPInvokeValueChangeCallback valueChangeCallback;
 }
 
-public class KAPNativeScreenReaderBridge
+public class KAPNativeScreenReaderBridge : IKAPScreenReader
 {
 #if UNITY_IOS && !UNITY_EDITOR
 
@@ -61,14 +61,9 @@ public class KAPNativeScreenReaderBridge
         return NativeScreenReaderAvailable();
     }
 
-    // This might be used in rare cases. 
-    public void UpdateHookForKAPElements(KAPElement accessibilityElement)
-    {
-        KAPExternalAccessibilityHook hook = this.AccessibilityHookForElement(accessibilityElement);
-        KAPUpdateHook(hook);
-    }
+    #region IKAPScreenReader
 
-    public void UpdateHooksForKAPElements(KAPElement[] accessibilityElements)
+    public void UpdateWithKAPElements(KAPElement[] accessibilityElements, bool tryRetainingIndex = false)
     {
         KAPExternalAccessibilityHook[] hooks = new KAPExternalAccessibilityHook[accessibilityElements.Length];
 
@@ -83,6 +78,18 @@ public class KAPNativeScreenReaderBridge
 
         KAPUpdateHooks(hooks, hooks.Length);
     }
+
+    public void AnnounceMessage(string Message)
+    { 
+        // TODO: Implement!
+    }
+
+    public void FocusElementWithID(int instanceID)
+    { 
+        // TODO: Implement
+    }
+
+    #endregion
 
     public void ClearAllHooks()
     {
