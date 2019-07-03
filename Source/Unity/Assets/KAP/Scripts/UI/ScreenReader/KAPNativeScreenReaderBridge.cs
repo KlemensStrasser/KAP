@@ -68,14 +68,14 @@ public class KAPNativeScreenReaderBridge : IKAPScreenReader
 
     #region IKAPScreenReader
 
-    public void UpdateWithKAPElements(KAPElement[] accessibilityElements, bool tryRetainingIndex = false)
+    public void UpdateWithScreenReaderElements(KAPScreenReaderElement[] accessibilityElements, bool tryRetainingIndex = false)
     {
         KAPExternalAccessibilityHook[] hooks = new KAPExternalAccessibilityHook[accessibilityElements.Length];
 
         // TODO: Error handling
         for(int i = 0; i < accessibilityElements.Length; i++)
         {
-            KAPElement accessibilityElement = accessibilityElements[i];
+            KAPScreenReaderElement accessibilityElement = accessibilityElements[i];
             KAPExternalAccessibilityHook hook = this.AccessibilityHookForElement(accessibilityElement);
 
             hooks[i] = hook;
@@ -122,7 +122,7 @@ public class KAPNativeScreenReaderBridge : IKAPScreenReader
 
     #region Private Helpers
 
-    KAPExternalAccessibilityHook AccessibilityHookForElement(KAPElement accessibilityElement) {
+    KAPExternalAccessibilityHook AccessibilityHookForElement(KAPScreenReaderElement accessibilityElement) {
 
         KAPExternalAccessibilityHook hook = new KAPExternalAccessibilityHook()
         {

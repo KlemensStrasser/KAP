@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 
 [AddComponentMenu("KAP/UI/KAPText")]
-public class KAPText : KAPElement
+public class KAPText : KAPScreenReaderElement
 {
     /// The Text that might be attached to the same GameObject as this component
     private Text text;

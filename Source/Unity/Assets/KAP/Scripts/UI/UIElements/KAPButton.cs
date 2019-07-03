@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 [AddComponentMenu("KAP/UI/KAPButton")]
-public class KAPButton : KAPElement
+public class KAPButton : KAPScreenReaderElement
 {
     private Button button;
     private Text buttonText;

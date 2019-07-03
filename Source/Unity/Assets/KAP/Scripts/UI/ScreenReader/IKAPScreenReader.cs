@@ -4,7 +4,7 @@ using UnityEngine;
 
 public interface IKAPScreenReader
 {
-    void UpdateWithKAPElements(KAPElement[] accessibilityElements, bool tryRetainingIndex = false);
+    void UpdateWithScreenReaderElements(KAPScreenReaderElement[] accessibilityElements, bool tryRetainingIndex = false);
 
     void AnnounceMessage(string Message);
 

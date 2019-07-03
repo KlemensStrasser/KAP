@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 [AddComponentMenu("KAP/UI/KAPToggle")]
-public class KAPToggle : KAPElement
+public class KAPToggle : KAPScreenReaderElement
 {
     /// The Text that might be attached to the same GameObject as this component
     private Toggle toggle;

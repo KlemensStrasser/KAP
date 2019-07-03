@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 [AddComponentMenu("KAP/UI/KAPImage")]
-public class KAPImage : KAPElement
+public class KAPImage : KAPScreenReaderElement
 {
     override protected KAPTrait defaultTraits
     {

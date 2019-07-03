@@ -12,7 +12,7 @@
 /// - p3 has to have p2 or one of p2's children as parent 
 /// If this rule is broken, the current active popover might not be the one the user sees on top of the screen!
 [AddComponentMenu("KAP/UI/KAPPopOver")]
-public class KAPPopover : KAPElement
+public class KAPPopover : KAPScreenReaderElement
 {
     override protected KAPTrait defaultTraits
     {

@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 
 [AddComponentMenu("KAP/UI/KAPSlider")]
-public class KAPSlider : KAPElement
+public class KAPSlider : KAPScreenReaderElement
 {
     /// The slider that should be attached to the same gameObject
     private Slider slider;

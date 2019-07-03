@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class KAPUIVisualizer : MonoBehaviour
 {
-    public void DrawIndicatorForElement(KAPElement element) 
+    public void DrawIndicatorForElement(KAPScreenReaderElement element) 
     {
         if (element != null)
         {

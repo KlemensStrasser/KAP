@@ -18,7 +18,7 @@ public class KAPCustomScreenReader : MonoBehaviour, IKAPInputReceiver, IKAPScree
     private AudioClip blockAudioClip;
     private AudioClip selectAudioClip;
 
-    KAPElement[] accessibilityElements;
+    KAPScreenReaderElement[] accessibilityElements;
 
     private void Awake()
     {
@@ -58,9 +58,9 @@ public class KAPCustomScreenReader : MonoBehaviour, IKAPInputReceiver, IKAPScree
 
     #region IKAPScreenReader
 
-    public void UpdateWithKAPElements(KAPElement[] accessibilityElements, bool tryRetainingIndex = false)
+    public void UpdateWithScreenReaderElements(KAPScreenReaderElement[] accessibilityElements, bool tryRetainingIndex = false)
     {
-        KAPElement oldSelectedElement = FocusedElement();
+        KAPScreenReaderElement oldSelectedElement = FocusedElement();
 
         this.accessibilityElements = accessibilityElements;
 
@@ -125,7 +125,7 @@ public class KAPCustomScreenReader : MonoBehaviour, IKAPInputReceiver, IKAPScree
     private void OnGUI()
     {
         // Update visualizer
-        KAPElement selectedElement = FocusedElement();
+        KAPScreenReaderElement selectedElement = FocusedElement();
 
         if (selectedElement != null && kapVisualizer != null)
         {
@@ -141,7 +141,7 @@ public class KAPCustomScreenReader : MonoBehaviour, IKAPInputReceiver, IKAPScree
     {
         if (speechSynthesizer != null)
         {
-            KAPElement element = this.FocusedElement();
+            KAPScreenReaderElement element = this.FocusedElement();
 
             if (element != null)
             {
@@ -170,7 +170,7 @@ public class KAPCustomScreenReader : MonoBehaviour, IKAPInputReceiver, IKAPScree
 
     private void AnnouceValueOfSelectedElement()
     {
-        KAPElement selectedElement = this.FocusedElement();
+        KAPScreenReaderElement selectedElement = this.FocusedElement();
         if (speechSynthesizer != null && selectedElement != null && selectedElement.value != null)
         {
             string text = selectedElement.value;
@@ -233,7 +233,7 @@ public class KAPCustomScreenReader : MonoBehaviour, IKAPInputReceiver, IKAPScree
 
     public void SelectFocusedElement()
     {
-        KAPElement selectedElement = this.FocusedElement();
+        KAPScreenReaderElement selectedElement = this.FocusedElement();
         if (selectedElement)
         {
             selectedElement.InvokeSelection();
@@ -244,7 +244,7 @@ public class KAPCustomScreenReader : MonoBehaviour, IKAPInputReceiver, IKAPScree
 
     public void IncrementValueOfFocuedElement()
     {
-        KAPElement selectedElement = this.FocusedElement();
+        KAPScreenReaderElement selectedElement = this.FocusedElement();
         if (selectedElement)
         {
             string oldValue = selectedElement.value;
@@ -261,7 +261,7 @@ public class KAPCustomScreenReader : MonoBehaviour, IKAPInputReceiver, IKAPScree
 
     public void DecrementValueOfFocuedElement()
     {
-        KAPElement selectedElement = this.FocusedElement();
+        KAPScreenReaderElement selectedElement = this.FocusedElement();
         if (selectedElement)
         {
             string oldValue = selectedElement.value;
@@ -294,7 +294,7 @@ public class KAPCustomScreenReader : MonoBehaviour, IKAPInputReceiver, IKAPScree
 
         for (int i = 0; i < accessibilityElements.Length; i++)
         {
-            KAPElement element = accessibilityElements[i];
+            KAPScreenReaderElement element = accessibilityElements[i];
             if (element.frame.Contains(position))
             {
                 if (index == -1)
@@ -320,9 +320,9 @@ public class KAPCustomScreenReader : MonoBehaviour, IKAPInputReceiver, IKAPScree
     /// Safe way of accessibng the focused element
     /// </summary>
     /// <returns>Returns the currently focused element or null</returns>
-    private KAPElement FocusedElement()
+    private KAPScreenReaderElement FocusedElement()
     {
-        KAPElement element;
+        KAPScreenReaderElement element;
         if (focusedElementIndex >= 0 && accessibilityElements != null && focusedElementIndex < accessibilityElements.Length)
         {
             element = accessibilityElements[focusedElementIndex];
@@ -338,7 +338,7 @@ public class KAPCustomScreenReader : MonoBehaviour, IKAPInputReceiver, IKAPScree
     {
         if (focusedElementIndex != newFocusedElementIndex)
         {
-            KAPElement previousSelectedElement = FocusedElement();
+            KAPScreenReaderElement previousSelectedElement = FocusedElement();
             if (previousSelectedElement != null)
             {
                 previousSelectedElement.DidLoseFocus();
@@ -346,7 +346,7 @@ public class KAPCustomScreenReader : MonoBehaviour, IKAPInputReceiver, IKAPScree
 
             focusedElementIndex = newFocusedElementIndex;
 
-            KAPElement newSelectedElement = FocusedElement();
+            KAPScreenReaderElement newSelectedElement = FocusedElement();
             if (newSelectedElement != null)
             {
                 newSelectedElement.DidBecomeFocused();
