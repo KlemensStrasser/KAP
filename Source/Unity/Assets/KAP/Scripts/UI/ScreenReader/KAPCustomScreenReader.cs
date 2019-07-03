@@ -10,6 +10,7 @@ public class KAPCustomScreenReader : MonoBehaviour, IKAPInputReceiver, IKAPScree
     private KAPUIVisualizer kapVisualizer;
     KAPInput input;
 
+    private KAPScreenReaderElement focusedElement;
     private int focusedElementIndex;
 
     private AudioSource soundEffectAudioSource;
@@ -48,11 +49,10 @@ public class KAPCustomScreenReader : MonoBehaviour, IKAPInputReceiver, IKAPScree
             kapVisualizer = visualizerObject.GetComponent<KAPUIVisualizer>();
         }
 
-
-        if(accessibilityElements != null && accessibilityElements.Length > 0)
+        if (accessibilityElements != null && accessibilityElements.Length > 0 && focusedElement == null)
         {
-            UpdateFocusedElementIndex(0);
-            AnnouceElementAtFocusedIndex(true);
+            UpdateFocusedElement(0);
+            AnnouceFocusedElement(true);
         }
     }
 
@@ -60,33 +60,30 @@ public class KAPCustomScreenReader : MonoBehaviour, IKAPInputReceiver, IKAPScree
 
     public void UpdateWithScreenReaderElements(KAPScreenReaderElement[] accessibilityElements, bool tryRetainingIndex = false)
     {
-        KAPScreenReaderElement oldSelectedElement = FocusedElement();
-
         this.accessibilityElements = accessibilityElements;
 
-        // Annouce the very first one.
         if (accessibilityElements != null && accessibilityElements.Length > 0)
         {
-            if(tryRetainingIndex && oldSelectedElement != null)
+            if(tryRetainingIndex && focusedElement != null)
             {
-                int oldInstanceID = oldSelectedElement.gameObject.GetInstanceID();
+                int oldInstanceID = focusedElement.gameObject.GetInstanceID();
                 int indexInNewArray = Array.FindIndex(accessibilityElements, element => element.gameObject.GetInstanceID() == oldInstanceID);
 
-                if(indexInNewArray != -1)
+                // Focused element is not in the new array, so we have to highlight something else
+                if(indexInNewArray == -1)
                 {
-                    // Don't call UpdateSelectedElementIndex because the element is the same. No need to call the Focus methods 
+                    UpdateFocusedElement(0);
+                    AnnouceFocusedElement(true);
+                } else
+                {
+                    // Update the index to the one in the new array
                     focusedElementIndex = indexInNewArray;
-                }
-                else 
-                {
-                    UpdateFocusedElementIndex(0);
-                    AnnouceElementAtFocusedIndex(true);
                 }
             }
             else 
             {
-                UpdateFocusedElementIndex(0);
-                AnnouceElementAtFocusedIndex(true);
+                UpdateFocusedElement(0);
+                AnnouceFocusedElement(true);
             }
         }
     }
@@ -108,8 +105,8 @@ public class KAPCustomScreenReader : MonoBehaviour, IKAPInputReceiver, IKAPScree
 
         if (instanceIndex != -1)
         {
-            UpdateFocusedElementIndex(instanceIndex);
-            AnnouceElementAtFocusedIndex(true);
+            UpdateFocusedElement(instanceIndex);
+            AnnouceFocusedElement(true);
         } 
         else
         {
@@ -124,11 +121,9 @@ public class KAPCustomScreenReader : MonoBehaviour, IKAPInputReceiver, IKAPScree
     private void OnGUI()
     {
         // Update visualizer
-        KAPScreenReaderElement selectedElement = FocusedElement();
-
-        if (selectedElement != null && kapVisualizer != null)
+        if (focusedElement != null && kapVisualizer != null)
         {
-            kapVisualizer.DrawIndicatorForElement(selectedElement);
+            kapVisualizer.DrawIndicatorForElement(focusedElement);
         }
     }
 
@@ -136,22 +131,20 @@ public class KAPCustomScreenReader : MonoBehaviour, IKAPInputReceiver, IKAPScree
 
     #region Sounds
 
-    private void AnnouceElementAtFocusedIndex(bool includeDescription)
+    private void AnnouceFocusedElement(bool includeDescription)
     {
         if (speechSynthesizer != null)
         {
-            KAPScreenReaderElement element = this.FocusedElement();
-
-            if (element != null)
+            if (focusedElement != null)
             {
                 string text;
                 if (includeDescription)
                 {
-                    text = element.FullLabel();
+                    text = focusedElement.FullLabel();
                 }
                 else
                 {
-                    text = element.LabelWithTraitAndValue();
+                    text = focusedElement.LabelWithTraitAndValue();
                 }
 
                 speechSynthesizer.StartSpeaking(text);
@@ -169,10 +162,9 @@ public class KAPCustomScreenReader : MonoBehaviour, IKAPInputReceiver, IKAPScree
 
     private void AnnouceValueOfSelectedElement()
     {
-        KAPScreenReaderElement selectedElement = this.FocusedElement();
-        if (speechSynthesizer != null && selectedElement != null && selectedElement.value != null)
+        if (speechSynthesizer != null && focusedElement != null && focusedElement.value != null)
         {
-            string text = selectedElement.value;
+            string text = focusedElement.value;
             speechSynthesizer.StartSpeaking(text);
         }
     }
@@ -204,14 +196,14 @@ public class KAPCustomScreenReader : MonoBehaviour, IKAPInputReceiver, IKAPScree
     {
         if (focusedElementIndex + 1 < accessibilityElements.Length)
         {
-            UpdateFocusedElementIndex(focusedElementIndex + 1);
+            UpdateFocusedElement(focusedElementIndex + 1);
             PlayFocusSound();
-            AnnouceElementAtFocusedIndex(true);
+            AnnouceFocusedElement(true);
         }
         else
         {
             PlayBlockingSound();
-            AnnouceElementAtFocusedIndex(false);
+            AnnouceFocusedElement(false);
         }
     }
 
@@ -219,59 +211,56 @@ public class KAPCustomScreenReader : MonoBehaviour, IKAPInputReceiver, IKAPScree
     {
         if (focusedElementIndex > 0)
         {
-            UpdateFocusedElementIndex(focusedElementIndex - 1);
+            UpdateFocusedElement(focusedElementIndex - 1);
             PlayFocusSound();
-            AnnouceElementAtFocusedIndex(true);
+            AnnouceFocusedElement(true);
         }
         else
         {
             PlayBlockingSound();
-            AnnouceElementAtFocusedIndex(false);
+            AnnouceFocusedElement(false);
         }
     }
 
     public void SelectFocusedElement()
     {
-        KAPScreenReaderElement selectedElement = this.FocusedElement();
-        if (selectedElement)
+        if (focusedElement)
         {
-            selectedElement.InvokeSelection();
+            focusedElement.InvokeSelection();
             PlaySelectSound();
-            AnnouceElementAtFocusedIndex(true);
+            AnnouceFocusedElement(true);
         }
     }
 
     public void IncrementValueOfFocuedElement()
     {
-        KAPScreenReaderElement selectedElement = this.FocusedElement();
-        if (selectedElement)
+        if (focusedElement)
         {
-            string oldValue = selectedElement.value;
-            selectedElement.InvokeIncrement();
-            string newValue = selectedElement.value;
+            string oldValue = focusedElement.value;
+            focusedElement.InvokeIncrement();
+            string newValue = focusedElement.value;
 
             if (oldValue == newValue)
             {
                 PlayBlockingSound();
             }
-            AnnouceElementAtFocusedIndex(true);
+            AnnouceFocusedElement(true);
         }
     }
 
     public void DecrementValueOfFocuedElement()
     {
-        KAPScreenReaderElement selectedElement = this.FocusedElement();
-        if (selectedElement)
+        if (focusedElement)
         {
-            string oldValue = selectedElement.value;
-            selectedElement.InvokeDecrement();
-            string newValue = selectedElement.value;
+            string oldValue = focusedElement.value;
+            focusedElement.InvokeDecrement();
+            string newValue = focusedElement.value;
 
             if (oldValue == newValue)
             {
                 PlayBlockingSound();
             }
-            AnnouceElementAtFocusedIndex(true);
+            AnnouceFocusedElement(true);
         }
     }
 
@@ -281,9 +270,9 @@ public class KAPCustomScreenReader : MonoBehaviour, IKAPInputReceiver, IKAPScree
 
         if (touchedElementIndex != -1 && focusedElementIndex != touchedElementIndex)
         {
-            UpdateFocusedElementIndex(touchedElementIndex);
+            UpdateFocusedElement(touchedElementIndex);
             PlayFocusSound();
-            AnnouceElementAtFocusedIndex(true);
+            AnnouceFocusedElement(true);
         }
     }
 
@@ -316,40 +305,23 @@ public class KAPCustomScreenReader : MonoBehaviour, IKAPInputReceiver, IKAPScree
     #region Private Helpers
 
     /// <summary>
-    /// Safe way of accessibng the focused element
+    /// Updates the focused element.
     /// </summary>
-    /// <returns>Returns the currently focused element or null</returns>
-    private KAPScreenReaderElement FocusedElement()
+    /// <param name="newFocusedElementIndex">Index of the new focused element in the accessibilityElements array.</param>
+    private void UpdateFocusedElement(int newFocusedElementIndex)
     {
-        KAPScreenReaderElement element;
-        if (focusedElementIndex >= 0 && accessibilityElements != null && focusedElementIndex < accessibilityElements.Length)
+        if (newFocusedElementIndex >= 0 && newFocusedElementIndex < accessibilityElements.Length)
         {
-            element = accessibilityElements[focusedElementIndex];
-        }
-        else
-        {
-            element = null;
-        }
-        return element;
-    }
-
-    private void UpdateFocusedElementIndex(int newFocusedElementIndex)
-    {
-        if (focusedElementIndex != newFocusedElementIndex)
-        {
-            KAPScreenReaderElement previousSelectedElement = FocusedElement();
-            if (previousSelectedElement != null)
+            if (focusedElement != null)
             {
-                previousSelectedElement.DidLoseFocus();
+                focusedElement.DidLoseFocus();
             }
 
+            KAPScreenReaderElement newFocusedElement = accessibilityElements[newFocusedElementIndex];
+            newFocusedElement.DidBecomeFocused();
+
+            focusedElement = newFocusedElement;
             focusedElementIndex = newFocusedElementIndex;
-
-            KAPScreenReaderElement newSelectedElement = FocusedElement();
-            if (newSelectedElement != null)
-            {
-                newSelectedElement.DidBecomeFocused();
-            }
         }
     }
 
