@@ -58,14 +58,19 @@ public class KAPSonarManager : MonoBehaviour, IKAPSonarEventReceiver
     public float maxRecursionLevel = 10;
 
     /// <summary>
-    /// The key used for manually pinging the sonar when manual mode is activated
-    /// </summary>
-    public KeyCode manualSonarTriggerKey = KeyCode.B;
-
-    /// <summary>
     /// The key used to change between manual and automatic sonar mode
     /// </summary>
-    public KeyCode changeSonarModeKey = KeyCode.N;
+    public KeyCode changeSonarModeKey = KeyCode.B;
+
+    /// <summary>
+    /// The key used for manually pinging the sonar when manual mode is activated
+    /// </summary>
+    public KeyCode manualSonarTriggerKey = KeyCode.N;
+
+    /// <summary>
+    /// The key used to force path recalculation, in case the player gets stuck
+    /// </summary>
+    public KeyCode forcePathRecalculationKey = KeyCode.R;
 
     /// <summary>
     /// If true, user can manually activate the sonar instead of hearing a constant ping
@@ -380,6 +385,7 @@ public class KAPSonarManager : MonoBehaviour, IKAPSonarEventReceiver
     {
         if (cornerIndex >= 0 && pathPoints != null && pathPoints.Count > cornerIndex && sonarController != null)
         {
+
             Vector3 currentCornerPosition = pathPoints[cornerIndex];
 
             // Take the y position from the player so that it floats right in front of him/her
@@ -387,13 +393,23 @@ public class KAPSonarManager : MonoBehaviour, IKAPSonarEventReceiver
 
             // Distance is needed to make sure the sound can be heard
             float distance = Vector3.Distance(sonarPosition, playerTransform.position);
+
             sonarController.UpdatePosition(sonarPosition, distance);
         }
     }
 
+    private float CurrentDistanceToSonar()
+    {
+        Vector3 currentCornerPosition = pathPoints [cornerIndex];
+        Vector3 sonarPosition = new Vector3(currentCornerPosition.x, playerTransform.position.y, currentCornerPosition.z);
+
+        float distance = Vector3.Distance(sonarPosition, playerTransform.position);
+        return distance;
+    }
+
     #endregion
 
-    #region Manual triggering sonar
+    #region User Triggered changes at the sonar
 
     private void Update()
     {
@@ -402,12 +418,33 @@ public class KAPSonarManager : MonoBehaviour, IKAPSonarEventReceiver
             manuallyTriggerSonarSignal = !manuallyTriggerSonarSignal;
             sonarController.ShouldLoop(!manuallyTriggerSonarSignal);
         } 
-        else if (manuallyTriggerSonarSignal)
+        else if (Input.GetKeyDown(forcePathRecalculationKey))
         {
-            if (Input.GetKeyDown(manualSonarTriggerKey))
-            {
-                sonarController.StartSignal();
-            } 
+            ForcePathRecalculation();
+        }
+        else if (manuallyTriggerSonarSignal && Input.GetKeyDown(manualSonarTriggerKey))
+        {
+            ManualTriggerSonar();
+        } 
+    }
+
+    /// <summary>
+    /// Manuals the trigger sonar.
+    /// </summary>
+    private void ManualTriggerSonar()
+    {
+        // If the player wandered too far, this will ensure that the player 
+        sonarController.EnsureThatSignalCanBeHeard(CurrentDistanceToSonar());
+        sonarController.StartSignal();
+    }
+
+    private void ForcePathRecalculation()
+    {
+        // Goal is last position in the current path
+        if(pathPoints != null && pathPoints.Count > 0)
+        {
+            Vector3 targetPosition = pathPoints[pathPoints.Count - 1];
+            StartGuideToTargetPosition(targetPosition);
         }
     }
 
@@ -423,6 +460,7 @@ public class KAPSonarManager : MonoBehaviour, IKAPSonarEventReceiver
         {
             this.sonar.SetActive(false);
             cornerIndex = -1;
+            pathPoints.Clear();
 
             if (soundEffectAudioSource != null && targetReachedAudioClip != null)
             {

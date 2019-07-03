@@ -44,6 +44,21 @@ public class KAPSonarController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Ensures the that signal can be heard.
+    /// </summary>
+    /// <param name="distance">Distance from player to the sonar</param>
+    /// 
+    /// Used for manual ping. For the automatic ping, the user will hear that the signal will slowly fade out
+    public void EnsureThatSignalCanBeHeard(float distance)
+    {
+        float suggestedDistance = distance * 1.5f;
+        if(audioSource.maxDistance < suggestedDistance) 
+        {
+            audioSource.maxDistance = suggestedDistance;
+        }
+    }
+
     public void SetPlayerCollider(Collider collider)
     {
         playerCollider = collider;
