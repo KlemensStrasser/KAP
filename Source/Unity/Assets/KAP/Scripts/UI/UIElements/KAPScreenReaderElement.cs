@@ -8,6 +8,9 @@ using System.Linq;
 [AddComponentMenu("KAP/KAPScreenReaderElement")]
 public class KAPScreenReaderElement : KAPElement
 {
+    /// <summary>
+    /// Standardized frame of the element
+    /// </summary>
     public virtual Rect frame
     {
         get
@@ -16,13 +19,21 @@ public class KAPScreenReaderElement : KAPElement
         }
     }
 
-    /// Value
+    /// <summary>
+    /// Value of the element
+    /// </summary>
     public virtual string value { get; set; }
 
+    /// <summary>
     /// Detailed description of the function of the element
+    /// </summary>
     public string description = "";
 
 
+    /// <summary>
+    /// Default indication on how the accessibilityElement should be treated by the screen reader.
+    /// Set but the subclasses
+    /// </summary>
     protected virtual KAPTrait defaultTraits
     {
         get
@@ -32,8 +43,10 @@ public class KAPScreenReaderElement : KAPElement
     }
     private KAPTrait _traits;
 
-    /// Indication on how the accessibilityElement should be treated.
-    /// Only set for standard elements if you know what you're doing
+    /// <summary>
+    /// Indication on how the accessibilityElement should be treated by the screen reader.
+    /// Only set for standard elements if you know what you're doing.
+    /// </summary>
     [HideInInspector]
     public KAPTrait traits
     { 
@@ -55,19 +68,37 @@ public class KAPScreenReaderElement : KAPElement
         }
     }
 
+    /// <summary>
+    /// Event that gets invoked when the element was selected
+    /// </summary>
     public UnityEvent onClick = new UnityEvent();
 
+    /// <summary>
+    /// Event that gets invoked when the value of the element is incremented
+    /// </summary>
     public UnityEvent onIncrement = new UnityEvent();
+
+    /// <summary>
+    /// Event that gets invoked when the value of the element is decremented
+    /// </summary>
     public UnityEvent onDecrement = new UnityEvent();
 
+    /// <summary>
     /// Event that gets invoked when the element was focused by the manager
+    /// </summary>
     public UnityEvent becomeFocusedEvent = new UnityEvent();
-    /// Event that gets invoked when the element loses focus
-    public UnityEvent loseFocusEvent = new UnityEvent();
-    /// Indicates if the element currently has focus.
-    bool isFocused;
 
-    // TODO: shouldGroupAccessibilityChildren
+    /// <summary>
+    /// Event that gets invoked when the element loses focus
+    /// </summary>
+    public UnityEvent loseFocusEvent = new UnityEvent();
+
+    /// <summary>
+    /// Indicates if the element currently has focus.
+    /// </summary>
+    private bool isFocused;
+
+    // TODO: Implement shouldGroupAccessibilityChildren
 
     public KAPScreenReaderElement()
     {
@@ -79,6 +110,9 @@ public class KAPScreenReaderElement : KAPElement
         SetupLabel();
     }
 
+    /// <summary>
+    /// Setup the label 
+    /// </summary>
     protected void SetupLabel()
     {
         if (label == null || label.Length == 0)
@@ -87,17 +121,19 @@ public class KAPScreenReaderElement : KAPElement
         }
     }
 
-    /// Label value if none was set.
-    /// This would be the text of a button for example.
+    /// <summary>
+    /// Label value if none was explicitly set. This would be the text of a button for example.
     /// Should be overridden by the subclasses.
+    /// </summary>
     protected virtual string ImplicitLabelValue()
     {
         return "";
     }
 
 
-    /// Selecting the element
-    /// This could trigger button press, switch change...
+    /// <summary>
+    /// Invokes selecting the element (Button Click, toggle change...)
+    /// </summary>
     public virtual void InvokeSelection()
     {
         if (this.onClick != null)
@@ -106,7 +142,9 @@ public class KAPScreenReaderElement : KAPElement
         }
     }
 
-    /// Increment value
+    /// <summary>
+    /// Invokes incrementing the value of the element
+    /// </summary>
     public virtual void InvokeIncrement()
     {
         if (this.onIncrement != null)
@@ -115,7 +153,9 @@ public class KAPScreenReaderElement : KAPElement
         }    
     }
 
-    /// Decrement value
+    /// <summary>
+    /// Invokes decrementing the value of the element
+    /// </summary>
     public virtual void InvokeDecrement()
     {
         if (this.onDecrement != null)
@@ -126,6 +166,9 @@ public class KAPScreenReaderElement : KAPElement
 
     #region Focus Events and indication
 
+    /// <summary>
+    /// Called by the screenreader if this element gets focused
+    /// </summary>
     public void DidBecomeFocused()
     {
         this.isFocused = true;
@@ -135,6 +178,9 @@ public class KAPScreenReaderElement : KAPElement
         }
     }
 
+    /// <summary>
+    /// Called by the screenreader if this element is focused right now, but the focus will move to another element
+    /// </summary>
     public void DidLoseFocus()
     {
         this.isFocused = false;
@@ -144,7 +190,10 @@ public class KAPScreenReaderElement : KAPElement
         }
     }
 
-    /// Indicates if the element currently has focus.
+    /// <summary>
+    /// Indicates if the element currently is focused by the screen reader.
+    /// </summary>
+    /// <returns><c>true</c>, if it is focused, <c>false</c> otherwise.</returns>
     public bool IsFocused()
     {
         return this.isFocused;
@@ -154,6 +203,10 @@ public class KAPScreenReaderElement : KAPElement
 
     #region Public Helpers (No native screenreader available)
 
+    /// <summary>
+    /// Composes a string from the label, trait and description of the element
+    /// </summary>
+    /// <returns>The composed string</returns>
     public string FullLabel()
     {
         string fullString;
@@ -184,6 +237,10 @@ public class KAPScreenReaderElement : KAPElement
         return fullString;
     }
 
+    /// <summary>
+    /// Composes a string from the label and the element
+    /// </summary>
+    /// <returns>The composed string</returns>
     public string LabelWithTraitAndValue()
     {
         string fullString;
@@ -211,14 +268,13 @@ public class KAPScreenReaderElement : KAPElement
 
     #endregion
 
-    #region Public Helpers (Native screenreader available)
-
-
-    #endregion
-
-    /// Static Helper Methods, not sure yet where to put them
-
-    // Based on: https://answers.unity.com/questions/292031/how-to-display-a-rectangle-around-a-player.html
+    /// <summary>
+    /// Static helper method to calculate the frame of gameObject
+    /// </summary>
+    /// <returns>The frame for gameObject.</returns>
+    /// <param name="gObject">GameObject</param>
+    /// Based on: https://answers.unity.com/questions/292031/how-to-display-a-rectangle-around-a-player.html
+    /// Not sure where to put this code
     protected static Rect ScreenRectForGameObject(GameObject gObject) 
     {
         Rect rect;
