@@ -18,24 +18,24 @@ public class KAPSonarPathDrawer : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
+        //if (Input.GetMouseButtonDown(0))
+        //{
+        //    Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+        //    RaycastHit hit;
 
-            if (Physics.Raycast(ray, out hit))
-            {
-                targetPosition = hit.point;
+        //    if (Physics.Raycast(ray, out hit))
+        //    {
+        //        targetPosition = hit.point;
 
-                if (sonarManager != null)
-                {
-                    sonarManager.StartGuideToTargetPosition(targetPosition);
-                    //NavMesh.CalculatePath(playerTransform.position, targetPosition, NavMesh.AllAreas, path);
-                }
+        //        if (sonarManager != null)
+        //        {
+        //            sonarManager.StartGuideToTargetPosition(targetPosition);
+        //            //NavMesh.CalculatePath(playerTransform.position, targetPosition, NavMesh.AllAreas, path);
+        //        }
 
-                clickedOnce = true;
-            }
-        }
+        //        clickedOnce = true;
+        //    }
+        //}
 
         // Update the way to the goal every second.
         elapsed += Time.deltaTime;

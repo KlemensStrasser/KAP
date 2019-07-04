@@ -102,7 +102,7 @@ public class KAPSonarManager : MonoBehaviour, IKAPSonarEventReceiver
 
     private static KAPSonarManager _instance;
     /// <summary>
-    /// KAPUIManager Singleton
+    /// KAPSonarManager Singleton
     /// Based on: https://gamedev.stackexchange.com/questions/116009/in-unity-how-do-i-correctly-implement-the-singleton-pattern
     /// </summary>
     public static KAPSonarManager Instance

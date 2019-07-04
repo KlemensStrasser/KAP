@@ -175,7 +175,10 @@ public class KAPUIManager : MonoBehaviour
     /// </summary>
     public void AnnouceMessage(string message) 
     {
-        screenReader.AnnounceMessage(message);
+        if (screenReader != null)
+        {
+            screenReader.AnnounceMessage(message);
+        }
     }
 
     /// <summary>
@@ -183,7 +186,10 @@ public class KAPUIManager : MonoBehaviour
     /// </summary>
     public void FocusElement(KAPScreenReaderElement element) 
     {
-        screenReader.FocusElement(element);
+        if (screenReader != null)
+        {
+            screenReader.FocusElement(element);
+        }
     }
 
     /// <summary>
@@ -213,6 +219,15 @@ public class KAPUIManager : MonoBehaviour
     {
         needsUpdateElements = true;
         retainSelectedElementIndex = keepHighlightedElement;
+    }
+
+    /// <summary>
+    /// Disables/Enables screenreder navigation, so that the game can capture the current input
+    /// </summary>
+    public void SetAllowsDirectInput(bool allowDirectInput)
+    {
+        // TODO: Implement! 
+        // Give this to the screen reader, which should stop getting input
     }
 
     #endregion
