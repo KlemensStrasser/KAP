@@ -44,6 +44,7 @@ public class KAPCustomScreenReader : MonoBehaviour, IKAPInputReceiver, IKAPScree
         GameObject visualizerObject = Resources.Load<GameObject>("Prefabs/UI/KAPUIVisualizer");
         visualizerObject = Instantiate<GameObject>(visualizerObject);
         visualizerObject.name = "KAPUIVisualizer";
+        visualizerObject.gameObject.transform.SetParent(gameObject.transform);
         if (visualizerObject != null)
         {
             kapVisualizer = visualizerObject.GetComponent<KAPUIVisualizer>();

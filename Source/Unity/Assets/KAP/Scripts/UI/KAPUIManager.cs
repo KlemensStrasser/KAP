@@ -48,6 +48,9 @@ public class KAPUIManager : MonoBehaviour
         {
             _instance = this;
         }
+
+        // Make sure that the transform is reset, otherwise the screenreader highlighting might be messed up
+        this.transform.position = Vector3.zero;
     }
 
     /// <summary>
@@ -67,6 +70,7 @@ public class KAPUIManager : MonoBehaviour
             GameObject screenReaderObject = Resources.Load<GameObject>("Prefabs/UI/KAPScreenReader");
             screenReaderObject = Instantiate<GameObject>(screenReaderObject);
             screenReaderObject.name = "KAPScreenReader";
+            screenReaderObject.gameObject.transform.SetParent(gameObject.transform);
             if (screenReaderObject != null)
             {
                 screenReader = screenReaderObject.GetComponent<IKAPScreenReader>();
