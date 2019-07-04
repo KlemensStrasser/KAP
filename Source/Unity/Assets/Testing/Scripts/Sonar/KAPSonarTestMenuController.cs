@@ -158,7 +158,7 @@ public class KAPSonarTestMenuController : MonoBehaviour, IPickupCallbackObject
 
     #endregion
 
-    #region I
+    #region IPickupCallbackObject
 
     public bool CanBePickedUpByCollider(Collider other, int pickupID)
     {
@@ -175,6 +175,13 @@ public class KAPSonarTestMenuController : MonoBehaviour, IPickupCallbackObject
             {
                 KAPSonarTarget target = pickup.GetComponent<KAPSonarTarget>();
                 KAPUIManager.Instance.AnnouceMessage("Picked up " + target.label);
+
+                // Disable button if pickup was picked up
+                Button button = ButtonForPickup(pickup);
+                if(button != null)
+                {
+                    button.gameObject.SetActive(false);
+                }
             }
 
             currentTargetPickupID += 1;
@@ -183,11 +190,34 @@ public class KAPSonarTestMenuController : MonoBehaviour, IPickupCallbackObject
         return shouldPickup;
     }
 
+    #endregion
+    #region Private Helpers
+
     private KAPSonarTestPickupController PickupForID(int id)
     {
         KAPSonarTestPickupController[] pickupControllers = new[] {pickupA, pickupB, pickupC};
 
         return Array.Find(pickupControllers, p => p.PickupID() == id);
+    }
+
+    private Button ButtonForPickup(KAPSonarTestPickupController pickup)
+    {
+        Button button = null;
+        // This is horrible manual code, but I don't care right now. It just needs to work now
+        if(pickup == pickupA)
+        {
+            button = buttonPickupA; 
+        }
+        else if (pickup == pickupB)
+        {
+            button = buttonPickupB;
+        }
+        else if (pickup == pickupC)
+        {
+            button = buttonPickupC;
+        }
+
+        return button;
     }
 
     #endregion
