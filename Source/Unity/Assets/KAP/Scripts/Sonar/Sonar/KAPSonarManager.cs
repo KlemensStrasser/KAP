@@ -99,6 +99,26 @@ public class KAPSonarManager : MonoBehaviour, IKAPSonarEventReceiver
     private AudioClip sonarReachedAudioClip;
     private AudioClip targetReachedAudioClip;
 
+
+    private static KAPSonarManager _instance;
+    /// <summary>
+    /// KAPUIManager Singleton
+    /// Based on: https://gamedev.stackexchange.com/questions/116009/in-unity-how-do-i-correctly-implement-the-singleton-pattern
+    /// </summary>
+    public static KAPSonarManager Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                GameObject instanceObject = Resources.Load<GameObject>("Prefabs/Sonar/KAPSonarManager");
+                _instance = Instantiate<GameObject>(instanceObject).GetComponent<KAPSonarManager>();
+            }
+
+            return _instance;
+        }
+    }
+
     void OnValidate()
     {
         if(_player != null) 
@@ -109,29 +129,38 @@ public class KAPSonarManager : MonoBehaviour, IKAPSonarEventReceiver
 
     private void Awake()
     {
-        // Create and setup the sonar
-        sonar = Resources.Load<GameObject>("Prefabs/Sonar/KAPSonar");
-        sonar = Instantiate<GameObject>(sonar);
-        sonar.name = "KAPSonar";
-        sonar.transform.SetParent(this.transform);
-        sonar.SetActive(false);
-
-        sonarController = sonar.GetComponent<KAPSonarController>();
-
-        if (sonarController != null)
+        if (_instance != null && _instance != this)
         {
-            sonarController.eventReceiver = this;
-            sonarController.ShouldLoop(!manuallyTriggerSonarSignal);
-
-            ExtractValuesFromPlayer();
+            Destroy(this.gameObject);
         }
+        else
+        {
+            _instance = this;
 
-        // Setup the sound stuff
-        soundEffectAudioSource = gameObject.AddComponent<AudioSource>();
-        soundEffectAudioSource.volume = 0.75f;
+            // Create and setup the sonar
+            sonar = Resources.Load<GameObject>("Prefabs/Sonar/KAPSonar");
+            sonar = Instantiate<GameObject>(sonar);
+            sonar.name = "KAPSonar";
+            sonar.transform.SetParent(this.transform);
+            sonar.SetActive(false);
 
-        sonarReachedAudioClip = Resources.Load("Audio/Sonar/kap_SonarReached") as AudioClip;
-        targetReachedAudioClip = Resources.Load("Audio/Sonar/kap_SonarGoal") as AudioClip;
+            sonarController = sonar.GetComponent<KAPSonarController>();
+
+            if (sonarController != null)
+            {
+                sonarController.eventReceiver = this;
+                sonarController.ShouldLoop(!manuallyTriggerSonarSignal);
+
+                ExtractValuesFromPlayer();
+            }
+
+            // Setup the sound stuff
+            soundEffectAudioSource = gameObject.AddComponent<AudioSource>();
+            soundEffectAudioSource.volume = 0.75f;
+
+            sonarReachedAudioClip = Resources.Load("Audio/Sonar/kap_SonarReached") as AudioClip;
+            targetReachedAudioClip = Resources.Load("Audio/Sonar/kap_SonarGoal") as AudioClip;
+        }
     }
 
     /// <summary>
