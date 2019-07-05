@@ -23,6 +23,7 @@ public class KAPNativeScreenReader: IKAPScreenReader
     public void UpdateWithScreenReaderElements(KAPScreenReaderElement[] accessibilityElements, bool tryRetainingIndex = false)
     {
         this.accessibilityElements = accessibilityElements;
+        KAPNativeScreenReaderBridge.Instance.UpdateWithScreenReaderElements(accessibilityElements);
     }
 
 
