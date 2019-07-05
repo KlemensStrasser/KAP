@@ -86,14 +86,6 @@ public class KAPCustomScreenReader : MonoBehaviour, IKAPInputReceiver, IKAPScree
         }
     }
 
-    public void AnnounceMessage(string message)
-    {
-        if (message != null)
-        {
-            KAPSpeechSynthesizer.Instance.StartSpeaking(message);
-        }
-    }
-
     public void FocusElement(KAPScreenReaderElement elementToFocus)
     {
         int targetInstanceID = elementToFocus.gameObject.GetInstanceID();
@@ -110,9 +102,10 @@ public class KAPCustomScreenReader : MonoBehaviour, IKAPInputReceiver, IKAPScree
         }
     }
 
-    public void SetScreenReaderNavigationEnabled(bool navigationEnabled)
+    public void SetEnabled(bool enabled)
     {
-        // TODO: IMPLEMENT
+        // TODO: Maybe handle that differrently?
+        this.gameObject.SetActive(enabled);
     }
 
     #endregion

@@ -222,10 +222,12 @@ public class KAPUIManager : MonoBehaviour
     /// </summary>
     /// 
     /// This will not disable the screenreader fully, because it is also used for the annoucements
-    public void SetScreenReaderNavigationEnabled(bool navigationEnabled)
+    public void SetScreenReaderEnabled(bool enabled)
     {
-        // TODO: Implement! 
-        // Give this to the screen reader, which should stop getting input
+        if (screenReader != null)
+        {
+            screenReader.SetEnabled(enabled);
+        }
     }
 
     #endregion

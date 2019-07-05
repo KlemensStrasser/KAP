@@ -73,7 +73,7 @@ public class KAPSonarTestMenuController : MonoBehaviour, IPickupCallbackObject
             winningMenu.SetActive(false);
         }
 
-        KAPUIManager.Instance.gameObject.SetActive(false);
+        KAPUIManager.Instance.SetScreenReaderEnabled(false);
     }
 
     void Update()
@@ -97,7 +97,7 @@ public class KAPSonarTestMenuController : MonoBehaviour, IPickupCallbackObject
     void TriggerGameFinished()
     {
         winningMenu.SetActive(true);
-        KAPUIManager.Instance.gameObject.SetActive(true);
+        KAPUIManager.Instance.SetScreenReaderEnabled(true);
         KAPUIManager.Instance.VisibleElementsDidChange();
 
         if (playerController != null)
@@ -112,7 +112,7 @@ public class KAPSonarTestMenuController : MonoBehaviour, IPickupCallbackObject
     {
         if (mainMenu != null)
         {
-            KAPUIManager.Instance.gameObject.SetActive(showMenu);
+            KAPUIManager.Instance.SetScreenReaderEnabled(showMenu);
             mainMenu.SetActive(showMenu);
 
             if (showMenu)

@@ -38,6 +38,10 @@ public class KAPNativeScreenReader: IKAPScreenReader
         int targetInstanceID = elementToFocus.gameObject.GetInstanceID();
     }
 
+    public void SetEnabled(bool enabled)
+    { 
+    }
+
     #endregion
 
 
