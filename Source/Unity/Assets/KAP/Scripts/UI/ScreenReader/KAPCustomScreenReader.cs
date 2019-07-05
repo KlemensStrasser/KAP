@@ -6,7 +6,6 @@ using System;
 
 public class KAPCustomScreenReader : MonoBehaviour, IKAPInputReceiver, IKAPScreenReader
 {
-    private KAPSpeechSynthesizer speechSynthesizer;
     private KAPUIVisualizer kapVisualizer;
     KAPInput input;
 
@@ -31,8 +30,6 @@ public class KAPCustomScreenReader : MonoBehaviour, IKAPInputReceiver, IKAPScree
         input = gameObject.AddComponent<KAPMobileInput>();
         input.inputReceiver = this;
 #endif
-
-        speechSynthesizer = new KAPSpeechSynthesizer();
 
         // Initialize Sounds
         soundEffectAudioSource = gameObject.AddComponent<AudioSource>();
@@ -91,11 +88,9 @@ public class KAPCustomScreenReader : MonoBehaviour, IKAPInputReceiver, IKAPScree
 
     public void AnnounceMessage(string message)
     {
-        if (message != null && speechSynthesizer != null)
+        if (message != null)
         {
-            // This might not work
-            // TODO: Add queue to speechSynthesizer
-            speechSynthesizer.StartSpeaking(message);
+            KAPSpeechSynthesizer.Instance.StartSpeaking(message);
         }
     }
 
@@ -113,6 +108,11 @@ public class KAPCustomScreenReader : MonoBehaviour, IKAPInputReceiver, IKAPScree
         {
             Debug.LogWarning("KAPCustomScreenReader: Accessibility element with instanceID could not be found!");
         }
+    }
+
+    public void SetScreenReaderNavigationEnabled(bool navigationEnabled)
+    {
+        // TODO: IMPLEMENT
     }
 
     #endregion
@@ -134,39 +134,32 @@ public class KAPCustomScreenReader : MonoBehaviour, IKAPInputReceiver, IKAPScree
 
     private void AnnouceFocusedElement(bool includeDescription)
     {
-        if (speechSynthesizer != null)
+        if (focusedElement != null)
         {
-            if (focusedElement != null)
+            string text;
+            if (includeDescription)
             {
-                string text;
-                if (includeDescription)
-                {
-                    text = focusedElement.FullLabel();
-                }
-                else
-                {
-                    text = focusedElement.LabelWithTraitAndValue();
-                }
-
-                speechSynthesizer.StartSpeaking(text);
+                text = focusedElement.FullLabel();
             }
             else
             {
-                Debug.LogWarning("KAP Element at the selectedElementIndex is null!");
+                text = focusedElement.LabelWithTraitAndValue();
             }
+
+            KAPSpeechSynthesizer.Instance.StartSpeakingImmediately(text);
         }
         else
         {
-            Debug.LogWarning("The speechSynthesizer is null!");
+            Debug.LogWarning("KAP Element at the selectedElementIndex is null!");
         }
     }
 
-    private void AnnouceValueOfSelectedElement()
+    private void AnnouceValueOfFocusedElement()
     {
-        if (speechSynthesizer != null && focusedElement != null && focusedElement.value != null)
+        if (focusedElement != null && focusedElement.value != null)
         {
             string text = focusedElement.value;
-            speechSynthesizer.StartSpeaking(text);
+            KAPSpeechSynthesizer.Instance.StartSpeakingImmediately(text);
         }
     }
 

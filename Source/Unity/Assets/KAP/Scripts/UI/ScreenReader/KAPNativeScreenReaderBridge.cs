@@ -30,9 +30,11 @@ public struct KAPExternalAccessibilityHook
     public KAPInvokeValueChangeCallback valueChangeCallback;
 }
 
-public class KAPNativeScreenReaderBridge : IKAPScreenReader
+public class KAPNativeScreenReaderBridge
 {
 #if UNITY_IOS && !UNITY_EDITOR
+
+    public static bool Available = true;
 
     [DllImport("__Internal")]
     private static extern bool KAPIsScreenReaderRunning();
@@ -48,9 +50,9 @@ public class KAPNativeScreenReaderBridge : IKAPScreenReader
 
     [DllImport("__Internal")]
     private static extern void KAPAnnoucnceVoiceOverMessage(string cString);
-
-    private bool NativeScreenReaderAvailable() { return true; }
 #else
+
+    public static bool Available = false;
 
     // TODO: Return UNKOWN instead of false. 
     private bool KAPIsScreenReaderRunning() { return false; }
@@ -61,24 +63,47 @@ public class KAPNativeScreenReaderBridge : IKAPScreenReader
 
     private void KAPAnnoucnceVoiceOverMessage(string cString) { }
 
-    private bool NativeScreenReaderAvailable() { return false; }
 #endif
 
-    public bool Available()
+    [HideInInspector]
+    public KAPInvokeSelectionCallback selectionCallback;
+
+    [HideInInspector]
+    public KAPInvokeFocusCallback focusCallback;
+
+    [HideInInspector]
+    public KAPInvokeValueChangeCallback valueChangeCallback;
+
+
+    private static KAPNativeScreenReaderBridge _instance;
+    /// <summary>
+    /// KAPNativeScreenReaderBridge Singleton
+    /// </summary>
+    public static KAPNativeScreenReaderBridge Instance
     {
-        return NativeScreenReaderAvailable();
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = new KAPNativeScreenReaderBridge();
+            }
+
+            return _instance;
+        }
     }
 
-    #region IKAPScreenReader
+    /// <summary>
+    /// Initializes a new instance of the <see cref="T:KAPNativeScreenReaderBridge"/> class.
+    /// Private, so that no second instance can be created
+    /// </summary>
+    private KAPNativeScreenReaderBridge() { }
 
-    public void UpdateWithScreenReaderElements(KAPScreenReaderElement[] accessibilityElements, bool tryRetainingIndex = false)
+    public void UpdateWithScreenReaderElements(KAPScreenReaderElement[] accessibilityElements)
     {
-        KAPNativeScreenReaderBridgeElementStorage.Instance.SetAccessibilityElements(accessibilityElements);
-
         KAPExternalAccessibilityHook[] hooks = new KAPExternalAccessibilityHook[accessibilityElements.Length];
 
         // TODO: Error handling
-        for(int i = 0; i < accessibilityElements.Length; i++)
+        for (int i = 0; i < accessibilityElements.Length; i++)
         {
             KAPScreenReaderElement accessibilityElement = accessibilityElements[i];
             KAPExternalAccessibilityHook hook = this.AccessibilityHookForElement(accessibilityElement);
@@ -89,6 +114,11 @@ public class KAPNativeScreenReaderBridge : IKAPScreenReader
         KAPUpdateHooks(hooks, hooks.Length);
     }
 
+    public void ClearAllHooks()
+    {
+        KAPClearAllHooks();
+    }
+
     public void AnnounceMessage(string message)
     {
         if (message != null && message.Length > 0)
@@ -97,44 +127,36 @@ public class KAPNativeScreenReaderBridge : IKAPScreenReader
         }
     }
 
-    /// <summary>
-    /// Focuses the given element.
-    /// </summary>
-    /// <param name="elementToFocus">Element to focus.</param>
-    /// 
-    /// This needs to call the native plugin to change the focus of the native screen reader, which will trigger the InvokeFocuseCallback
-    public void FocusElement(KAPScreenReaderElement elementToFocus)
-    {
-        // TODO: IMPLEMENT FULLY
-        int targetInstanceID = elementToFocus.gameObject.GetInstanceID();
-    }
-
-    #endregion
-
-    public void ClearAllHooks()
-    {
-        KAPClearAllHooks();
-    }
-
     #region Static Callbacks
 
     [MonoPInvokeCallback(typeof(KAPInvokeSelectionCallback))]
     public static void InvokeSelectionCallback(int instanceID)
     {
-        KAPNativeScreenReaderBridgeElementStorage.Instance.InvokeSelectionOfElementWithID(instanceID);
+        // Is this the best way to to that? I don't know...
+        if(Instance.selectionCallback != null)
+        {
+            Instance.selectionCallback(instanceID);
+        }
     }
 
     [MonoPInvokeCallback(typeof(KAPInvokeValueChangeCallback))]
     public static void InvokeValueChangeCallback(int instanceID, int modifier)
     {
-        KAPNativeScreenReaderBridgeElementStorage.Instance.InvokeValueChangeOfElementWithID(instanceID, modifier);
+        // Is this the best way to to that? I don't know...
+        if (Instance.valueChangeCallback != null)
+        {
+            Instance.valueChangeCallback(instanceID, modifier);
+        }
     }
 
     [MonoPInvokeCallback(typeof(KAPInvokeFocusCallback))]
     public static void InvokeFocuseCallback(int instanceID)
     {
-        // TODO: CALL INVOKEFOCUSSTZFF
-        KAPNativeScreenReaderBridgeElementStorage.Instance.SetFocusOnElementWithID(instanceID);
+        // Is this the best way to to that? I don't know...
+        if (Instance.focusCallback != null)
+        {
+            Instance.focusCallback(instanceID);
+        }
     }
 
     #endregion

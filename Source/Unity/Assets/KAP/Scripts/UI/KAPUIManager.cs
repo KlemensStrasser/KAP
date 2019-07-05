@@ -59,11 +59,10 @@ public class KAPUIManager : MonoBehaviour
     void Start()
     {
         // TODO: Add settings to the screen readers like a prefered language
-        KAPNativeScreenReaderBridge nativeScreenReaderBridge = new KAPNativeScreenReaderBridge();
 
-        if(nativeScreenReaderBridge.Available())
+        if(KAPNativeScreenReaderBridge.Available)
         {
-            screenReader = nativeScreenReaderBridge;
+            screenReader = new KAPNativeScreenReader();
         }
         else
         {
@@ -175,10 +174,7 @@ public class KAPUIManager : MonoBehaviour
     /// </summary>
     public void AnnouceMessage(string message) 
     {
-        if (screenReader != null)
-        {
-            screenReader.AnnounceMessage(message);
-        }
+        KAPMessageAnnoucer.Instance.AnnounceMessage(message);
     }
 
     /// <summary>
@@ -224,7 +220,9 @@ public class KAPUIManager : MonoBehaviour
     /// <summary>
     /// Disables/Enables screenreder navigation, so that the game can capture the current input
     /// </summary>
-    public void SetAllowsDirectInput(bool allowDirectInput)
+    /// 
+    /// This will not disable the screenreader fully, because it is also used for the annoucements
+    public void SetScreenReaderNavigationEnabled(bool navigationEnabled)
     {
         // TODO: Implement! 
         // Give this to the screen reader, which should stop getting input

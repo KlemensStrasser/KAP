@@ -6,7 +6,5 @@ public interface IKAPScreenReader
 {
     void UpdateWithScreenReaderElements(KAPScreenReaderElement[] accessibilityElements, bool tryRetainingIndex = false);
 
-    void AnnounceMessage(string Message);
-
     void FocusElement(KAPScreenReaderElement elementToFocus);
 }

@@ -1,45 +1,45 @@
 ﻿using System;
 
 /// <summary>
-/// Storage for the accessibility elements
+/// This needs to be a singleton to make the callback 
 /// </summary>
-/// We need this because we cannot access the elements from the static callback methods
-public class KAPNativeScreenReaderBridgeElementStorage
+public class KAPNativeScreenReader: IKAPScreenReader
 {
-    private static KAPNativeScreenReaderBridgeElementStorage _instance;
-    /// <summary>
-    /// KAPNativeScreenReaderBridgeElementStorage Singleton
-    /// Based on: https://gamedev.stackexchange.com/questions/116009/in-unity-how-do-i-correctly-implement-the-singleton-pattern
-    /// </summary>
-    public static KAPNativeScreenReaderBridgeElementStorage Instance
-    {
-        get
-        {
-            if (_instance == null)
-            {
-                _instance = new KAPNativeScreenReaderBridgeElementStorage();
-            }
-
-            return _instance;
-        }
-    }
-
-    /// <summary>
-    /// Array of the KAPScreenReaderElement that are currently visible to the screen reader
-    /// </summary>
     private KAPScreenReaderElement[] accessibilityElements;
 
     private KAPScreenReaderElement currentlyFocusedElement;
 
-    private KAPNativeScreenReaderBridgeElementStorage() 
+    public  KAPNativeScreenReader() 
     {
         currentlyFocusedElement = null;
+
+        KAPNativeScreenReaderBridge.Instance.selectionCallback = InvokeSelectionOfElementWithID;
+        KAPNativeScreenReaderBridge.Instance.valueChangeCallback = InvokeValueChangeOfElementWithID;
+        KAPNativeScreenReaderBridge.Instance.focusCallback = SetFocusOnElementWithID;
     }
 
-    public void SetAccessibilityElements(KAPScreenReaderElement[] accessibilityElements)
+    #region IKAPScreenReader
+
+    public void UpdateWithScreenReaderElements(KAPScreenReaderElement[] accessibilityElements, bool tryRetainingIndex = false)
     {
         this.accessibilityElements = accessibilityElements;
     }
+
+
+    /// <summary>
+    /// Focuses the given element.
+    /// </summary>
+    /// <param name="elementToFocus">Element to focus.</param>
+    /// 
+    /// This needs to call the native plugin to change the focus of the native screen reader, which will trigger the InvokeFocuseCallback
+    public void FocusElement(KAPScreenReaderElement elementToFocus)
+    {
+        // TODO: IMPLEMENT FULLY
+        int targetInstanceID = elementToFocus.gameObject.GetInstanceID();
+    }
+
+    #endregion
+
 
     #region Callbacks
 
