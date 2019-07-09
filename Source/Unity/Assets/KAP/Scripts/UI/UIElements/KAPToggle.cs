@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 [AddComponentMenu("KAP/UI/KAPToggle")]
-public class KAPToggle : KAPScreenReaderElement
+public class KAPToggle : KAPElement
 {
     /// The Text that might be attached to the same GameObject as this component
     private Toggle toggle;
@@ -48,6 +48,11 @@ public class KAPToggle : KAPScreenReaderElement
         }
 
         SetupLabel();
+    }
+
+    public void Reset()
+    {
+        isScreenReaderElement = true;
     }
 
     override protected string ImplicitLabelValue()

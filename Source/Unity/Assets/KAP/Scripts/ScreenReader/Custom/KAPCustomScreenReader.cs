@@ -9,7 +9,7 @@ public class KAPCustomScreenReader : MonoBehaviour, IKAPInputReceiver, IKAPScree
     private KAPUIVisualizer kapVisualizer;
     KAPInput input;
 
-    private KAPScreenReaderElement focusedElement;
+    private KAPElement focusedElement;
     private int focusedElementIndex;
 
     private AudioSource soundEffectAudioSource;
@@ -18,7 +18,7 @@ public class KAPCustomScreenReader : MonoBehaviour, IKAPInputReceiver, IKAPScree
     private AudioClip blockAudioClip;
     private AudioClip selectAudioClip;
 
-    KAPScreenReaderElement[] accessibilityElements;
+    KAPElement[] accessibilityElements;
 
     private void Awake()
     {
@@ -56,7 +56,7 @@ public class KAPCustomScreenReader : MonoBehaviour, IKAPInputReceiver, IKAPScree
 
     #region IKAPScreenReader
 
-    public void UpdateWithScreenReaderElements(KAPScreenReaderElement[] accessibilityElements, bool tryRetainingIndex = false)
+    public void UpdateWithScreenReaderElements(KAPElement[] accessibilityElements, bool tryRetainingIndex = false)
     {
         this.accessibilityElements = accessibilityElements;
 
@@ -86,7 +86,7 @@ public class KAPCustomScreenReader : MonoBehaviour, IKAPInputReceiver, IKAPScree
         }
     }
 
-    public void FocusElement(KAPScreenReaderElement elementToFocus)
+    public void FocusElement(KAPElement elementToFocus)
     {
         int targetInstanceID = elementToFocus.gameObject.GetInstanceID();
         int instanceIndex = Array.FindIndex(accessibilityElements, element => element.gameObject.GetInstanceID() == targetInstanceID);
@@ -269,7 +269,7 @@ public class KAPCustomScreenReader : MonoBehaviour, IKAPInputReceiver, IKAPScree
 
         for (int i = 0; i < accessibilityElements.Length; i++)
         {
-            KAPScreenReaderElement element = accessibilityElements[i];
+            KAPElement element = accessibilityElements[i];
             if (element.frame.Contains(position))
             {
                 if (index == -1)
@@ -304,7 +304,7 @@ public class KAPCustomScreenReader : MonoBehaviour, IKAPInputReceiver, IKAPScree
                 focusedElement.DidLoseFocus();
             }
 
-            KAPScreenReaderElement newFocusedElement = accessibilityElements[newFocusedElementIndex];
+            KAPElement newFocusedElement = accessibilityElements[newFocusedElementIndex];
             newFocusedElement.DidBecomeFocused();
 
             focusedElement = newFocusedElement;

@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 [AddComponentMenu("KAP/UI/KAPButton")]
-public class KAPButton : KAPScreenReaderElement
+public class KAPButton : KAPElement
 {
     private Button button;
     private Text buttonText;
@@ -26,6 +26,11 @@ public class KAPButton : KAPScreenReaderElement
         }
 
         SetupLabel();
+    }
+
+    public void Reset()
+    {
+        isScreenReaderElement = true;
     }
 
     override protected string ImplicitLabelValue()

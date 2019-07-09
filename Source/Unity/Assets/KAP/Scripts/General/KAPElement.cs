@@ -6,8 +6,18 @@ using System.Linq;
 /// Basic Element
 /// Used for custom GameObject that should be made accessible
 [AddComponentMenu("KAP/KAPScreenReaderElement")]
-public class KAPScreenReaderElement : KAPElement
+public class KAPElement : MonoBehaviour
 {
+    /// <summary>
+    /// Indicates if it can be seen by the screen reader or not.
+    /// </summary>
+    public bool isScreenReaderElement;
+
+    /// <summary>
+    /// Text indicator of the element
+    /// </summary>
+    public string label = "";
+
     /// <summary>
     /// Standardized frame of the element
     /// </summary>
@@ -28,7 +38,6 @@ public class KAPScreenReaderElement : KAPElement
     /// Detailed description of the function of the element
     /// </summary>
     public string description = "";
-
 
     /// <summary>
     /// Default indication on how the accessibilityElement should be treated by the screen reader.
@@ -100,7 +109,7 @@ public class KAPScreenReaderElement : KAPElement
 
     // TODO: Implement shouldGroupAccessibilityChildren
 
-    public KAPScreenReaderElement()
+    public KAPElement()
     {
         this.isFocused = false;
     }

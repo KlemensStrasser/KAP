@@ -76,20 +76,30 @@ public class KAPUIManager : MonoBehaviour
             }
         }
 
-        // Fetch Elements
-        KAPScreenReaderElement[] accessibilityElements = LoadAccessibilityElements();
+        // Fetch Elements and update screen reader
+        KAPElement[] screenReaderElements = LoadScreenReaderElements();
+        screenReader.UpdateWithScreenReaderElements(screenReaderElements);
+    }
 
-        screenReader.UpdateWithScreenReaderElements(accessibilityElements);
+    /// <summary>
+    /// Fetches the accessibility elements and filters out all where isScreenReaderElement is false
+    /// </summary>
+    KAPElement[] LoadScreenReaderElements()
+    {
+        KAPElement[] accessibilityElements = LoadAccessibilityElements();
+        accessibilityElements = accessibilityElements.Where(e => e.isScreenReaderElement == true).ToArray();
+
+        return accessibilityElements;
     }
 
     /// <summary>
     /// Fetches the accessibility elements in the scene and sorts them by frame
     /// </summary>
-    KAPScreenReaderElement[] LoadAccessibilityElements()
+    KAPElement[] LoadAccessibilityElements()
     {
-        KAPScreenReaderElement[] elements = FindObjectsOfType<KAPScreenReaderElement>();
+        KAPElement[] elements = FindObjectsOfType<KAPElement>();
 
-        KAPScreenReaderElement[] popovers = elements.Where(c => c is KAPPopover).ToArray();
+        KAPElement[] popovers = elements.Where(c => c is KAPPopover).ToArray();
         if(popovers != null && popovers.Length > 0)
         {
             elements = GetAccessibilityElementsFromPopover((KAPPopover)popovers[0]);
@@ -98,7 +108,7 @@ public class KAPUIManager : MonoBehaviour
         if (elements != null) 
         {
             // Sort by frame
-            Array.Sort(elements, delegate (KAPScreenReaderElement element1, KAPScreenReaderElement element2)
+            Array.Sort(elements, delegate (KAPElement element1, KAPElement element2)
             {
                 int comparrisonResult = element1.frame.y.CompareTo(element2.frame.y);
                 if (comparrisonResult == 0)
@@ -118,9 +128,9 @@ public class KAPUIManager : MonoBehaviour
     /// </summary>
     /// <returns>The accessibility elements from the top popover.</returns>
     /// <param name="popover">The popover we start with</param>
-    KAPScreenReaderElement[] GetAccessibilityElementsFromPopover(KAPPopover popover)
+    KAPElement[] GetAccessibilityElementsFromPopover(KAPPopover popover)
     {
-        KAPScreenReaderElement[] topAccessibilityElements;
+        KAPElement[] topAccessibilityElements;
 
         if (popover != null)
         {
@@ -154,13 +164,13 @@ public class KAPUIManager : MonoBehaviour
             } while (searchForChildPopOvers);
 
 
-            topAccessibilityElements = topPopover.gameObject.GetComponentsInChildren<KAPScreenReaderElement>();
+            topAccessibilityElements = topPopover.gameObject.GetComponentsInChildren<KAPElement>();
             // Filter out the popover
             topAccessibilityElements = topAccessibilityElements.Where(go => go.gameObject != topPopover.gameObject).ToArray();
         } 
         else
         {
-            topAccessibilityElements = new KAPScreenReaderElement[0];
+            topAccessibilityElements = new KAPElement[0];
         }
 
         return topAccessibilityElements;
@@ -178,9 +188,9 @@ public class KAPUIManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Tries to set the focus on a given KAPScreenReaderElement
+    /// Tries to set the focus on a given KAPElement
     /// </summary>
-    public void FocusElement(KAPScreenReaderElement element) 
+    public void FocusElement(KAPElement element) 
     {
         if (screenReader != null)
         {
@@ -189,11 +199,11 @@ public class KAPUIManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Tries to set the focus on a KAPScreenReaderElement that is attached to the given GameObject
+    /// Tries to set the focus on a KAPElement that is attached to the given GameObject
     /// </summary>
     public void FocusGameObject(GameObject gObject)
     {
-        KAPScreenReaderElement element = gObject.GetComponent<KAPScreenReaderElement>();
+        KAPElement element = gObject.GetComponent<KAPElement>();
 
         if (element != null)
         {
@@ -201,7 +211,7 @@ public class KAPUIManager : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("KAPUIManager: Given GameObject has no KAPScreenReaderElement attached!");
+            Debug.LogWarning("KAPUIManager: Given GameObject has no KAPElement attached!");
         }
     }
 
@@ -239,8 +249,8 @@ public class KAPUIManager : MonoBehaviour
     {
         if(needsUpdateElements)
         {
-            KAPScreenReaderElement[] accessibilityElements = LoadAccessibilityElements();
-            screenReader.UpdateWithScreenReaderElements(accessibilityElements, retainSelectedElementIndex);
+            KAPElement[] screenReaderElements = LoadScreenReaderElements();
+            screenReader.UpdateWithScreenReaderElements(screenReaderElements, retainSelectedElementIndex);
 
             needsUpdateElements = false;
             retainSelectedElementIndex = true;

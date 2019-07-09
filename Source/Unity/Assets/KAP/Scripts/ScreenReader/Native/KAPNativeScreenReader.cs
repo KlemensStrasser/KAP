@@ -5,9 +5,9 @@
 /// </summary>
 public class KAPNativeScreenReader: IKAPScreenReader
 {
-    private KAPScreenReaderElement[] accessibilityElements;
+    private KAPElement[] accessibilityElements;
 
-    private KAPScreenReaderElement currentlyFocusedElement;
+    private KAPElement currentlyFocusedElement;
 
     public  KAPNativeScreenReader() 
     {
@@ -20,7 +20,7 @@ public class KAPNativeScreenReader: IKAPScreenReader
 
     #region IKAPScreenReader
 
-    public void UpdateWithScreenReaderElements(KAPScreenReaderElement[] accessibilityElements, bool tryRetainingIndex = false)
+    public void UpdateWithScreenReaderElements(KAPElement[] accessibilityElements, bool tryRetainingIndex = false)
     {
         this.accessibilityElements = accessibilityElements;
         KAPNativeScreenReaderBridge.Instance.UpdateWithScreenReaderElements(accessibilityElements);
@@ -33,7 +33,7 @@ public class KAPNativeScreenReader: IKAPScreenReader
     /// <param name="elementToFocus">Element to focus.</param>
     /// 
     /// This needs to call the native plugin to change the focus of the native screen reader, which will trigger the InvokeFocuseCallback
-    public void FocusElement(KAPScreenReaderElement elementToFocus)
+    public void FocusElement(KAPElement elementToFocus)
     {
         // TODO: IMPLEMENT FULLY
         int targetInstanceID = elementToFocus.gameObject.GetInstanceID();
@@ -54,7 +54,7 @@ public class KAPNativeScreenReader: IKAPScreenReader
     /// <param name="instanceID">Instance id of the elements gameObject.</param>
     public void InvokeSelectionOfElementWithID(int instanceID)
     {
-        KAPScreenReaderElement element = Array.Find(accessibilityElements, e => e.gameObject.GetInstanceID() == instanceID);
+        KAPElement element = Array.Find(accessibilityElements, e => e.gameObject.GetInstanceID() == instanceID);
 
         if (element != null)
         {
@@ -69,7 +69,7 @@ public class KAPNativeScreenReader: IKAPScreenReader
     /// <param name="modifier">1 = Increment, -1 = decrement</param>
     public void InvokeValueChangeOfElementWithID(int instanceID, int modifier)
     {
-        KAPScreenReaderElement element = Array.Find(accessibilityElements, e => e.gameObject.GetInstanceID() == instanceID);
+        KAPElement element = Array.Find(accessibilityElements, e => e.gameObject.GetInstanceID() == instanceID);
 
         if (element != null)
         {
@@ -100,7 +100,7 @@ public class KAPNativeScreenReader: IKAPScreenReader
                 currentlyFocusedElement.DidLoseFocus();
             }
 
-            KAPScreenReaderElement newElement = accessibilityElements[index];
+            KAPElement newElement = accessibilityElements[index];
             newElement.DidBecomeFocused();
 
             currentlyFocusedElement = newElement;

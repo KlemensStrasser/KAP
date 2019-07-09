@@ -162,6 +162,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a19e0221209ae49709ad22eea8addae4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isScreenReaderElement: 1
   label: 
   description: 
   onClick:
@@ -359,6 +360,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8970e07328fb543a9b5b3557db9a8a9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isScreenReaderElement: 1
   label: Right
   description: Sprite
   onClick:
@@ -479,7 +481,7 @@ GameObject:
   - component: {fileID: 468527424}
   - component: {fileID: 468527427}
   m_Layer: 5
-  m_Name: Annoucement
+  m_Name: AnnoucementButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -596,6 +598,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 361a8b9d2b2fe498ebf02b3e5199c209, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isScreenReaderElement: 1
   label: 
   description: 
   onClick:
@@ -715,6 +718,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a19e0221209ae49709ad22eea8addae4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isScreenReaderElement: 1
   label: 
   description: 
   onClick:
@@ -953,7 +957,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0.38, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -1062,6 +1066,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8970e07328fb543a9b5b3557db9a8a9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isScreenReaderElement: 1
   label: Center
   description: Sprite
   onClick:
@@ -1245,6 +1250,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 040667b3de43547c7a43755df3a43203, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isScreenReaderElement: 0
   label: 
   description: 
   onClick:
@@ -1452,6 +1458,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 361a8b9d2b2fe498ebf02b3e5199c209, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isScreenReaderElement: 1
   label: 
   description: 
   onClick:
@@ -1798,6 +1805,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 361a8b9d2b2fe498ebf02b3e5199c209, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isScreenReaderElement: 1
   label: 
   description: Opens a popup
   onClick:
@@ -1843,7 +1851,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1043328403
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1883,6 +1891,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fbb9fa7dfef84ee78c57453740b09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isScreenReaderElement: 1
   label: 
   description: 
   onClick:
@@ -2034,6 +2043,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0da78f135c63248bea8f8e4b4709f89c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isScreenReaderElement: 0
   label: 
   description: 
   onClick:
@@ -2177,6 +2187,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a19e0221209ae49709ad22eea8addae4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isScreenReaderElement: 1
   label: 
   description: 
   onClick:
@@ -2421,6 +2432,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a19e0221209ae49709ad22eea8addae4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isScreenReaderElement: 1
   label: 
   description: 
   onClick:
@@ -2540,6 +2552,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8970e07328fb543a9b5b3557db9a8a9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isScreenReaderElement: 1
   label: Left
   description: Sprite
   onClick:
@@ -2712,6 +2725,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 530ab86fdcf654637b4f2b0f490a59e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isScreenReaderElement: 1
   label: 
   description: 
   onClick:
@@ -2983,6 +2997,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fbb9fa7dfef84ee78c57453740b09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isScreenReaderElement: 1
   label: 
   description: 
   onClick:
@@ -3165,6 +3180,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a19e0221209ae49709ad22eea8addae4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isScreenReaderElement: 1
   label: 
   description: 
   onClick:
@@ -3340,8 +3356,8 @@ RectTransform:
   m_Father: {fileID: 693726098}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.38, y: 0}
-  m_AnchorMax: {x: 0.38, y: 1}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}

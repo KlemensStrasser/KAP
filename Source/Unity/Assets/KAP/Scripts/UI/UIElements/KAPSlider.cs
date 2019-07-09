@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 
 [AddComponentMenu("KAP/UI/KAPSlider")]
-public class KAPSlider : KAPScreenReaderElement
+public class KAPSlider : KAPElement
 {
     /// The slider that should be attached to the same gameObject
     private Slider slider;
@@ -38,13 +38,14 @@ public class KAPSlider : KAPScreenReaderElement
         }
     }
 
-    public KAPSlider() : base()
-    {
-    }
-
     private void Awake()
     {
         this.slider = gameObject.GetComponent<Slider>();
+    }
+
+    public void Reset()
+    {
+        isScreenReaderElement = true;
     }
 
     /// Increment value

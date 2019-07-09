@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 
 [AddComponentMenu("KAP/UI/KAPText")]
-public class KAPText : KAPScreenReaderElement
+public class KAPText : KAPElement
 {
     /// The Text that might be attached to the same GameObject as this component
     private Text text;
@@ -19,6 +19,11 @@ public class KAPText : KAPScreenReaderElement
     {
         this.text = gameObject.GetComponent<Text>();
         SetupLabel();
+    }
+
+    public void Reset()
+    {
+        isScreenReaderElement = true;
     }
 
     override protected string ImplicitLabelValue()

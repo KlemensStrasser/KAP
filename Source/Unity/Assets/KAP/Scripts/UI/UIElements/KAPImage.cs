@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 [AddComponentMenu("KAP/UI/KAPImage")]
-public class KAPImage : KAPScreenReaderElement
+public class KAPImage : KAPElement
 {
     override protected KAPTrait defaultTraits
     {
@@ -9,5 +9,10 @@ public class KAPImage : KAPScreenReaderElement
         {
             return KAPTrait.Image;
         }
+    }
+
+    public void Reset()
+    {
+        isScreenReaderElement = true;
     }
 }
