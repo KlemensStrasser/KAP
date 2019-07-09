@@ -16,11 +16,18 @@ public class KAPDesktopInput : KAPInput {
     /// Keycode for the key used to decrement the value of the focused element
     public KeyCode decrementValueKey = KeyCode.DownArrow;
 
-	void Update ()
+    public KeyCode browseElementsKey = KeyCode.Caret;
+
+    void Update ()
     {
         if (inputReceiver != null)
         {
-            if (Input.GetKeyDown(nextElementKey))
+            if (Input.GetKey(browseElementsKey))
+            {
+                Vector2 invertedPosition = new Vector2(Input.mousePosition.x, Screen.height - Input.mousePosition.y);
+                inputReceiver.FocusElementAtPosition(invertedPosition);
+            }
+            else if (Input.GetKeyDown(nextElementKey))
             {
                 inputReceiver.FocusNextElement();
             }
@@ -44,6 +51,7 @@ public class KAPDesktopInput : KAPInput {
             {
                 inputReceiver.DecrementValueOfFocuedElement();
             }
+            
         } else {
             Debug.LogWarning("The KAPKeyboardInput has no input receiver and thus, cannot forward any input.");
         }
