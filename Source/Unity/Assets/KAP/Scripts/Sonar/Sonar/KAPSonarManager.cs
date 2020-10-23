@@ -231,7 +231,7 @@ public class KAPSonarManager : MonoBehaviour, IKAPSonarEventReceiver
     /// </summary>
     private List<Vector3> RecalculatePath(Vector3 targetPosition)
     {
-        List<Vector3> points = new List<Vector3>(); ;
+        List<Vector3> points = new List<Vector3>();
 
         NavMeshPath path = new NavMeshPath();
 
@@ -414,7 +414,6 @@ public class KAPSonarManager : MonoBehaviour, IKAPSonarEventReceiver
     {
         if (cornerIndex >= 0 && pathPoints != null && pathPoints.Count > cornerIndex && sonarController != null)
         {
-
             Vector3 currentCornerPosition = pathPoints[cornerIndex];
 
             // Take the y position from the player so that it floats right in front of him/her
@@ -462,9 +461,12 @@ public class KAPSonarManager : MonoBehaviour, IKAPSonarEventReceiver
     /// </summary>
     private void ManualTriggerSonar()
     {
-        // If the player wandered too far, this will ensure that the player 
-        sonarController.EnsureThatSignalCanBeHeard(CurrentDistanceToSonar());
-        sonarController.StartSignal();
+        if (pathPoints != null && pathPoints.Count > 0)
+        {
+            // If the player wandered too far, this will ensure that the player 
+            sonarController.EnsureThatSignalCanBeHeard(CurrentDistanceToSonar());
+            sonarController.StartSignal();
+        }
     }
 
     private void ForcePathRecalculation()

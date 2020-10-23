@@ -78,7 +78,6 @@ public class KAPSonarTestMenuController : MonoBehaviour, IPickupCallbackObject
 
     void Update()
     {
-
         if(winningMenu.activeSelf == false)
         {
             if (Input.GetKeyDown(KeyCode.Escape))

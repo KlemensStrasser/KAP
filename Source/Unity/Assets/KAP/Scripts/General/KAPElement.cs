@@ -9,25 +9,9 @@ using System.Linq;
 public class KAPElement : MonoBehaviour
 {
     /// <summary>
-    /// Indicates if it can be seen by the screen reader or not.
-    /// </summary>
-    public bool isScreenReaderElement;
-
-    /// <summary>
-    /// Text indicator of the element
+    /// A short but concise label of the element
     /// </summary>
     public string label = "";
-
-    /// <summary>
-    /// Standardized frame of the element
-    /// </summary>
-    public virtual Rect frame
-    {
-        get
-        {
-            return ScreenRectForGameObject(this.gameObject);
-        }
-    }
 
     /// <summary>
     /// Value of the element
@@ -35,7 +19,8 @@ public class KAPElement : MonoBehaviour
     public virtual string value { get; set; }
 
     /// <summary>
-    /// Detailed description of the function of the element
+    /// Detailed description of the function of the element.
+    /// Only used if the functioning isn't obvious through label, value and traits.
     /// </summary>
     public string description = "";
 
@@ -50,10 +35,12 @@ public class KAPElement : MonoBehaviour
             return KAPTrait.None;
         }
     }
+
     private KAPTrait _traits;
 
     /// <summary>
-    /// Indication on how the accessibilityElement should be treated by the screen reader.
+    /// Indication on how the element should be treated by the accessibility technology
+    /// Returns the defaultTraits if not explicitily set
     /// Only set for standard elements if you know what you're doing.
     /// </summary>
     [HideInInspector]
@@ -78,6 +65,27 @@ public class KAPElement : MonoBehaviour
     }
 
     /// <summary>
+    /// Standardized frame of the element in screen coordinates.
+    /// </summary>
+    public virtual Rect frame
+    {
+        get
+        {
+            return ScreenRectForGameObject(this.gameObject);
+        }
+    }
+
+    /// <summary>
+    /// Indicates if it can be seen by the screen reader or not.
+    /// </summary>
+    public bool isScreenReaderElement;
+
+    /// <summary>
+    /// Indicated if the element is focued by the accessibility technology.
+    /// </summary>
+    private bool isFocused;
+
+    /// <summary>
     /// Event that gets invoked when the element was selected
     /// </summary>
     public UnityEvent onClick = new UnityEvent();
@@ -95,19 +103,12 @@ public class KAPElement : MonoBehaviour
     /// <summary>
     /// Event that gets invoked when the element was focused by the manager
     /// </summary>
-    public UnityEvent becomeFocusedEvent = new UnityEvent();
+    public UnityEvent onBecomeFocused = new UnityEvent();
 
     /// <summary>
     /// Event that gets invoked when the element loses focus
     /// </summary>
-    public UnityEvent loseFocusEvent = new UnityEvent();
-
-    /// <summary>
-    /// Indicates if the element currently has focus.
-    /// </summary>
-    private bool isFocused;
-
-    // TODO: Implement shouldGroupAccessibilityChildren
+    public UnityEvent onLoseFocus = new UnityEvent();
 
     public KAPElement()
     {
@@ -181,9 +182,9 @@ public class KAPElement : MonoBehaviour
     public void DidBecomeFocused()
     {
         this.isFocused = true;
-        if (this.becomeFocusedEvent != null)
+        if (this.onBecomeFocused!= null)
         {
-            becomeFocusedEvent.Invoke();
+            onBecomeFocused.Invoke();
         }
     }
 
@@ -193,9 +194,9 @@ public class KAPElement : MonoBehaviour
     public void DidLoseFocus()
     {
         this.isFocused = false;
-        if (this.loseFocusEvent != null)
+        if (this.onLoseFocus != null)
         {
-            loseFocusEvent.Invoke();
+            onLoseFocus.Invoke();
         }
     }
 
