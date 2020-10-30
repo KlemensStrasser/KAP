@@ -1,0 +1,67 @@
+﻿using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
+
+[AddComponentMenu("UA11Y/UI/UA11YButton")]
+public class UA11YButton : UA11YElement
+{
+    private Button button;
+    private Text buttonText;
+
+    override protected UA11YTrait defaultTraits
+    {
+        get
+        {
+            return UA11YTrait.Button;
+        }
+    }
+
+    private void Awake()
+    {
+        this.button = gameObject.GetComponent<Button>();
+
+        if (button != null)
+        {
+            this.buttonText = button.GetComponentInChildren<Text>();
+        }
+
+        SetupLabel();
+    }
+
+    public void Reset()
+    {
+        isScreenReaderElement = true;
+    }
+
+    override protected string ImplicitLabelValue()
+    {
+        string implicitTextValue;
+        if (buttonText != null)
+        {
+            implicitTextValue = buttonText.text;
+        }
+        else
+        {
+            implicitTextValue = "";
+        }
+
+        return implicitTextValue;
+    }
+
+    override public void InvokeSelection()
+    {
+        if (EventSystem.current != null)
+        {
+            ExecuteEvents.Execute(gameObject, new BaseEventData(EventSystem.current), ExecuteEvents.submitHandler);
+        }
+        else if (button != null)
+        {
+            button.onClick.Invoke();
+        }
+
+        if(this.onClick != null) 
+        {
+            this.onClick.Invoke();
+        }
+    }
+}

@@ -16,6 +16,6 @@ public class PopupTestController : MonoBehaviour
     void ClosePopover()
     {
         gameObject.SetActive(false);
-        KAPUIManager.Instance.VisibleElementsDidChange();
+        UA11YUIManager.Instance.VisibleElementsDidChange();
     }
 }

@@ -33,7 +33,7 @@ public class UITestController : MonoBehaviour {
         {
             mainMenu.SetActive(true);
         }
-        KAPUIManager.Instance.VisibleElementsDidChange();
+        UA11YUIManager.Instance.VisibleElementsDidChange();
     }
 
     private void Update()
@@ -49,7 +49,7 @@ public class UITestController : MonoBehaviour {
                     popover.SetActive(false);
                 }
 
-                KAPUIManager.Instance.VisibleElementsDidChange();
+                UA11YUIManager.Instance.VisibleElementsDidChange();
             }
         }
     }
@@ -59,12 +59,12 @@ public class UITestController : MonoBehaviour {
         if (popover != null)
         {
             popover.SetActive(true);
-            KAPUIManager.Instance.VisibleElementsDidChange();
+            UA11YUIManager.Instance.VisibleElementsDidChange();
         }
     }
 
     void SpeakAlert()
     {
-        KAPUIManager.Instance.AnnouceMessage("This an important announcement");
+        UA11YUIManager.Instance.AnnouceMessage("This an important announcement");
     }
 }
