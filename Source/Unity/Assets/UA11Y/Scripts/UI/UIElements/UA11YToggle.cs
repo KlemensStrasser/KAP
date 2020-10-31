@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System.Collections.Generic;
 
 [AddComponentMenu("UA11Y/UI/UA11YToggle")]
 public class UA11YToggle : UA11YElement
@@ -30,11 +31,11 @@ public class UA11YToggle : UA11YElement
         }
     }
 
-    override protected UA11YTrait defaultTraits
+    override protected List<UA11YTrait> defaultTraits
     {
         get
         {
-            return UA11YTrait.Toggle;
+            return new List<UA11YTrait> { UA11YTrait.Toggle };
         }
     }
 

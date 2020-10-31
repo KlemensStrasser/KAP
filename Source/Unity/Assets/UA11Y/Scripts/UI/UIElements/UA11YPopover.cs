@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-
+using System.Collections.Generic;
 
 /// <summary>
 /// UA11YPopover is used to temporarily limit the accessible elements to only children of the top most popover
@@ -14,14 +14,6 @@
 [AddComponentMenu("UA11Y/UI/UA11YPopOver")]
 public class UA11YPopover : UA11YElement
 {
-    override protected UA11YTrait defaultTraits
-    {
-        get
-        {
-            return UA11YTrait.None;
-        }
-    }
-
     public void Reset()
     {
         isScreenReaderElement = true;

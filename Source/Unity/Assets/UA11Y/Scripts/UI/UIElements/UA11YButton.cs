@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System.Collections.Generic;
 
 [AddComponentMenu("UA11Y/UI/UA11YButton")]
 public class UA11YButton : UA11YElement
@@ -8,11 +9,11 @@ public class UA11YButton : UA11YElement
     private Button button;
     private Text buttonText;
 
-    override protected UA11YTrait defaultTraits
+    override protected List<UA11YTrait> defaultTraits
     {
         get
         {
-            return UA11YTrait.Button;
+            return new List<UA11YTrait> { UA11YTrait.Button };
         }
     }
 

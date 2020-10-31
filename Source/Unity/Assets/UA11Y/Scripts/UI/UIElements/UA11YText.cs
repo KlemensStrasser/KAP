@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 [AddComponentMenu("UA11Y/UI/UA11YText")]
 public class UA11YText : UA11YElement
@@ -7,11 +8,11 @@ public class UA11YText : UA11YElement
     /// The Text that might be attached to the same GameObject as this component
     private Text text;
 
-    override protected UA11YTrait defaultTraits
+    override protected List<UA11YTrait> defaultTraits
     {
         get
         {
-            return UA11YTrait.StaticText;
+            return new List<UA11YTrait> { UA11YTrait.StaticText };
         }
     }
 

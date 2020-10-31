@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 [AddComponentMenu("UA11Y/UI/UA11YSlider")]
 public class UA11YSlider : UA11YElement
@@ -10,11 +11,11 @@ public class UA11YSlider : UA11YElement
     /// The amount of decimals we can handle for increasing/decreasing the slider
     private static int accuracy = 4;
 
-    override protected UA11YTrait defaultTraits
+    override protected List<UA11YTrait> defaultTraits
     {
         get
         {
-            return UA11YTrait.Adjustable;
+            return new List<UA11YTrait> { UA11YTrait.Adjustable };
         }
     }
 

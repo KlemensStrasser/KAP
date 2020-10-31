@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using System.Runtime.InteropServices;
 using AOT;
@@ -23,7 +22,7 @@ public struct UA11YExternalAccessibilityHook
     public string value;
     public string hint;
 
-    public ulong  trait;
+    public ulong trait;
 
     public UA11YInvokeSelectionCallback selectionCallback;
     public UA11YInvokeFocusCallback focusCallback;
@@ -175,7 +174,7 @@ public class UA11YNativeScreenReaderBridge
             label = accessibilityElement.label,
             value = accessibilityElement.value,
             hint = accessibilityElement.description,
-            trait = accessibilityElement.traits.Value,
+            trait = ExternalAccessibilityTraitForTraits(accessibilityElement.traits),
 
             selectionCallback = InvokeSelectionCallback,
             focusCallback = InvokeFocuseCallback,
@@ -183,6 +182,74 @@ public class UA11YNativeScreenReaderBridge
         };
 
         return hook;
+    }
+
+    // TODO: This will be platform dependend. Currently using iOS Traits here
+    ulong ExternalAccessibilityTraitForTraits(List<UA11YTrait> traits)
+    {
+        ulong externalTrait = 0;
+        foreach (UA11YTrait trait in traits)
+        {
+            if (trait.Equals(UA11YTrait.None))
+            {
+                externalTrait |= 0x0000000000000000;
+            }
+            else if (trait.Equals(UA11YTrait.Button))
+            {
+                externalTrait |= 0x0000000000000001;
+            }
+            else if (trait.Equals(UA11YTrait.Toggle))
+            {
+                externalTrait |= 0x0020000000000001;
+            }
+            else if (trait.Equals(UA11YTrait.Link))
+            {
+                externalTrait |= 0x0000000000000002;
+            }
+            else if (trait.Equals(UA11YTrait.Image))
+            {
+                externalTrait |= 0x0000000000000004;
+            }
+            else if (trait.Equals(UA11YTrait.Selected))
+            {
+                externalTrait |= 0x0000000000000008;
+            }
+            else if (trait.Equals(UA11YTrait.StaticText))
+            {
+                externalTrait |= 0x0000000000000040;
+            }
+            else if (trait.Equals(UA11YTrait.Header))
+            {
+                externalTrait |= 0x0000000000010000;
+            }
+            else if (trait.Equals(UA11YTrait.SummaryElement))
+            {
+                externalTrait |= 0x0000000000000080;
+            }
+            else if (trait.Equals(UA11YTrait.NotEnabled))
+            {
+                externalTrait |= 0x0000000000000100;
+            }
+            else if (trait.Equals(UA11YTrait.UpdatesFrequently))
+            {
+                externalTrait |= 0x0000000000000200;
+            }
+            else if (trait.Equals(UA11YTrait.Adjustable))
+            {
+                externalTrait |= 0x0000000000001000;
+            }
+            else if (trait.Equals(UA11YTrait.AllowsDirectInteraction))
+            {
+                externalTrait |= 0x0000000000002000;
+            }
+            else if (trait.Equals(UA11YTrait.SearchField))
+            {
+                externalTrait |= 0x0000000000000001;
+            }
+        }
+
+        return externalTrait;
+
     }
 
     #endregion

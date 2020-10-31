@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 /// Basic Element
@@ -28,15 +29,15 @@ public class UA11YElement : MonoBehaviour
     /// Default indication on how the accessibilityElement should be treated by the screen reader.
     /// Set but the subclasses
     /// </summary>
-    protected virtual UA11YTrait defaultTraits
+    protected virtual List<UA11YTrait> defaultTraits
     {
         get
         {
-            return UA11YTrait.None;
+            return new List<UA11YTrait>();
         }
     }
 
-    private UA11YTrait _traits;
+    private List<UA11YTrait> _traits;
 
     /// <summary>
     /// Indication on how the element should be treated by the accessibility technology
@@ -44,7 +45,7 @@ public class UA11YElement : MonoBehaviour
     /// Only set for standard elements if you know what you're doing.
     /// </summary>
     [HideInInspector]
-    public UA11YTrait traits
+    public List<UA11YTrait> traits
     { 
         get 
         { 
@@ -256,10 +257,9 @@ public class UA11YElement : MonoBehaviour
         string fullString;
         string[] strings;
 
-        if (traits != null)
+        if (traits.Count > 0)
         {
-            // TODO: Add something to get the string for the trait here
-            strings = (new[] { label, traits.ToString(), value });
+            strings = (new[] { label, traitsValue(), value });
         }
         else
         {
@@ -351,5 +351,23 @@ public class UA11YElement : MonoBehaviour
         }
 
         return rect;
+    }
+
+    private string traitsValue()
+    {
+        string traitsValue = "";
+        foreach (UA11YTrait trait in traits)
+        {
+            if (traitsValue.Equals(""))
+            {
+                traitsValue = trait.ToString();
+            }
+            else
+            {
+                traitsValue += ", " + trait.ToString();
+            }
+        }
+
+        return traitsValue;
     }
 }
