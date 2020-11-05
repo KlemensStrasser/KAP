@@ -187,14 +187,10 @@ public class UA11YNativeScreenReaderBridge
     // TODO: This will be platform dependend. Currently using iOS Traits here
     ulong ExternalAccessibilityTraitForTraits(List<UA11YTrait> traits)
     {
-        ulong externalTrait = 0;
+        ulong externalTrait = 0x0000000000000000;
         foreach (UA11YTrait trait in traits)
         {
-            if (trait.Equals(UA11YTrait.None))
-            {
-                externalTrait |= 0x0000000000000000;
-            }
-            else if (trait.Equals(UA11YTrait.Button))
+            if (trait.Equals(UA11YTrait.Button))
             {
                 externalTrait |= 0x0000000000000001;
             }
@@ -230,10 +226,6 @@ public class UA11YNativeScreenReaderBridge
             {
                 externalTrait |= 0x0000000000000100;
             }
-            else if (trait.Equals(UA11YTrait.UpdatesFrequently))
-            {
-                externalTrait |= 0x0000000000000200;
-            }
             else if (trait.Equals(UA11YTrait.Adjustable))
             {
                 externalTrait |= 0x0000000000001000;
@@ -241,10 +233,6 @@ public class UA11YNativeScreenReaderBridge
             else if (trait.Equals(UA11YTrait.AllowsDirectInteraction))
             {
                 externalTrait |= 0x0000000000002000;
-            }
-            else if (trait.Equals(UA11YTrait.SearchField))
-            {
-                externalTrait |= 0x0000000000000001;
             }
         }
 

@@ -9,26 +9,35 @@ public class UA11YTrait
 
     public string Key { get; set; }
 
-    // TODO: Support for those should definitley be implemented at some point.
-    public static UA11YTrait None { get { return new UA11YTrait(""); } }
+    // UI Element Types
     public static UA11YTrait Button { get { return new UA11YTrait("Button"); } }
     public static UA11YTrait Toggle { get { return new UA11YTrait("Toggle"); } }
     public static UA11YTrait Link { get { return new UA11YTrait("Link"); } }
     public static UA11YTrait Image { get { return new UA11YTrait("Image"); } }
-    public static UA11YTrait Selected { get { return new UA11YTrait("Selected"); } }
     public static UA11YTrait StaticText { get { return new UA11YTrait("StaticText"); } }
     public static UA11YTrait Header { get { return new UA11YTrait("Header"); } }
     public static UA11YTrait SummaryElement { get { return new UA11YTrait("SummaryElement"); } }
-    public static UA11YTrait NotEnabled { get { return new UA11YTrait("NotEnabled"); } }
-    public static UA11YTrait UpdatesFrequently { get { return new UA11YTrait("UpdatesFrequently"); } }
     public static UA11YTrait Adjustable { get { return new UA11YTrait("Adjustable"); } }
+
+    // Properties
+    public static UA11YTrait Selected { get { return new UA11YTrait("Selected"); } }
+    public static UA11YTrait NotEnabled { get { return new UA11YTrait("NotEnabled"); } }
     public static UA11YTrait AllowsDirectInteraction { get { return new UA11YTrait("AllowsDirectInteraction"); } }
-    public static UA11YTrait SearchField { get { return new UA11YTrait("SearchField"); } }
 
     // TODO: Localize
     override public string ToString()
     {
-        return Key;
+        string stringRepresentation;
+        if (this.Equals(StaticText))
+        {
+            stringRepresentation = "";
+        }
+        else
+        {
+            stringRepresentation = Key;
+        }
+
+        return stringRepresentation;
     }
 
     public override bool Equals(object obj)
