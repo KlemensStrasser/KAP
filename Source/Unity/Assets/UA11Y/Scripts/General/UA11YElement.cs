@@ -86,11 +86,6 @@ public class UA11YElement : MonoBehaviour
     }
 
     /// <summary>
-    /// Indicates if it can be seen by the screen reader or not.
-    /// </summary>
-    public bool isScreenReaderElement;
-
-    /// <summary>
     /// Event that gets invoked when the element was selected
     /// </summary>
     protected UnityEvent onClick = new UnityEvent();

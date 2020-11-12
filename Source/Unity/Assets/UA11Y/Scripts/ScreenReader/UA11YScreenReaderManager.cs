@@ -82,33 +82,22 @@ public class UA11YScreenReaderManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Fetches the accessibility elements and filters out all where isScreenReaderElement is false
+    /// Fetches the accessibility elements and filters out all elements hidden from the screen reader
     /// </summary>
-    UA11YElement[] LoadScreenReaderElements()
+    private UA11YElement[] LoadScreenReaderElements()
     {
-        UA11YElement[] accessibilityElements = LoadAccessibilityElements();
-        accessibilityElements = accessibilityElements.Where(e => e.isScreenReaderElement == true).ToArray();
+        UA11YElement[] accessibilityElements = FindObjectsOfType<UA11YElement>();
 
-        return accessibilityElements;
-    }
-
-    /// <summary>
-    /// Fetches the accessibility elements in the scene and sorts them by frame
-    /// </summary>
-    UA11YElement[] LoadAccessibilityElements()
-    {
-        UA11YElement[] elements = FindObjectsOfType<UA11YElement>();
-
-        UA11YElement[] popovers = elements.Where(c => c is UA11YPopover).ToArray();
-        if(popovers != null && popovers.Length > 0)
+        UA11YElement[] popovers = accessibilityElements.Where(c => c is UA11YPopover).ToArray();
+        if (popovers != null && popovers.Length > 0)
         {
-            elements = GetAccessibilityElementsFromPopover((UA11YPopover)popovers[0]);
+            accessibilityElements = GetAccessibilityElementsFromPopover((UA11YPopover)popovers[0]);
         }
 
-        if (elements != null) 
+        if (accessibilityElements != null)
         {
             // Sort by frame
-            Array.Sort(elements, delegate (UA11YElement element1, UA11YElement element2)
+            Array.Sort(accessibilityElements, delegate (UA11YElement element1, UA11YElement element2)
             {
                 int comparrisonResult = element1.frame.y.CompareTo(element2.frame.y);
                 if (comparrisonResult == 0)
@@ -119,16 +108,17 @@ public class UA11YScreenReaderManager : MonoBehaviour
             });
         }
 
-        return elements;
-    }
+        accessibilityElements = accessibilityElements.Where(e => e.traits.Contains(UA11YTrait.HideFromScreenReader) == false).ToArray();
 
+        return accessibilityElements;
+    }
 
     /// <summary>
     /// Gets the accessibility elements from the top popover.
     /// </summary>
     /// <returns>The accessibility elements from the top popover.</returns>
     /// <param name="popover">The popover we start with</param>
-    UA11YElement[] GetAccessibilityElementsFromPopover(UA11YPopover popover)
+    private UA11YElement[] GetAccessibilityElementsFromPopover(UA11YPopover popover)
     {
         UA11YElement[] topAccessibilityElements;
 

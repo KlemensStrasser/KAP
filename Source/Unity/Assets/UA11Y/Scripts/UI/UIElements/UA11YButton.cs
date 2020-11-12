@@ -29,11 +29,6 @@ public class UA11YButton : UA11YElement
         SetupLabel();
     }
 
-    public void Reset()
-    {
-        isScreenReaderElement = true;
-    }
-
     override protected string ImplicitLabelValue()
     {
         string implicitTextValue;

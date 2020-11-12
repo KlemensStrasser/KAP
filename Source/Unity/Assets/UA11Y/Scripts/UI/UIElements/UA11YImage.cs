@@ -11,9 +11,4 @@ public class UA11YImage : UA11YElement
             return new List<UA11YTrait> { UA11YTrait.Image };
         }
     }
-
-    public void Reset()
-    {
-        isScreenReaderElement = true;
-    }
 }

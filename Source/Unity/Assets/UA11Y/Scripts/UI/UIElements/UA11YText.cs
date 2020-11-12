@@ -22,11 +22,6 @@ public class UA11YText : UA11YElement
         SetupLabel();
     }
 
-    public void Reset()
-    {
-        isScreenReaderElement = true;
-    }
-
     override protected string ImplicitLabelValue()
     {
         string implicitTextValue;

@@ -44,11 +44,6 @@ public class UA11YSlider : UA11YElement
         this.slider = gameObject.GetComponent<Slider>();
     }
 
-    public void Reset()
-    {
-        isScreenReaderElement = true;
-    }
-
     /// Increment value
     override protected void InvokeIncrement()
     {

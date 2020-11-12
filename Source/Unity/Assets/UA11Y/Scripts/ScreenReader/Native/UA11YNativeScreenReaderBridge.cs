@@ -185,6 +185,7 @@ public class UA11YNativeScreenReaderBridge
     }
 
     // TODO: This will be platform dependend. Currently using iOS Traits here
+    // TODO: Other Traits are currently ignored
     ulong ExternalAccessibilityTraitForTraits(List<UA11YTrait> traits)
     {
         ulong externalTrait = 0x0000000000000000;

@@ -23,12 +23,13 @@ public class UA11YTrait
     public static UA11YTrait Selected { get { return new UA11YTrait("Selected"); } }
     public static UA11YTrait NotEnabled { get { return new UA11YTrait("NotEnabled"); } }
     public static UA11YTrait AllowsDirectInteraction { get { return new UA11YTrait("AllowsDirectInteraction"); } }
+    public static UA11YTrait HideFromScreenReader { get { return new UA11YTrait("HideFromScreenReader"); } }
 
     // TODO: Localize
     override public string ToString()
     {
         string stringRepresentation;
-        if (this.Equals(StaticText))
+        if (this.Equals(StaticText) || this.Equals(HideFromScreenReader))
         {
             stringRepresentation = "";
         }

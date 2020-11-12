@@ -14,8 +14,4 @@ using System.Collections.Generic;
 [AddComponentMenu("UA11Y/UI/UA11YPopOver")]
 public class UA11YPopover : UA11YElement
 {
-    public void Reset()
-    {
-        isScreenReaderElement = true;
-    }
 }
