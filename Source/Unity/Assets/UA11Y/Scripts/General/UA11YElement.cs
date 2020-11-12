@@ -4,6 +4,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+public enum UA11YElementInteractionEventType
+{
+    Click,
+    Increment,
+    Decrement,
+    BecomeFocused,
+    LoseFocus
+}
+
 /// Basic Element
 /// Used for custom GameObject that should be made accessible
 [AddComponentMenu("UA11Y/UA11YScreenReaderElement")]
@@ -84,31 +93,27 @@ public class UA11YElement : MonoBehaviour
     /// <summary>
     /// Event that gets invoked when the element was selected
     /// </summary>
-    public UnityEvent onClick = new UnityEvent();
+    protected UnityEvent onClick = new UnityEvent();
 
     /// <summary>
     /// Event that gets invoked when the value of the element is incremented
     /// </summary>
-    public UnityEvent onIncrement = new UnityEvent();
+    protected UnityEvent onIncrement = new UnityEvent();
 
     /// <summary>
     /// Event that gets invoked when the value of the element is decremented
     /// </summary>
-    public UnityEvent onDecrement = new UnityEvent();
+    protected UnityEvent onDecrement = new UnityEvent();
 
     /// <summary>
     /// Event that gets invoked when the element was focused by the manager
     /// </summary>
-    public UnityEvent onBecomeFocused = new UnityEvent();
+    protected UnityEvent onBecomeFocused = new UnityEvent();
 
     /// <summary>
     /// Event that gets invoked when the element loses focus
     /// </summary>
-    public UnityEvent onLoseFocus = new UnityEvent();
-
-    public UA11YElement()
-    {
-    }
+    protected UnityEvent onLoseFocus = new UnityEvent();
 
     void Awake()
     {
@@ -135,62 +140,106 @@ public class UA11YElement : MonoBehaviour
         return "";
     }
 
+    #region Subscribing or Unsubscribe to Events
+
+    public void AddListenerForEventOfType(UA11YElementInteractionEventType eventType, UnityAction action)
+    {
+        UnityEvent unityEvent = EventForType(eventType);
+
+        if (unityEvent != null)
+        {
+            unityEvent.AddListener(action);
+        }
+    }
+
+    public void RemoveListenerForEventOfType(UA11YElementInteractionEventType eventType, UnityAction action)
+    {
+        UnityEvent unityEvent = EventForType(eventType);
+
+        if (unityEvent != null)
+        {
+            unityEvent.RemoveListener(action);
+        }
+    }
+
+    public void RemoveAllListenersForEventOfType(UA11YElementInteractionEventType eventType)
+    {
+        UnityEvent unityEvent = EventForType(eventType);
+
+        if (unityEvent != null)
+        {
+            unityEvent.RemoveAllListeners();
+        }
+    }   
+
+    #endregion
+
+    #region Triggering Events
+
+    /// <summary>
+    /// Invokes the given type of event
+    /// <param name="eventType">Type of event that should be invoked</param>
+    /// </summary>
+    public void InvokeEventOfType(UA11YElementInteractionEventType eventType)
+    {
+        switch (eventType)
+        {
+            case UA11YElementInteractionEventType.Click:
+                InvokeSelection();
+                break;
+            case UA11YElementInteractionEventType.Increment:
+                InvokeIncrement();
+                break;
+            case UA11YElementInteractionEventType.Decrement:
+                InvokeDecrement();
+                break;
+            case UA11YElementInteractionEventType.BecomeFocused:
+                InvokeBecomeFocused();
+                break;
+            case UA11YElementInteractionEventType.LoseFocus:
+                InvokeLoseFocus();
+                break;
+        }
+    }
 
     /// <summary>
     /// Invokes selecting the element (Button Click, toggle change...)
     /// </summary>
-    public virtual void InvokeSelection()
+    protected virtual void InvokeSelection()
     {
-        if (this.onClick != null)
-        {
-            onClick.Invoke();
-        }
+        onClick.Invoke();
     }
 
     /// <summary>
     /// Invokes incrementing the value of the element
     /// </summary>
-    public virtual void InvokeIncrement()
+    protected virtual void InvokeIncrement()
     {
-        if (this.onIncrement != null)
-        {
-            onIncrement.Invoke();
-        }    
+        onIncrement.Invoke();
     }
 
     /// <summary>
     /// Invokes decrementing the value of the element
     /// </summary>
-    public virtual void InvokeDecrement()
+    protected virtual void InvokeDecrement()
     {
-        if (this.onDecrement != null)
-        {
-            onDecrement.Invoke();
-        }
+        onDecrement.Invoke();
     }
-
-    #region Focus Events and indication
 
     /// <summary>
     /// Called by the screenreader if this element gets focused
     /// </summary>
-    public void DidBecomeFocused()
+    protected void InvokeBecomeFocused()
     {
-        if (this.onBecomeFocused!= null)
-        {
-            onBecomeFocused.Invoke();
-        }
+        onBecomeFocused.Invoke();
     }
 
     /// <summary>
     /// Called by the screenreader if this element is focused right now, but the focus will move to another element
     /// </summary>
-    public void DidLoseFocus()
+    protected void InvokeLoseFocus()
     {
-        if (this.onLoseFocus != null)
-        {
-            onLoseFocus.Invoke();
-        }
+        onLoseFocus.Invoke();
     }
 
     #endregion
@@ -265,7 +314,7 @@ public class UA11YElement : MonoBehaviour
     /// Static helper method to calculate the frame of gameObject
     /// </summary>
     /// <returns>The frame for gameObject.</returns>
-    /// <param name="gObject">GameObject</param>
+    /// <param name="gObject">GameObject for which to calculate the screen rect</param>
     /// Based on: https://answers.unity.com/questions/292031/how-to-display-a-rectangle-around-a-player.html
     /// Not sure where to put this code
     protected static Rect ScreenRectForGameObject(GameObject gObject) 
@@ -353,4 +402,31 @@ public class UA11YElement : MonoBehaviour
 
         return traitsValue;
     }
+
+    private UnityEvent EventForType(UA11YElementInteractionEventType eventType)
+    {
+        UnityEvent eventForType = null;
+
+        switch (eventType)
+        {
+            case UA11YElementInteractionEventType.Click:
+                eventForType = onClick;
+                break;
+            case UA11YElementInteractionEventType.Increment:
+                eventForType = onIncrement;
+                break;
+            case UA11YElementInteractionEventType.Decrement:
+                eventForType = onDecrement;
+                break;
+            case UA11YElementInteractionEventType.BecomeFocused:
+                eventForType = onBecomeFocused;
+                break;
+            case UA11YElementInteractionEventType.LoseFocus:
+                eventForType = onLoseFocus;
+                break;
+        }
+
+        return eventForType;
+    }
+
 }

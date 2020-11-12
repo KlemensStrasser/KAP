@@ -49,7 +49,7 @@ public class UA11YButton : UA11YElement
         return implicitTextValue;
     }
 
-    override public void InvokeSelection()
+    override protected void InvokeSelection()
     {
         if (EventSystem.current != null)
         {

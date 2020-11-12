@@ -58,7 +58,7 @@ public class UA11YNativeScreenReader: IUA11YScreenReader
 
         if (element != null)
         {
-            element.InvokeSelection();
+            element.InvokeEventOfType(UA11YElementInteractionEventType.Click);
         }
     }
 
@@ -75,11 +75,11 @@ public class UA11YNativeScreenReader: IUA11YScreenReader
         {
             if (modifier == -1)
             {
-                element.InvokeDecrement();
+                element.InvokeEventOfType(UA11YElementInteractionEventType.Decrement);
             }
             else if (modifier == 1)
             {
-                element.InvokeIncrement();
+                element.InvokeEventOfType(UA11YElementInteractionEventType.Increment);
             }
         }
     }
@@ -97,11 +97,11 @@ public class UA11YNativeScreenReader: IUA11YScreenReader
         { 
             if(currentlyFocusedElement != null)
             {
-                currentlyFocusedElement.DidLoseFocus();
+                currentlyFocusedElement.InvokeEventOfType(UA11YElementInteractionEventType.LoseFocus);
             }
 
             UA11YElement newElement = accessibilityElements[index];
-            newElement.DidBecomeFocused();
+            newElement.InvokeEventOfType(UA11YElementInteractionEventType.BecomeFocused);
 
             currentlyFocusedElement = newElement;
         }

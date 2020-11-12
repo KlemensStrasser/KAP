@@ -213,7 +213,7 @@ public class UA11YCustomScreenReader : MonoBehaviour, IUA11YInputReceiver, IUA11
     {
         if (focusedElement)
         {
-            focusedElement.InvokeSelection();
+            focusedElement.InvokeEventOfType(UA11YElementInteractionEventType.Click);
             PlaySelectSound();
             AnnouceFocusedElement(true);
         }
@@ -224,7 +224,7 @@ public class UA11YCustomScreenReader : MonoBehaviour, IUA11YInputReceiver, IUA11
         if (focusedElement)
         {
             string oldValue = focusedElement.value;
-            focusedElement.InvokeIncrement();
+            focusedElement.InvokeEventOfType(UA11YElementInteractionEventType.Increment);
             string newValue = focusedElement.value;
 
             if (oldValue == newValue)
@@ -240,7 +240,7 @@ public class UA11YCustomScreenReader : MonoBehaviour, IUA11YInputReceiver, IUA11
         if (focusedElement)
         {
             string oldValue = focusedElement.value;
-            focusedElement.InvokeDecrement();
+            focusedElement.InvokeEventOfType(UA11YElementInteractionEventType.Decrement);
             string newValue = focusedElement.value;
 
             if (oldValue == newValue)
@@ -301,11 +301,11 @@ public class UA11YCustomScreenReader : MonoBehaviour, IUA11YInputReceiver, IUA11
         {
             if (focusedElement != null)
             {
-                focusedElement.DidLoseFocus();
+                focusedElement.InvokeEventOfType(UA11YElementInteractionEventType.LoseFocus);
             }
 
             UA11YElement newFocusedElement = accessibilityElements[newFocusedElementIndex];
-            newFocusedElement.DidBecomeFocused();
+            newFocusedElement.InvokeEventOfType(UA11YElementInteractionEventType.BecomeFocused);
 
             focusedElement = newFocusedElement;
             focusedElementIndex = newFocusedElementIndex;

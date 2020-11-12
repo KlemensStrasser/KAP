@@ -50,7 +50,7 @@ public class UA11YSlider : UA11YElement
     }
 
     /// Increment value
-    override public void InvokeIncrement()
+    override protected void InvokeIncrement()
     {
         if (this.onIncrement != null)
         {
@@ -77,7 +77,7 @@ public class UA11YSlider : UA11YElement
     }
 
     /// Decrement value
-    override public void InvokeDecrement()
+    override protected void InvokeDecrement()
     {
         if (this.onDecrement != null)
         {
