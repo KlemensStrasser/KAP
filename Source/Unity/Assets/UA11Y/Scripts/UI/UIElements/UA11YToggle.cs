@@ -88,6 +88,6 @@ public class UA11YToggle : UA11YElement
         }
 
         // TODO: This is not the right place for the update call because its only needed when we have a native plugin. But not sure where the right place is.
-        UA11YUIManager.Instance.SetNeedsUpdateElements();
+        UA11YScreenReaderManager.Instance.SetNeedsUpdateElements();
     }
 }

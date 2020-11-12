@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public class UA11YSonarPathDrawer : MonoBehaviour
+public class UA11YNavAgentPathDrawer : MonoBehaviour
 {
     public Camera cam;
-    public UA11YSonarManager sonarManager;
+    public UA11YNavAgentManager NavAgentManager;
     public Transform playerTransform;
     private float elapsed = 0.0f;
 
@@ -27,9 +27,9 @@ public class UA11YSonarPathDrawer : MonoBehaviour
         //    {
         //        targetPosition = hit.point;
 
-        //        if (sonarManager != null)
+        //        if (NavAgentManager != null)
         //        {
-        //            sonarManager.StartGuideToTargetPosition(targetPosition);
+        //            NavAgentManager.StartGuideToTargetPosition(targetPosition);
         //            //NavMesh.CalculatePath(playerTransform.position, targetPosition, NavMesh.AllAreas, path);
         //        }
 
@@ -45,7 +45,7 @@ public class UA11YSonarPathDrawer : MonoBehaviour
 
         }
 
-        List<Vector3> pathPoints = sonarManager.PathPoints();
+        List<Vector3> pathPoints = NavAgentManager.PathPoints();
         for (int i = 0; i < pathPoints.Count - 1; i++)
         {
             Debug.DrawLine(pathPoints[i], pathPoints[i + 1], Color.red);

@@ -72,7 +72,7 @@ public class UA11YSlider : UA11YElement
             slider.value = (float)roundedValue;
 
             // TODO: This is not the right place for the update call because its only needed when we have a native plugin. But not sure where the right place is.
-            UA11YUIManager.Instance.SetNeedsUpdateElements();
+            UA11YScreenReaderManager.Instance.SetNeedsUpdateElements();
         }
     }
 
@@ -98,7 +98,7 @@ public class UA11YSlider : UA11YElement
             slider.value = (float)roundedValue;
 
             // TODO: This is not the right place for the update call because its only needed when we have a native plugin. But not sure where the right place is.
-            UA11YUIManager.Instance.SetNeedsUpdateElements();
+            UA11YScreenReaderManager.Instance.SetNeedsUpdateElements();
         }
     }
 }

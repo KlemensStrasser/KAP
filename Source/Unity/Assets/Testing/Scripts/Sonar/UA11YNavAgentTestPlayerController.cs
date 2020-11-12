@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class UA11YSonarTestPlayerController : MonoBehaviour
+public class UA11YNavAgentTestPlayerController : MonoBehaviour
 {
     [HideInInspector]
     public bool movementBlocked;

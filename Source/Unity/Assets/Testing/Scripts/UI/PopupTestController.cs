@@ -16,6 +16,6 @@ public class PopupTestController : MonoBehaviour
     void ClosePopover()
     {
         gameObject.SetActive(false);
-        UA11YUIManager.Instance.VisibleElementsDidChange();
+        UA11YScreenReaderManager.Instance.VisibleElementsDidChange();
     }
 }

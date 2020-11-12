@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UA11YSonarTestMenuController : MonoBehaviour, IPickupCallbackObject
+public class UA11YNavAgentTestMenuController : MonoBehaviour, IPickupCallbackObject
 {
     [Header("UI")]
     public GameObject mainMenu;
@@ -14,12 +14,12 @@ public class UA11YSonarTestMenuController : MonoBehaviour, IPickupCallbackObject
     public Button buttonPickupC;
 
     [Header("Pickups")]
-    public UA11YSonarTestPickupController pickupA;
-    public UA11YSonarTestPickupController pickupB;
-    public UA11YSonarTestPickupController pickupC;
+    public UA11YNavAgentTestPickupController pickupA;
+    public UA11YNavAgentTestPickupController pickupB;
+    public UA11YNavAgentTestPickupController pickupC;
 
     [Header("Player")]
-    public UA11YSonarTestPlayerController playerController;
+    public UA11YNavAgentTestPlayerController playerController;
 
     private int currentTargetPickupID = -1;
 
@@ -40,7 +40,7 @@ public class UA11YSonarTestMenuController : MonoBehaviour, IPickupCallbackObject
             buttonPickupC.onClick.AddListener(ButtonPickupCClicked);
         }
 
-        if(pickupA != null)
+        if (pickupA != null)
         {
             pickupA.callbackObject = this;
             pickupA.AssignPickupID(0);
@@ -73,12 +73,12 @@ public class UA11YSonarTestMenuController : MonoBehaviour, IPickupCallbackObject
             winningMenu.SetActive(false);
         }
 
-        UA11YUIManager.Instance.SetScreenReaderEnabled(false);
+        UA11YScreenReaderManager.Instance.SetScreenReaderEnabled(false);
     }
 
     void Update()
     {
-        if(winningMenu.activeSelf == false)
+        if (winningMenu.activeSelf == false)
         {
             if (Input.GetKeyDown(KeyCode.Escape))
             {
@@ -96,27 +96,27 @@ public class UA11YSonarTestMenuController : MonoBehaviour, IPickupCallbackObject
     void TriggerGameFinished()
     {
         winningMenu.SetActive(true);
-        UA11YUIManager.Instance.SetScreenReaderEnabled(true);
-        UA11YUIManager.Instance.VisibleElementsDidChange();
+        UA11YScreenReaderManager.Instance.SetScreenReaderEnabled(true);
+        UA11YScreenReaderManager.Instance.VisibleElementsDidChange();
 
         if (playerController != null)
         {
             playerController.movementBlocked = true;
         }
 
-        UA11YSonarManager.Instance.gameObject.SetActive(false);
+        UA11YNavAgentManager.Instance.gameObject.SetActive(false);
     }
 
     void ChangeMenuVisibility(bool showMenu)
     {
         if (mainMenu != null)
         {
-            UA11YUIManager.Instance.SetScreenReaderEnabled(showMenu);
+            UA11YScreenReaderManager.Instance.SetScreenReaderEnabled(showMenu);
             mainMenu.SetActive(showMenu);
 
             if (showMenu)
             {
-                UA11YUIManager.Instance.VisibleElementsDidChange();
+                UA11YScreenReaderManager.Instance.VisibleElementsDidChange();
             }
 
             if (playerController != null)
@@ -132,7 +132,7 @@ public class UA11YSonarTestMenuController : MonoBehaviour, IPickupCallbackObject
     {
         if (pickupA != null)
         {
-            UA11YSonarManager.Instance.StartGuideToTargetPosition(pickupA.transform.position);
+            UA11YNavAgentManager.Instance.StartGuideToTargetPosition(pickupA.transform.position);
             ChangeMenuVisibility(false);
         }
     }
@@ -141,7 +141,7 @@ public class UA11YSonarTestMenuController : MonoBehaviour, IPickupCallbackObject
     {
         if (pickupB != null)
         {
-            UA11YSonarManager.Instance.StartGuideToTargetPosition(pickupB.transform.position);
+            UA11YNavAgentManager.Instance.StartGuideToTargetPosition(pickupB.transform.position);
             ChangeMenuVisibility(false);
         }
     }
@@ -150,7 +150,7 @@ public class UA11YSonarTestMenuController : MonoBehaviour, IPickupCallbackObject
     {
         if (pickupC != null)
         {
-            UA11YSonarManager.Instance.StartGuideToTargetPosition(pickupC.transform.position);
+            UA11YNavAgentManager.Instance.StartGuideToTargetPosition(pickupC.transform.position);
             ChangeMenuVisibility(false);
         }
     }
@@ -164,20 +164,20 @@ public class UA11YSonarTestMenuController : MonoBehaviour, IPickupCallbackObject
         bool shouldPickup = false;
         Collider playerCollider = playerController.gameObject.GetComponent<Collider>();
 
-        if(playerCollider != null && playerCollider == other && pickupID == currentTargetPickupID)
+        if (playerCollider != null && playerCollider == other && pickupID == currentTargetPickupID)
         {
             shouldPickup = true;
 
-            UA11YSonarTestPickupController pickup = PickupForID(pickupID);
+            UA11YNavAgentTestPickupController pickup = PickupForID(pickupID);
 
-            if (pickup != null && pickup.GetComponent<UA11YSonarTarget>() != null)
+            if (pickup != null && pickup.GetComponent<UA11NavAgentTarget>() != null)
             {
-                UA11YSonarTarget target = pickup.GetComponent<UA11YSonarTarget>();
-                UA11YUIManager.Instance.AnnouceMessage("Picked up " + target.label);
+                UA11NavAgentTarget target = pickup.GetComponent<UA11NavAgentTarget>();
+                UA11YScreenReaderManager.Instance.AnnouceMessage("Picked up " + target.label);
 
                 // Disable button if pickup was picked up
                 Button button = ButtonForPickup(pickup);
-                if(button != null)
+                if (button != null)
                 {
                     button.gameObject.SetActive(false);
                 }
@@ -192,20 +192,20 @@ public class UA11YSonarTestMenuController : MonoBehaviour, IPickupCallbackObject
     #endregion
     #region Private Helpers
 
-    private UA11YSonarTestPickupController PickupForID(int id)
+    private UA11YNavAgentTestPickupController PickupForID(int id)
     {
-        UA11YSonarTestPickupController[] pickupControllers = {pickupA, pickupB, pickupC};
+        UA11YNavAgentTestPickupController[] pickupControllers = { pickupA, pickupB, pickupC };
 
         return Array.Find(pickupControllers, p => p.PickupID() == id);
     }
 
-    private Button ButtonForPickup(UA11YSonarTestPickupController pickup)
+    private Button ButtonForPickup(UA11YNavAgentTestPickupController pickup)
     {
         Button button = null;
         // This is horrible manual code, but I don't care right now. It just needs to work now
-        if(pickup == pickupA)
+        if (pickup == pickupA)
         {
-            button = buttonPickupA; 
+            button = buttonPickupA;
         }
         else if (pickup == pickupB)
         {

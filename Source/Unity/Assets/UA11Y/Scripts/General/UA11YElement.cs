@@ -82,11 +82,6 @@ public class UA11YElement : MonoBehaviour
     public bool isScreenReaderElement;
 
     /// <summary>
-    /// Indicated if the element is focued by the accessibility technology.
-    /// </summary>
-    private bool isFocused;
-
-    /// <summary>
     /// Event that gets invoked when the element was selected
     /// </summary>
     public UnityEvent onClick = new UnityEvent();
@@ -113,7 +108,6 @@ public class UA11YElement : MonoBehaviour
 
     public UA11YElement()
     {
-        this.isFocused = false;
     }
 
     void Awake()
@@ -182,7 +176,6 @@ public class UA11YElement : MonoBehaviour
     /// </summary>
     public void DidBecomeFocused()
     {
-        this.isFocused = true;
         if (this.onBecomeFocused!= null)
         {
             onBecomeFocused.Invoke();
@@ -194,20 +187,10 @@ public class UA11YElement : MonoBehaviour
     /// </summary>
     public void DidLoseFocus()
     {
-        this.isFocused = false;
         if (this.onLoseFocus != null)
         {
             onLoseFocus.Invoke();
         }
-    }
-
-    /// <summary>
-    /// Indicates if the element currently is focused by the screen reader.
-    /// </summary>
-    /// <returns><c>true</c>, if it is focused, <c>false</c> otherwise.</returns>
-    public bool IsFocused()
-    {
-        return this.isFocused;
     }
 
     #endregion

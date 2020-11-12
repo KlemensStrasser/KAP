@@ -1,14 +1,14 @@
 ﻿using UnityEngine;
 
-public interface IUA11YSonarEventReceiver
+public interface IUA11YNavAgentEventReceiver
 {
-    void SonarReached();
+    void NavAgentReached();
 }
 
-public class UA11YSonarController : MonoBehaviour
+public class UA11YNavAgentController : MonoBehaviour
 {
     [HideInInspector]
-    public IUA11YSonarEventReceiver eventReceiver;
+    public IUA11YNavAgentEventReceiver eventReceiver;
 
     /// <summary>
     /// Minimal distance from where the audiosource should be heard
@@ -31,7 +31,7 @@ public class UA11YSonarController : MonoBehaviour
     /// Updates the position.
     /// </summary>
     /// <param name="position">New position of the lighthouse</param>
-    /// <param name="distance">Distance from the sonar to the player.</param>
+    /// <param name="distance">Distance from the NavAgent to the player.</param>
     public void UpdatePosition(Vector3 position, float distance) 
     {
         this.transform.position = position;
@@ -47,7 +47,7 @@ public class UA11YSonarController : MonoBehaviour
     /// <summary>
     /// Ensures the that signal can be heard.
     /// </summary>
-    /// <param name="distance">Distance from player to the sonar</param>
+    /// <param name="distance">Distance from player to the NavAgent</param>
     /// 
     /// Used for manual ping. For the automatic ping, the user will hear that the signal will slowly fade out
     public void EnsureThatSignalCanBeHeard(float distance)
@@ -77,11 +77,11 @@ public class UA11YSonarController : MonoBehaviour
         }
         else if(audioSource == null) 
         {
-            Debug.LogError("UA11YSonarController: Audiosource is null");
+            Debug.LogError("UA11YNavAgentController: Audiosource is null");
         }
         else if(audioSource.isPlaying) 
         {
-            Debug.LogWarning("UA11YSonarController: Audiosource is already playing");
+            Debug.LogWarning("UA11YNavAgentController: Audiosource is already playing");
         }
     }
 
@@ -93,7 +93,7 @@ public class UA11YSonarController : MonoBehaviour
         }
         else
         {
-            Debug.LogError("UA11YSonarController: Audiosource is null");
+            Debug.LogError("UA11YNavAgentController: Audiosource is null");
         }
     }
 
@@ -114,24 +114,24 @@ public class UA11YSonarController : MonoBehaviour
         }
         else if (audioSource == null)
         {
-            Debug.LogError("UA11YSonarController: Audiosource is null");
+            Debug.LogError("UA11YNavAgentController: Audiosource is null");
         }
     }
 
     #endregion
 
     /// <summary>
-    /// Trigger sonar reached of the event receiver
+    /// Trigger NavAgent reached of the event receiver
     /// </summary>
     private void OnTriggerEnter(Collider other)
     {
         if(eventReceiver != null && other == playerCollider)
         {
-            eventReceiver.SonarReached();
+            eventReceiver.NavAgentReached();
         }
         else 
         {
-            Debug.LogError("UA11YSonarController: EventReceiver is null");
+            Debug.LogError("UA11YNavAgentController: EventReceiver is null");
         }
     }
 }

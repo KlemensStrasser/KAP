@@ -7,7 +7,7 @@ public interface IPickupCallbackObject
     bool CanBePickedUpByCollider(Collider other, int pickupID);
 }
 
-public class UA11YSonarTestPickupController : MonoBehaviour
+public class UA11YNavAgentTestPickupController : MonoBehaviour
 {
     private bool pickedUp = false;
 

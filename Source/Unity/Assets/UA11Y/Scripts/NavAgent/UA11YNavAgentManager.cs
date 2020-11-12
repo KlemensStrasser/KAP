@@ -3,8 +3,8 @@ using UnityEngine.AI;
 using System.Collections.Generic;
 
 /// <summary>
-/// UA11YSonar manager can guide the player to a given position.
-/// (It's not really a sonar, more a inverse sonar I guess?)
+/// UA11YNavAgent manager can guide the player to a given position.
+/// (It's not really a NavAgent, more a inverse NavAgent I guess?)
 /// </summary>
 /// The automatic calculation of the path to a given point only works when a NavMesh is in the scene
 /// 
@@ -12,7 +12,7 @@ using System.Collections.Generic;
 /// - A player that either has a camera or a audiolistener attached. (Don't forget to remove the audiolistener from the camera, if the audiolistener is directly attached)
 /// - A player with a collider/rigidbody
 /// - The player gameObject needs to be given here
-public class UA11YSonarManager : MonoBehaviour, IUA11YSonarEventReceiver
+public class UA11YNavAgentManager : MonoBehaviour, IUA11YNavAgentEventReceiver
 {
 
     /// <summary>
@@ -33,7 +33,7 @@ public class UA11YSonarManager : MonoBehaviour, IUA11YSonarEventReceiver
     }
 
     /// <summary>
-    /// Needed in case the player gets assigned before the sonar was created
+    /// Needed in case the player gets assigned before the NavAgent was created
     /// </summary>
 
     [SerializeField]
@@ -57,14 +57,14 @@ public class UA11YSonarManager : MonoBehaviour, IUA11YSonarEventReceiver
     public float maxRecursionLevel = 10;
 
     /// <summary>
-    /// The key used to change between manual and automatic sonar mode
+    /// The key used to change between manual and automatic NavAgent mode
     /// </summary>
-    public KeyCode changeSonarModeKey = KeyCode.B;
+    public KeyCode changeNavAgentModeKey = KeyCode.B;
 
     /// <summary>
-    /// The key used for manually pinging the sonar when manual mode is activated
+    /// The key used for manually pinging the NavAgent when manual mode is activated
     /// </summary>
-    public KeyCode manualSonarTriggerKey = KeyCode.N;
+    public KeyCode manualNavAgentTriggerKey = KeyCode.N;
 
     /// <summary>
     /// The key used to force path recalculation, in case the player gets stuck
@@ -72,9 +72,9 @@ public class UA11YSonarManager : MonoBehaviour, IUA11YSonarEventReceiver
     public KeyCode forcePathRecalculationKey = KeyCode.R;
 
     /// <summary>
-    /// If true, user can manually activate the sonar instead of hearing a constant ping
+    /// If true, user can manually activate the NavAgent instead of hearing a constant ping
     /// </summary>
-    private bool manuallyTriggerSonarSignal = false;
+    private bool manuallyTriggerNavAgentSignal = false;
 
     /// <summary>
     /// Transform of the Player
@@ -82,36 +82,36 @@ public class UA11YSonarManager : MonoBehaviour, IUA11YSonarEventReceiver
     private Transform playerTransform;
 
     /// <summary>
-    /// List of all points where the sonar will be placed
+    /// List of all points where the NavAgent will be placed
     /// </summary>
     private List<Vector3> pathPoints;
-    /// The index of the corner in the path where the sonar is currenty positioned
+    /// The index of the corner in the path where the NavAgent is currenty positioned
     private int cornerIndex = -1;
 
-    /// Gameobject of the sonar
-    private GameObject sonar;
+    /// Gameobject of the NavAgent
+    private GameObject NavAgent;
 
-    /// The sonarController attached to the sonar
-    private UA11YSonarController sonarController;
+    /// The NavAgentController attached to the NavAgent
+    private UA11YNavAgentController NavAgentController;
 
     private AudioSource soundEffectAudioSource;
-    private AudioClip sonarReachedAudioClip;
+    private AudioClip NavAgentReachedAudioClip;
     private AudioClip targetReachedAudioClip;
 
 
-    private static UA11YSonarManager _instance;
+    private static UA11YNavAgentManager _instance;
     /// <summary>
-    /// UA11YSonarManager Singleton
+    /// UA11YNavAgentManager Singleton
     /// Based on: https://gamedev.stackexchange.com/questions/116009/in-unity-how-do-i-correctly-implement-the-singleton-pattern
     /// </summary>
-    public static UA11YSonarManager Instance
+    public static UA11YNavAgentManager Instance
     {
         get
         {
             if (_instance == null)
             {
-                GameObject instanceObject = Resources.Load<GameObject>("Prefabs/Sonar/UA11YSonarManager");
-                _instance = Instantiate<GameObject>(instanceObject).GetComponent<UA11YSonarManager>();
+                GameObject instanceObject = Resources.Load<GameObject>("Prefabs/NavAgent/UA11YNavAgentManager");
+                _instance = Instantiate<GameObject>(instanceObject).GetComponent<UA11YNavAgentManager>();
             }
 
             return _instance;
@@ -136,19 +136,19 @@ public class UA11YSonarManager : MonoBehaviour, IUA11YSonarEventReceiver
         {
             _instance = this;
 
-            // Create and setup the sonar
-            sonar = Resources.Load<GameObject>("Prefabs/Sonar/UA11YSonar");
-            sonar = Instantiate<GameObject>(sonar);
-            sonar.name = "UA11YSonar";
-            sonar.transform.SetParent(this.transform);
-            sonar.SetActive(false);
+            // Create and setup the NavAgent
+            NavAgent = Resources.Load<GameObject>("Prefabs/NavAgent/UA11YNavAgent");
+            NavAgent = Instantiate<GameObject>(NavAgent);
+            NavAgent.name = "UA11YNavAgent";
+            NavAgent.transform.SetParent(this.transform);
+            NavAgent.SetActive(false);
 
-            sonarController = sonar.GetComponent<UA11YSonarController>();
+            NavAgentController = NavAgent.GetComponent<UA11YNavAgentController>();
 
-            if (sonarController != null)
+            if (NavAgentController != null)
             {
-                sonarController.eventReceiver = this;
-                sonarController.ShouldLoop(!manuallyTriggerSonarSignal);
+                NavAgentController.eventReceiver = this;
+                NavAgentController.ShouldLoop(!manuallyTriggerNavAgentSignal);
 
                 ExtractValuesFromPlayer();
             }
@@ -157,8 +157,8 @@ public class UA11YSonarManager : MonoBehaviour, IUA11YSonarEventReceiver
             soundEffectAudioSource = gameObject.AddComponent<AudioSource>();
             soundEffectAudioSource.volume = 0.75f;
 
-            sonarReachedAudioClip = Resources.Load("Audio/Sonar/UA11Y_SonarReached") as AudioClip;
-            targetReachedAudioClip = Resources.Load("Audio/Sonar/UA11Y_SonarGoal") as AudioClip;
+            NavAgentReachedAudioClip = Resources.Load("Audio/NavAgent/UA11Y_NavAgentReached") as AudioClip;
+            targetReachedAudioClip = Resources.Load("Audio/NavAgent/UA11Y_NavAgentGoal") as AudioClip;
         }
     }
 
@@ -172,9 +172,9 @@ public class UA11YSonarManager : MonoBehaviour, IUA11YSonarEventReceiver
             Collider pCollider = _player.GetComponent<Collider>();
             Transform pTransform = _player.GetComponent<Transform>();
 
-            if (pCollider != null && sonarController != null)
+            if (pCollider != null && NavAgentController != null)
             {
-                sonarController.SetPlayerCollider(pCollider);
+                NavAgentController.SetPlayerCollider(pCollider);
             }
 
             if (pTransform != null)
@@ -196,14 +196,14 @@ public class UA11YSonarManager : MonoBehaviour, IUA11YSonarEventReceiver
         {
             pathPoints = tempPoints;
 
-            this.sonar.SetActive(true);
-            RepositionSonar();
-            sonarController.StartSignal();
+            this.NavAgent.SetActive(true);
+            RepositionNavAgent();
+            NavAgentController.StartSignal();
         }
     }
 
     /// <summary>
-    /// Uses predefined points as positions for the sonar and starts the guide
+    /// Uses predefined points as positions for the NavAgent and starts the guide
     /// </summary>
     public void StartGuideWithPoints(List<Vector3> points)
     {
@@ -212,9 +212,9 @@ public class UA11YSonarManager : MonoBehaviour, IUA11YSonarEventReceiver
             pathPoints = points.ConvertAll(point => new Vector3(point.x, point.y, point.z));
             cornerIndex = 0;
 
-            this.sonar.SetActive(true);
-            RepositionSonar();
-            sonarController.StartSignal();
+            this.NavAgent.SetActive(true);
+            RepositionNavAgent();
+            NavAgentController.StartSignal();
         }
     }
 
@@ -223,7 +223,7 @@ public class UA11YSonarManager : MonoBehaviour, IUA11YSonarEventReceiver
         return pathPoints ?? new List<Vector3>();
     }
 
-    #region Private helpers for creating the path & repositioning the sonar
+    #region Private helpers for creating the path & repositioning the NavAgent
 
     /// <summary>
     /// Calculate the path from the current position to the given target 
@@ -254,7 +254,7 @@ public class UA11YSonarManager : MonoBehaviour, IUA11YSonarEventReceiver
         } 
         else
         {
-            Debug.LogError("UA11YSonarManager: PlayerTransform is null, cannot recalculate path!");
+            Debug.LogError("UA11YNavAgentManager: PlayerTransform is null, cannot recalculate path!");
         }
 
         cornerIndex = 0;
@@ -409,62 +409,62 @@ public class UA11YSonarManager : MonoBehaviour, IUA11YSonarEventReceiver
         return splitIsOK;
     }
 
-    private void RepositionSonar()
+    private void RepositionNavAgent()
     {
-        if (cornerIndex >= 0 && pathPoints != null && pathPoints.Count > cornerIndex && sonarController != null)
+        if (cornerIndex >= 0 && pathPoints != null && pathPoints.Count > cornerIndex && NavAgentController != null)
         {
             Vector3 currentCornerPosition = pathPoints[cornerIndex];
 
             // Take the y position from the player so that it floats right in front of him/her
-            Vector3 sonarPosition = new Vector3(currentCornerPosition.x, playerTransform.position.y, currentCornerPosition.z);
+            Vector3 NavAgentPosition = new Vector3(currentCornerPosition.x, playerTransform.position.y, currentCornerPosition.z);
 
             // Distance is needed to make sure the sound can be heard
-            float distance = Vector3.Distance(sonarPosition, playerTransform.position);
+            float distance = Vector3.Distance(NavAgentPosition, playerTransform.position);
 
-            sonarController.UpdatePosition(sonarPosition, distance);
+            NavAgentController.UpdatePosition(NavAgentPosition, distance);
         }
     }
 
-    private float CurrentDistanceToSonar()
+    private float CurrentDistanceToNavAgent()
     {
         Vector3 currentCornerPosition = pathPoints [cornerIndex];
-        Vector3 sonarPosition = new Vector3(currentCornerPosition.x, playerTransform.position.y, currentCornerPosition.z);
+        Vector3 NavAgentPosition = new Vector3(currentCornerPosition.x, playerTransform.position.y, currentCornerPosition.z);
 
-        float distance = Vector3.Distance(sonarPosition, playerTransform.position);
+        float distance = Vector3.Distance(NavAgentPosition, playerTransform.position);
         return distance;
     }
 
     #endregion
 
-    #region User Triggered changes at the sonar
+    #region User Triggered changes at the NavAgent
 
     private void Update()
     {
-        if (Input.GetKeyDown(changeSonarModeKey))
+        if (Input.GetKeyDown(changeNavAgentModeKey))
         {
-            manuallyTriggerSonarSignal = !manuallyTriggerSonarSignal;
-            sonarController.ShouldLoop(!manuallyTriggerSonarSignal);
+            manuallyTriggerNavAgentSignal = !manuallyTriggerNavAgentSignal;
+            NavAgentController.ShouldLoop(!manuallyTriggerNavAgentSignal);
         } 
         else if (Input.GetKeyDown(forcePathRecalculationKey))
         {
             ForcePathRecalculation();
         }
-        else if (manuallyTriggerSonarSignal && Input.GetKeyDown(manualSonarTriggerKey))
+        else if (manuallyTriggerNavAgentSignal && Input.GetKeyDown(manualNavAgentTriggerKey))
         {
-            ManualTriggerSonar();
+            ManualTriggerNavAgent();
         } 
     }
 
     /// <summary>
-    /// Manuals the trigger sonar.
+    /// Manuals the trigger NavAgent.
     /// </summary>
-    private void ManualTriggerSonar()
+    private void ManualTriggerNavAgent()
     {
         if (pathPoints != null && pathPoints.Count > 0)
         {
             // If the player wandered too far, this will ensure that the player 
-            sonarController.EnsureThatSignalCanBeHeard(CurrentDistanceToSonar());
-            sonarController.StartSignal();
+            NavAgentController.EnsureThatSignalCanBeHeard(CurrentDistanceToNavAgent());
+            NavAgentController.StartSignal();
         }
     }
 
@@ -480,15 +480,15 @@ public class UA11YSonarManager : MonoBehaviour, IUA11YSonarEventReceiver
 
     #endregion
 
-    #region IUA11YSonarEventReceiver
+    #region IUA11YNavAgentEventReceiver
     /// <summary>
-    /// Plays a sound to indicate that the sonar is reached and repositions it (if needed)
+    /// Plays a sound to indicate that the NavAgent is reached and repositions it (if needed)
     /// </summary>
-    void IUA11YSonarEventReceiver.SonarReached()
+    void IUA11YNavAgentEventReceiver.NavAgentReached()
     {
         if (cornerIndex == pathPoints.Count - 1)
         {
-            this.sonar.SetActive(false);
+            this.NavAgent.SetActive(false);
             cornerIndex = -1;
             pathPoints.Clear();
 
@@ -499,22 +499,22 @@ public class UA11YSonarManager : MonoBehaviour, IUA11YSonarEventReceiver
         }
         else
         {
-            if (soundEffectAudioSource != null && sonarReachedAudioClip != null)
+            if (soundEffectAudioSource != null && NavAgentReachedAudioClip != null)
             {
-                soundEffectAudioSource.PlayOneShot(sonarReachedAudioClip);
+                soundEffectAudioSource.PlayOneShot(NavAgentReachedAudioClip);
             }
 
             cornerIndex += 1;
 
-            // Deactivate so that if the sonar is placed within the character, the collider triggers again
+            // Deactivate so that if the NavAgent is placed within the character, the collider triggers again
 
-            sonar.SetActive(false);
-            RepositionSonar();
-            sonar.SetActive(true);
-            // TODO: This method makes the sonar sound stop, so we start it again. BUT this leads to the sound beign weird, so we need to find a different method!
-            if (!manuallyTriggerSonarSignal) 
+            NavAgent.SetActive(false);
+            RepositionNavAgent();
+            NavAgent.SetActive(true);
+            // TODO: This method makes the NavAgent sound stop, so we start it again. BUT this leads to the sound beign weird, so we need to find a different method!
+            if (!manuallyTriggerNavAgentSignal) 
             {
-                sonarController.StartSignal();
+                NavAgentController.StartSignal();
             }
         }
     }

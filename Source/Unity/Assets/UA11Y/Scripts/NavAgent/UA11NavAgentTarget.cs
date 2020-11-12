@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UA11YSonarTarget : UA11YElement
+public class UA11NavAgentTarget : UA11YElement
 {
 
 }

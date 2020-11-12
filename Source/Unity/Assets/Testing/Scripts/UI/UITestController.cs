@@ -33,7 +33,7 @@ public class UITestController : MonoBehaviour {
         {
             mainMenu.SetActive(true);
         }
-        UA11YUIManager.Instance.VisibleElementsDidChange();
+        UA11YScreenReaderManager.Instance.VisibleElementsDidChange();
     }
 
     private void Update()
@@ -49,7 +49,7 @@ public class UITestController : MonoBehaviour {
                     popover.SetActive(false);
                 }
 
-                UA11YUIManager.Instance.VisibleElementsDidChange();
+                UA11YScreenReaderManager.Instance.VisibleElementsDidChange();
             }
         }
     }
@@ -59,12 +59,12 @@ public class UITestController : MonoBehaviour {
         if (popover != null)
         {
             popover.SetActive(true);
-            UA11YUIManager.Instance.VisibleElementsDidChange();
+            UA11YScreenReaderManager.Instance.VisibleElementsDidChange();
         }
     }
 
     void SpeakAlert()
     {
-        UA11YUIManager.Instance.AnnouceMessage("This an important announcement");
+        UA11YScreenReaderManager.Instance.AnnouceMessage("This an important announcement");
     }
 }

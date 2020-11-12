@@ -2,7 +2,7 @@
 using UnityEngine;
 using System.Linq;
 
-public class UA11YUIManager : MonoBehaviour
+public class UA11YScreenReaderManager : MonoBehaviour
 {
     private IUA11YScreenReader screenReader;
 
@@ -16,19 +16,19 @@ public class UA11YUIManager : MonoBehaviour
     /// </summary>
     private bool retainSelectedElementIndex;
 
-    private static UA11YUIManager _instance;
+    private static UA11YScreenReaderManager _instance;
     /// <summary>
     /// UA11YUIManager Singleton
     /// Based on: https://gamedev.stackexchange.com/questions/116009/in-unity-how-do-i-correctly-implement-the-singleton-pattern
     /// </summary>
-    public static UA11YUIManager Instance 
+    public static UA11YScreenReaderManager Instance 
     { 
         get 
         {
             if (_instance == null)
             {
-                GameObject instanceObject = Resources.Load<GameObject>("Prefabs/UI/UA11YUIManager");
-                _instance = Instantiate<GameObject>(instanceObject).GetComponent<UA11YUIManager>();
+                GameObject instanceObject = Resources.Load<GameObject>("Prefabs/UI/UA11YScreenReaderManager");
+                _instance = Instantiate<GameObject>(instanceObject).GetComponent<UA11YScreenReaderManager>();
             } 
 
             return _instance;
