@@ -5,9 +5,12 @@ using System;
 /// Based on https://developer.apple.com/documentation/uikit/accessibility/uiaccessibility/accessibility_traits?language=objc
 public class UA11YTrait
 {
-    private UA11YTrait(string key) { Key = key; }
+    public UA11YTrait(string identifier)
+    {
+        this.identifier = identifier;
+    }
 
-    public string Key { get; set; }
+    private string identifier { get; set; }
 
     // UI Element Types
     public static UA11YTrait Button { get { return new UA11YTrait("Button"); } }
@@ -26,6 +29,12 @@ public class UA11YTrait
     public static UA11YTrait HideFromScreenReader { get { return new UA11YTrait("HideFromScreenReader"); } }
 
     // TODO: Localize
+
+    public string GetIdentifier()
+    {
+        return identifier;
+    }
+
     override public string ToString()
     {
         string stringRepresentation;
@@ -35,7 +44,7 @@ public class UA11YTrait
         }
         else
         {
-            stringRepresentation = Key;
+            stringRepresentation = identifier;
         }
 
         return stringRepresentation;
@@ -54,11 +63,11 @@ public class UA11YTrait
 
     public bool Equals(UA11YTrait trait)
     {
-        return this.Key.Equals(trait.Key);
+        return this.identifier.Equals(trait.identifier);
     }
 
     public override int GetHashCode()
     {
-        return Key.GetHashCode();
+        return identifier.GetHashCode();
     }
 }
