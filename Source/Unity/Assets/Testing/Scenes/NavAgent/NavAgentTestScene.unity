@@ -325,22 +325,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   label: 
   description: 
-  isScreenReaderElement: 1
-  onClick:
-    m_PersistentCalls:
-      m_Calls: []
-  onIncrement:
-    m_PersistentCalls:
-      m_Calls: []
-  onDecrement:
-    m_PersistentCalls:
-      m_Calls: []
-  onBecomeFocused:
-    m_PersistentCalls:
-      m_Calls: []
-  onLoseFocus:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &274950418 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1047249064294018275, guid: 9350678e501f04e91bd7d51da3bcd80c,
@@ -619,22 +603,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   label: 
   description: 
-  isScreenReaderElement: 1
-  onClick:
-    m_PersistentCalls:
-      m_Calls: []
-  onIncrement:
-    m_PersistentCalls:
-      m_Calls: []
-  onDecrement:
-    m_PersistentCalls:
-      m_Calls: []
-  onBecomeFocused:
-    m_PersistentCalls:
-      m_Calls: []
-  onLoseFocus:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &409595867
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1067,22 +1035,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   label: 
   description: 
-  isScreenReaderElement: 1
-  onClick:
-    m_PersistentCalls:
-      m_Calls: []
-  onIncrement:
-    m_PersistentCalls:
-      m_Calls: []
-  onDecrement:
-    m_PersistentCalls:
-      m_Calls: []
-  onBecomeFocused:
-    m_PersistentCalls:
-      m_Calls: []
-  onLoseFocus:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &760770107
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1236,7 +1188,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 960347028}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 00f2b6542494e43da9d86e01faceb08b, type: 3}
+  m_Script: {fileID: 11500000, guid: e6f6180d9c3214b849797591bb350c54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!4 &960347030
@@ -1305,22 +1257,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   label: 
   description: 
-  isScreenReaderElement: 1
-  onClick:
-    m_PersistentCalls:
-      m_Calls: []
-  onIncrement:
-    m_PersistentCalls:
-      m_Calls: []
-  onDecrement:
-    m_PersistentCalls:
-      m_Calls: []
-  onBecomeFocused:
-    m_PersistentCalls:
-      m_Calls: []
-  onLoseFocus:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &1061246308
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1665,22 +1601,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   label: 
   description: 
-  isScreenReaderElement: 1
-  onClick:
-    m_PersistentCalls:
-      m_Calls: []
-  onIncrement:
-    m_PersistentCalls:
-      m_Calls: []
-  onDecrement:
-    m_PersistentCalls:
-      m_Calls: []
-  onBecomeFocused:
-    m_PersistentCalls:
-      m_Calls: []
-  onLoseFocus:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &1595158462
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1882,22 +1802,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   label: 
   description: 
-  isScreenReaderElement: 1
-  onClick:
-    m_PersistentCalls:
-      m_Calls: []
-  onIncrement:
-    m_PersistentCalls:
-      m_Calls: []
-  onDecrement:
-    m_PersistentCalls:
-      m_Calls: []
-  onBecomeFocused:
-    m_PersistentCalls:
-      m_Calls: []
-  onLoseFocus:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &1695105671
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2096,22 +2000,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   label: 
   description: 
-  isScreenReaderElement: 1
-  onClick:
-    m_PersistentCalls:
-      m_Calls: []
-  onIncrement:
-    m_PersistentCalls:
-      m_Calls: []
-  onDecrement:
-    m_PersistentCalls:
-      m_Calls: []
-  onBecomeFocused:
-    m_PersistentCalls:
-      m_Calls: []
-  onLoseFocus:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &1872360836
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2202,22 +2090,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   label: 
   description: 
-  isScreenReaderElement: 1
-  onClick:
-    m_PersistentCalls:
-      m_Calls: []
-  onIncrement:
-    m_PersistentCalls:
-      m_Calls: []
-  onDecrement:
-    m_PersistentCalls:
-      m_Calls: []
-  onBecomeFocused:
-    m_PersistentCalls:
-      m_Calls: []
-  onLoseFocus:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &1900034935
 MonoBehaviour:
   m_ObjectHideFlags: 0
