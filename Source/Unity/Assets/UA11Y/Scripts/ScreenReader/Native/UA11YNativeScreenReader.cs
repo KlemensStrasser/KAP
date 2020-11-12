@@ -57,7 +57,7 @@ public class UA11YNativeScreenReader: IUA11YScreenReader
     /// Invokes the selection of the element with given identifier.
     /// </summary>
     /// <param name="instanceID">Instance id of the elements gameObject.</param>
-    public void InvokeSelectionOfElementWithID(int instanceID)
+    private void InvokeSelectionOfElementWithID(int instanceID)
     {
         UA11YElement element = Array.Find(accessibilityElements, e => e.gameObject.GetInstanceID() == instanceID);
 
@@ -72,7 +72,7 @@ public class UA11YNativeScreenReader: IUA11YScreenReader
     /// </summary>
     /// <param name="instanceID">Instance id of the elements gameObject.</param>
     /// <param name="modifier">1 = Increment, -1 = decrement</param>
-    public void InvokeValueChangeOfElementWithID(int instanceID, int modifier)
+    private void InvokeValueChangeOfElementWithID(int instanceID, int modifier)
     {
         UA11YElement element = Array.Find(accessibilityElements, e => e.gameObject.GetInstanceID() == instanceID);
 
@@ -94,7 +94,7 @@ public class UA11YNativeScreenReader: IUA11YScreenReader
     /// Also calls DidLoseFocus on the previous focused element (if available)
     /// </summary>
     /// <param name="instanceID">Instance id of the elements gameObject.</param>
-    public void SetFocusOnElementWithID(int instanceID)
+    private void SetFocusOnElementWithID(int instanceID)
     {
         int index = Array.FindIndex(accessibilityElements, e => e.gameObject.GetInstanceID() == instanceID);
 
