@@ -173,7 +173,7 @@ public class UA11YNavAgentTestMenuController : MonoBehaviour, IPickupCallbackObj
             if (pickup != null && pickup.GetComponent<UA11NavAgentTarget>() != null)
             {
                 UA11NavAgentTarget target = pickup.GetComponent<UA11NavAgentTarget>();
-                UA11YScreenReaderManager.Instance.AnnouceMessage("Picked up " + target.label);
+                UA11YScreenReaderManager.Instance.AnnounceMessage("Picked up " + target.label);
 
                 // Disable button if pickup was picked up
                 Button button = ButtonForPickup(pickup);

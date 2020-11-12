@@ -9,4 +9,6 @@ public interface IUA11YScreenReader
     void FocusElement(UA11YElement elementToFocus);
 
     void SetEnabled(bool enabled);
+
+    void AnnounceMessage(string message);
 }

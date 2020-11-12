@@ -108,6 +108,11 @@ public class UA11YCustomScreenReader : MonoBehaviour, IUA11YInputReceiver, IUA11
         this.gameObject.SetActive(enabled);
     }
 
+    public void AnnounceMessage(string message)
+    {
+        UA11YSpeechSynthesizer.Instance.StartSpeaking(message);
+    }
+
     #endregion
 
     #region Visualization
@@ -127,19 +132,31 @@ public class UA11YCustomScreenReader : MonoBehaviour, IUA11YInputReceiver, IUA11
 
     private void AnnouceFocusedElement(bool includeDescription)
     {
+        AnnouceFocusedElement(includeDescription, true);
+    }
+
+    private void AnnouceFocusedElement(bool includeDescription, bool startImmediately)
+    {
         if (focusedElement != null)
         {
             string text;
             if (includeDescription)
             {
-                text = focusedElement.FullLabel();
+                text = focusedElement.ToString();
             }
             else
             {
                 text = focusedElement.LabelWithTraitAndValue();
             }
 
-            UA11YSpeechSynthesizer.Instance.StartSpeakingImmediately(text);
+            if (startImmediately)
+            {
+                UA11YSpeechSynthesizer.Instance.StartSpeakingImmediately(text);
+            }
+            else
+            {
+                UA11YSpeechSynthesizer.Instance.StartSpeaking(text);
+            }
         }
         else
         {
@@ -215,7 +232,7 @@ public class UA11YCustomScreenReader : MonoBehaviour, IUA11YInputReceiver, IUA11
         {
             focusedElement.InvokeEventOfType(UA11YElementInteractionEventType.Click);
             PlaySelectSound();
-            AnnouceFocusedElement(true);
+            AnnouceFocusedElement(true, false);
         }
     }
 
@@ -231,7 +248,7 @@ public class UA11YCustomScreenReader : MonoBehaviour, IUA11YInputReceiver, IUA11
             {
                 PlayBlockingSound();
             }
-            AnnouceFocusedElement(true);
+            AnnouceValueOfFocusedElement();
         }
     }
 
@@ -247,7 +264,7 @@ public class UA11YCustomScreenReader : MonoBehaviour, IUA11YInputReceiver, IUA11
             {
                 PlayBlockingSound();
             }
-            AnnouceFocusedElement(true);
+            AnnouceValueOfFocusedElement();
         }
     }
 

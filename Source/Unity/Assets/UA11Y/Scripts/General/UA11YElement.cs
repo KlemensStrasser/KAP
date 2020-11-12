@@ -245,7 +245,7 @@ public class UA11YElement : MonoBehaviour
     /// Composes a string from the label, trait and description of the element
     /// </summary>
     /// <returns>The composed string</returns>
-    public string FullLabel()
+    override public string ToString()
     {
         string fullString;
 

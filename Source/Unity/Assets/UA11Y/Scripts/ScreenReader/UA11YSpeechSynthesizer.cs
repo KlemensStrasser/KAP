@@ -113,6 +113,7 @@ public class UA11YSpeechSynthesizer {
     /// If anything is currently spoken, the given text will be added to the queue and spoken later
     /// </summary>
     /// <param name="text">The text that needs to be spoken.</param>
+    // TODO: Queuing is currently not working anymore
     public void StartSpeaking(string text)
     {
         if(text != null && text.Length > 0)

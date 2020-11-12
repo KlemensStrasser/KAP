@@ -9,7 +9,7 @@ public class UA11YNativeScreenReader: IUA11YScreenReader
 
     private UA11YElement currentlyFocusedElement;
 
-    public  UA11YNativeScreenReader() 
+    public UA11YNativeScreenReader() 
     {
         currentlyFocusedElement = null;
 
@@ -41,6 +41,11 @@ public class UA11YNativeScreenReader: IUA11YScreenReader
 
     public void SetEnabled(bool enabled)
     { 
+    }
+
+    public void AnnounceMessage(string message)
+    {
+        UA11YNativeScreenReaderBridge.Instance.AnnounceMessage(message);
     }
 
     #endregion

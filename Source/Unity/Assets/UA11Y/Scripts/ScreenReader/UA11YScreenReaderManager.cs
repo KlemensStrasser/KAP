@@ -172,37 +172,9 @@ public class UA11YScreenReaderManager : MonoBehaviour
     /// <summary>
     /// Stops any text that is currently spoken and annouces the given message
     /// </summary>
-    public void AnnouceMessage(string message) 
+    public void AnnounceMessage(string message) 
     {
-        UA11YMessageAnnoucer.Instance.AnnounceMessage(message);
-    }
-
-    /// <summary>
-    /// Tries to set the focus on a given UA11YElement
-    /// </summary>
-    public void FocusElement(UA11YElement element) 
-    {
-        if (screenReader != null)
-        {
-            screenReader.FocusElement(element);
-        }
-    }
-
-    /// <summary>
-    /// Tries to set the focus on a UA11YElement that is attached to the given GameObject
-    /// </summary>
-    public void FocusGameObject(GameObject gObject)
-    {
-        UA11YElement element = gObject.GetComponent<UA11YElement>();
-
-        if (element != null)
-        {
-            this.FocusElement(element);
-        }
-        else
-        {
-            Debug.LogWarning("UA11YUIManager: Given GameObject has no UA11YElement attached!");
-        }
+        screenReader.AnnounceMessage(message);
     }
 
     /// Should be called when a popover appears,level changes (but scene stays), ...

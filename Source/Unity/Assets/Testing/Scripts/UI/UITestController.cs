@@ -65,6 +65,6 @@ public class UITestController : MonoBehaviour {
 
     void SpeakAlert()
     {
-        UA11YScreenReaderManager.Instance.AnnouceMessage("This an important announcement");
+        UA11YScreenReaderManager.Instance.AnnounceMessage("This an important announcement");
     }
 }
