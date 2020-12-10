@@ -131,31 +131,19 @@ public class UA11YNativeScreenReaderBridge
     [MonoPInvokeCallback(typeof(UA11YInvokeSelectionCallback))]
     public static void InvokeSelectionCallback(int instanceID)
     {
-        // Is this the best way to to that? I don't know...
-        if(Instance.selectionCallback != null)
-        {
-            Instance.selectionCallback(instanceID);
-        }
+        Instance.selectionCallback?.Invoke(instanceID);
     }
 
     [MonoPInvokeCallback(typeof(UA11YInvokeValueChangeCallback))]
     public static void InvokeValueChangeCallback(int instanceID, int modifier)
     {
-        // Is this the best way to to that? I don't know...
-        if (Instance.valueChangeCallback != null)
-        {
-            Instance.valueChangeCallback(instanceID, modifier);
-        }
+        Instance.valueChangeCallback?.Invoke(instanceID, modifier);
     }
 
     [MonoPInvokeCallback(typeof(UA11YInvokeFocusCallback))]
     public static void InvokeFocuseCallback(int instanceID)
     {
-        // Is this the best way to to that? I don't know...
-        if (Instance.focusCallback != null)
-        {
-            Instance.focusCallback(instanceID);
-        }
+        Instance.focusCallback?.Invoke(instanceID);
     }
 
     #endregion

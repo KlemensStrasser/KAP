@@ -1,11 +1,13 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 // Based on RTS Style Unit Selection in Unity 5 by Jeff Zimmer
 // Link https://hyunkell.com/blog/rts-style-unit-selection-in-unity-5/
-public static class UA11YUIVisulizationDrawer
+public class UA11YCustomScreenReaderVisualizer : MonoBehaviour
 {
-    static Texture2D _borderTexture;
-    public static Texture2D borderTexture
+    private static Texture2D _borderTexture;
+    private static Texture2D borderTexture
     {
         get
         {
@@ -20,14 +22,25 @@ public static class UA11YUIVisulizationDrawer
         }
     }
 
-    public static void DrawRect(Rect rect, Color color)
+    public void DrawIndicatorForElement(UA11YElement element) 
     {
-        GUI.color = color;
-        GUI.DrawTexture(rect, borderTexture);
-        GUI.color = Color.white;
+        if (element != null)
+        {
+            float borderWidth = 2;
+            Rect frame = element.frame;
+            DrawRectBorder(frame, borderWidth, Color.black);
+
+            Rect outerFrame = new Rect(
+                frame.x - borderWidth,
+                frame.y - borderWidth,
+                frame.width + borderWidth * 2,
+                frame.height + borderWidth * 2);
+
+            DrawRectBorder(outerFrame, borderWidth, Color.white);
+        }
     }
 
-    public static void DrawRectBorder(Rect rect, float borderWidth, Color color)
+    private static void DrawRectBorder(Rect rect, float borderWidth, Color color)
     {
         // Top
         DrawRect(new Rect(rect.xMin - borderWidth / 2, rect.yMin - borderWidth, rect.width + borderWidth / 2, borderWidth), color);
@@ -37,5 +50,12 @@ public static class UA11YUIVisulizationDrawer
         DrawRect(new Rect(rect.xMax, rect.yMin - borderWidth, borderWidth, rect.height + borderWidth), color);
         // Bottom
         DrawRect(new Rect(rect.xMin - borderWidth / 2, rect.yMax - borderWidth / 2, rect.width + borderWidth * 1.5f, borderWidth), color);
+    }
+
+    private static void DrawRect(Rect rect, Color color)
+    {
+        GUI.color = color;
+        GUI.DrawTexture(rect, borderTexture);
+        GUI.color = Color.white;
     }
 }

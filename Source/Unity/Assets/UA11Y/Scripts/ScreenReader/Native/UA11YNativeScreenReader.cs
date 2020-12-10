@@ -40,7 +40,8 @@ public class UA11YNativeScreenReader: IUA11YScreenReader
     }
 
     public void SetEnabled(bool enabled)
-    { 
+    {
+        // TODO: Disable (For iOS, this would work by make the SKView a direct interaction view)
     }
 
     public void AnnounceMessage(string message)

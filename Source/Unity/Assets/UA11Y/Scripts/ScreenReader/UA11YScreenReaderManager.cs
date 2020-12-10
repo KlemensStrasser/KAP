@@ -96,6 +96,9 @@ public class UA11YScreenReaderManager : MonoBehaviour
 
         if (accessibilityElements != null)
         {
+            Rect screenRect = new Rect(0f, 0f, Screen.width, Screen.height);
+            accessibilityElements = accessibilityElements.Where(c => screenRect.Overlaps(c.frame)).ToArray();
+
             // Sort by frame
             Array.Sort(accessibilityElements, delegate (UA11YElement element1, UA11YElement element2)
             {
@@ -180,7 +183,7 @@ public class UA11YScreenReaderManager : MonoBehaviour
     /// Should be called when a popover appears,level changes (but scene stays), ...
     public void VisibleElementsDidChange() 
     {
-        SetNeedsUpdateElements(false);
+        SetNeedsUpdateElements();
     }
 
     public void SetNeedsUpdateElements(bool keepHighlightedElement = true)
@@ -209,6 +212,7 @@ public class UA11YScreenReaderManager : MonoBehaviour
     /// </summary>
     private void Update()
     {
+        // TODO: It might make sense to trigger an automatic update every ~5 seconds
         if(needsUpdateElements)
         {
             UA11YElement[] screenReaderElements = LoadScreenReaderElements();

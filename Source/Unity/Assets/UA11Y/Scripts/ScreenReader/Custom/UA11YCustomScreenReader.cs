@@ -6,8 +6,9 @@ using System;
 
 public class UA11YCustomScreenReader : MonoBehaviour, IUA11YInputReceiver, IUA11YScreenReader
 {
-    private UA11YUIVisualizer UA11YVisualizer;
-    UA11YInput input;
+    private UA11YCustomScreenReaderVisualizer visualizer;
+    private UA11YInput input;
+    private UA11YSpeechSynthesizer speechSynthesizer = new UA11YSpeechSynthesizer();
 
     private UA11YElement focusedElement;
     private int focusedElementIndex;
@@ -18,9 +19,11 @@ public class UA11YCustomScreenReader : MonoBehaviour, IUA11YInputReceiver, IUA11
     private AudioClip blockAudioClip;
     private AudioClip selectAudioClip;
 
-    UA11YElement[] accessibilityElements;
+    private UA11YElement[] accessibilityElements;
 
-    private void Awake()
+    private bool hasStarted;
+
+    private void Start()
     {
         // Create the correct Input depending on the available device
 #if UNITY_STANDALONE || UNITY_EDITOR
@@ -44,8 +47,10 @@ public class UA11YCustomScreenReader : MonoBehaviour, IUA11YInputReceiver, IUA11
         visualizerObject.gameObject.transform.SetParent(gameObject.transform);
         if (visualizerObject != null)
         {
-            UA11YVisualizer = visualizerObject.GetComponent<UA11YUIVisualizer>();
+            visualizer = visualizerObject.GetComponent<UA11YCustomScreenReaderVisualizer>();
         }
+
+        hasStarted = true;
 
         if (accessibilityElements != null && accessibilityElements.Length > 0 && focusedElement == null)
         {
@@ -60,7 +65,7 @@ public class UA11YCustomScreenReader : MonoBehaviour, IUA11YInputReceiver, IUA11
     {
         this.accessibilityElements = accessibilityElements;
 
-        if (accessibilityElements != null && accessibilityElements.Length > 0)
+        if (hasStarted && accessibilityElements != null && accessibilityElements.Length > 0)
         {
             if(tryRetainingIndex && focusedElement != null)
             {
@@ -110,7 +115,7 @@ public class UA11YCustomScreenReader : MonoBehaviour, IUA11YInputReceiver, IUA11
 
     public void AnnounceMessage(string message)
     {
-        UA11YSpeechSynthesizer.Instance.StartSpeaking(message);
+        speechSynthesizer.StartSpeaking(message);
     }
 
     #endregion
@@ -120,9 +125,9 @@ public class UA11YCustomScreenReader : MonoBehaviour, IUA11YInputReceiver, IUA11
     private void OnGUI()
     {
         // Update visualizer
-        if (focusedElement != null && UA11YVisualizer != null)
+        if (focusedElement != null && visualizer != null)
         {
-            UA11YVisualizer.DrawIndicatorForElement(focusedElement);
+            visualizer.DrawIndicatorForElement(focusedElement);
         }
     }
 
@@ -130,12 +135,7 @@ public class UA11YCustomScreenReader : MonoBehaviour, IUA11YInputReceiver, IUA11
 
     #region Sounds
 
-    private void AnnouceFocusedElement(bool includeDescription)
-    {
-        AnnouceFocusedElement(includeDescription, true);
-    }
-
-    private void AnnouceFocusedElement(bool includeDescription, bool startImmediately)
+    private void AnnouceFocusedElement(bool includeDescription, bool startImmediately = true)
     {
         if (focusedElement != null)
         {
@@ -151,11 +151,11 @@ public class UA11YCustomScreenReader : MonoBehaviour, IUA11YInputReceiver, IUA11
 
             if (startImmediately)
             {
-                UA11YSpeechSynthesizer.Instance.StartSpeakingImmediately(text);
+                speechSynthesizer.StartSpeakingImmediately(text);
             }
             else
             {
-                UA11YSpeechSynthesizer.Instance.StartSpeaking(text);
+                speechSynthesizer.StartSpeaking(text);
             }
         }
         else
@@ -169,7 +169,7 @@ public class UA11YCustomScreenReader : MonoBehaviour, IUA11YInputReceiver, IUA11
         if (focusedElement != null && focusedElement.value != null)
         {
             string text = focusedElement.value;
-            UA11YSpeechSynthesizer.Instance.StartSpeakingImmediately(text);
+            speechSynthesizer.StartSpeakingImmediately(text);
         }
     }
 

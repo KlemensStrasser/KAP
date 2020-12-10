@@ -1,23 +1,28 @@
 ﻿using UnityEngine;
 
-enum TouchAction {None, SwipeLeft, SwipeRight, Browsing, Tapping }
+enum UA11YTouchActionState {
+    None,
+    SwipeLeft,
+    SwipeRight,
+    Browsing,
+    Tapping
+}
 
 public class UA11YMobileInput : UA11YInput
 {
     // The maximum time to recognize the touch+move as a gesture (like a swipe)
-    static float MaximumSwipeGestureTime = 0.25f;
-    static float MaximumTapTime = 0.175f;
-    static float MaximumTapCooldownTime = 0.1f;
+    private static float MaximumSwipeGestureTime = 0.25f;
+    private static float MaximumTapTime = 0.175f;
+    private static float MaximumTapCooldownTime = 0.1f;
+    private static Vector2 SwipeResistance = new Vector2(50f, 50f);
+
+    private UA11YTouchActionState currentTouchActionState = UA11YTouchActionState.None;
 
     private Vector3 touchStartPosition;
-    private Vector2 swipeResistance = new Vector2(50f, 50f);
 
     private float touchDownTime;
-
-    public int tapCount = 0;
+    private int tapCount = 0;
     private float timeSinceLastTap = 0.0f;
-
-    private TouchAction currentTouchAction = TouchAction.None;
 
     void Update()
     {
@@ -40,7 +45,7 @@ public class UA11YMobileInput : UA11YInput
                 case TouchPhase.Moved:
                     if (currentTime - touchDownTime > MaximumSwipeGestureTime)
                     {
-                        currentTouchAction = TouchAction.Browsing;
+                        currentTouchActionState = UA11YTouchActionState.Browsing;
                     }
 
                     break;
@@ -53,26 +58,26 @@ public class UA11YMobileInput : UA11YInput
 
                     float timeDelta = currentTime - touchDownTime;
 
-                    if (timeDelta <= MaximumTapTime && Mathf.Abs(swipeDelta.x) <= swipeResistance.x)
+                    if (timeDelta <= MaximumTapTime && Mathf.Abs(swipeDelta.x) <= SwipeResistance.x)
                     {
                         tapCount += 1;
                         timeSinceLastTap = currentTime;
-                        currentTouchAction = TouchAction.Tapping;
+                        currentTouchActionState = UA11YTouchActionState.Tapping;
                     }
                     else if (currentTime - touchDownTime <= MaximumSwipeGestureTime)
                     {
-                        if (swipeDelta.x > swipeResistance.x)
+                        if (swipeDelta.x > SwipeResistance.x)
                         {
-                            currentTouchAction = TouchAction.SwipeLeft;
+                            currentTouchActionState = UA11YTouchActionState.SwipeLeft;
                         }
-                        else if (swipeDelta.x < -swipeResistance.x)
+                        else if (swipeDelta.x < -SwipeResistance.x)
                         {
-                            currentTouchAction = TouchAction.SwipeRight;
+                            currentTouchActionState = UA11YTouchActionState.SwipeRight;
                         }
                     }
-                    else if (currentTouchAction == TouchAction.Browsing)
+                    else if (currentTouchActionState == UA11YTouchActionState.Browsing)
                     {
-                        currentTouchAction = TouchAction.None;
+                        currentTouchActionState = UA11YTouchActionState.None;
                     }
 
                     break;
@@ -80,24 +85,24 @@ public class UA11YMobileInput : UA11YInput
 
             if (inputReceiver != null)
             {
-                switch (currentTouchAction)
+                switch (currentTouchActionState)
                 {
-                    case TouchAction.None:
+                    case UA11YTouchActionState.None:
                         break;
-                    case TouchAction.SwipeLeft:
+                    case UA11YTouchActionState.SwipeLeft:
                         inputReceiver.FocusPreviousElement();
-                        currentTouchAction = TouchAction.None;
+                        currentTouchActionState = UA11YTouchActionState.None;
                         break;
-                    case TouchAction.SwipeRight:
+                    case UA11YTouchActionState.SwipeRight:
                         inputReceiver.FocusNextElement();
-                        currentTouchAction = TouchAction.None;
+                        currentTouchActionState = UA11YTouchActionState.None;
                         break;
-                    case TouchAction.Browsing:
+                    case UA11YTouchActionState.Browsing:
                         Vector2 point = touch.position;
                         point.y = Screen.height - point.y;
                         inputReceiver.FocusElementAtPosition(point);
                         break;
-                    case TouchAction.Tapping:
+                    case UA11YTouchActionState.Tapping:
                         // This needs to be handled outside
                         // The tapping action will be triggered when the last touch is already over. 
                         // And when the touch is over, Input.touchCount > 0 fails.
@@ -106,7 +111,7 @@ public class UA11YMobileInput : UA11YInput
             }
         }
 
-        if (!touchActive && currentTouchAction == TouchAction.Tapping && currentTime - timeSinceLastTap >= MaximumTapCooldownTime)
+        if (!touchActive && currentTouchActionState == UA11YTouchActionState.Tapping && currentTime - timeSinceLastTap >= MaximumTapCooldownTime)
         {
             if (tapCount == 2)
             {
@@ -116,10 +121,10 @@ public class UA11YMobileInput : UA11YInput
             {
                 // Handle tripple tpuches and stuff
             }
-            currentTouchAction = TouchAction.None;
+            currentTouchActionState = UA11YTouchActionState.None;
         }
 
-        if (currentTouchAction != TouchAction.Tapping)
+        if (currentTouchActionState != UA11YTouchActionState.Tapping)
         {
             tapCount = 0;
         }
@@ -127,6 +132,6 @@ public class UA11YMobileInput : UA11YInput
 
     override public string GetStatusText() 
     {
-        return currentTouchAction.ToString() +  " - " + tapCount.ToString();
+        return currentTouchActionState.ToString() +  " - " + tapCount.ToString();
     }
 }

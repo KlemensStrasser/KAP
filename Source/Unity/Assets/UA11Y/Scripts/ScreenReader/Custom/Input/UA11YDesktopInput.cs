@@ -18,7 +18,7 @@ public class UA11YDesktopInput : UA11YInput {
 
     public KeyCode browseElementsKey = KeyCode.Caret;
 
-    void Update ()
+    private void Update ()
     {
         if (inputReceiver != null)
         {

@@ -291,7 +291,7 @@ public class UA11YNavAgentManager : MonoBehaviour, IUA11YNavAgentEventReceiver
             Vector3 currentCorner = path.corners[i];
 
             // If X or Z coordinate is almost the same, 
-            if (IsAValidLine(previousCorner, currentCorner))
+            if (IsStraightLine(previousCorner, currentCorner))
             {
                 straightPathPoints.Add(currentCorner);
             }
@@ -308,7 +308,7 @@ public class UA11YNavAgentManager : MonoBehaviour, IUA11YNavAgentEventReceiver
     /// <summary>
     /// Checks if the line between two points is (almost) horizontal or (almost) vertical
     /// </summary>
-    private bool IsAValidLine(Vector3 pointA, Vector3 pointB) 
+    private bool IsStraightLine(Vector3 pointA, Vector3 pointB) 
     {
         bool cornerIsValid = false;
 
@@ -346,7 +346,7 @@ public class UA11YNavAgentManager : MonoBehaviour, IUA11YNavAgentEventReceiver
     {
         List<Vector3> points = new List<Vector3>();
 
-        if(!IsAValidLine(pointA, pointB))
+        if(!IsStraightLine(pointA, pointB))
         {
             Vector3 possibleAB = new Vector3(pointA.x, pointA.y, pointB.z);
             Vector3 possibleBA = new Vector3(pointB.x, pointA.y, pointA.z);
@@ -451,14 +451,14 @@ public class UA11YNavAgentManager : MonoBehaviour, IUA11YNavAgentEventReceiver
         }
         else if (manuallyTriggerNavAgentSignal && Input.GetKeyDown(manualNavAgentTriggerKey))
         {
-            ManualTriggerNavAgent();
+            ManualTriggerNavAgentSignal();
         } 
     }
 
     /// <summary>
     /// Manuals the trigger NavAgent.
     /// </summary>
-    private void ManualTriggerNavAgent()
+    private void ManualTriggerNavAgentSignal()
     {
         if (pathPoints != null && pathPoints.Count > 0)
         {
@@ -480,6 +480,22 @@ public class UA11YNavAgentManager : MonoBehaviour, IUA11YNavAgentEventReceiver
 
     #endregion
 
+    private void PlayTargetReachedSound() 
+    {
+        if (soundEffectAudioSource != null && targetReachedAudioClip != null)
+        {
+            soundEffectAudioSource.PlayOneShot(targetReachedAudioClip);
+        }
+    }
+
+    private void PlayAgentReachedSound()
+    {
+        if (soundEffectAudioSource != null && NavAgentReachedAudioClip != null)
+        {
+            soundEffectAudioSource.PlayOneShot(NavAgentReachedAudioClip);
+        }
+    }
+
     #region IUA11YNavAgentEventReceiver
     /// <summary>
     /// Plays a sound to indicate that the NavAgent is reached and repositions it (if needed)
@@ -488,21 +504,16 @@ public class UA11YNavAgentManager : MonoBehaviour, IUA11YNavAgentEventReceiver
     {
         if (cornerIndex == pathPoints.Count - 1)
         {
+            PlayTargetReachedSound();
+
             this.NavAgent.SetActive(false);
             cornerIndex = -1;
             pathPoints.Clear();
-
-            if (soundEffectAudioSource != null && targetReachedAudioClip != null)
-            {
-                soundEffectAudioSource.PlayOneShot(targetReachedAudioClip);
-            }
+            
         }
         else
         {
-            if (soundEffectAudioSource != null && NavAgentReachedAudioClip != null)
-            {
-                soundEffectAudioSource.PlayOneShot(NavAgentReachedAudioClip);
-            }
+            PlayAgentReachedSound();
 
             cornerIndex += 1;
 

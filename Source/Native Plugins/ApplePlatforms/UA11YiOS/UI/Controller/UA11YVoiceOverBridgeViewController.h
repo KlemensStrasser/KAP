@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface UA11YVoiceOverBridgeViewController : UIViewController
 
+- (void)updateHookViewForHook:(UA11YInternalAccessibilityHook *)hook;
 - (void)updateHookViewsForHooks:(NSArray<UA11YInternalAccessibilityHook *> *)hooks;
 
 - (void)clearAllHooks;

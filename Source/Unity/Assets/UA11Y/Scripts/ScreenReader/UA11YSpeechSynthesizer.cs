@@ -64,29 +64,11 @@ public class UA11YSpeechSynthesizer {
     private bool VoiceIsPaused() { return false; }
 #endif
 
-    private static UA11YSpeechSynthesizer _instance;
-    /// <summary>
-    /// UA11YSpeechSynthesizer Singleton
-    /// Based on: https://gamedev.stackexchange.com/questions/116009/in-unity-how-do-i-correctly-implement-the-singleton-pattern
-    /// </summary>
-    public static UA11YSpeechSynthesizer Instance
-    {
-        get
-        {
-            if (_instance == null)
-            {
-                _instance = new UA11YSpeechSynthesizer();
-            }
-
-            return _instance;
-        }
-    }
-
     /// <summary>
     /// Initializes a new instance of the <see cref="T:UA11YSpeechSynthesizer"/> class.
     /// Private, so that no second instance can be created
     /// </summary>
-    private UA11YSpeechSynthesizer() 
+    public UA11YSpeechSynthesizer() 
     {
         VoiceSetup();
     }
@@ -165,7 +147,7 @@ public class UA11YSpeechSynthesizer {
     /// Check if speaking is currently paused
     /// </summary>
     /// <returns><c>true</c>, if speaking is currently paused, <c>false</c> otherwise.</returns>
-    public bool IsPaused() 
+    public bool IsPaused()
     {
         return VoiceIsPaused();
     }
