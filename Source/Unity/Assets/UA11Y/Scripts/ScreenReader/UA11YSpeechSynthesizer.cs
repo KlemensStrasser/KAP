@@ -47,6 +47,30 @@ public class UA11YSpeechSynthesizer {
 
     [DllImport ("__Internal")]
     private static extern bool VoiceIsPaused();
+
+#elif UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN
+
+    [DllImport("UA11YWindows")]
+    private static extern void VoiceSetup();
+
+    [DllImport("UA11YWindows")]
+    private static extern void VoiceStartSpeaking(string cString);
+
+    [DllImport("UA11YWindows")]
+    private static extern void VoicePauseSpeaking();
+
+    [DllImport("UA11YWindows")]
+    private static extern void VoiceContinueSpeaking();
+
+    [DllImport("UA11YWindows")]
+    private static extern void VoiceStopSpeaking();
+
+    [DllImport("UA11YWindows")]
+    private static extern bool VoiceIsSpeaking();
+
+    [DllImport("UA11YWindows")]
+    private static extern bool VoiceIsPaused();
+
 #else
     // Dummy Implementations for non supported platforms
     private void VoiceSetup() { }
@@ -57,7 +81,7 @@ public class UA11YSpeechSynthesizer {
 
     private void VoiceContinueSpeaking() { }
 
-    private void VoicecStopSpeaking() { }
+    private void VoiceStopSpeaking() { }
 
     private bool VoiceIsSpeaking() { return false; }
 
