@@ -27,7 +27,7 @@ public class UA11YScreenReaderManager : MonoBehaviour
         {
             if (_instance == null)
             {
-                GameObject instanceObject = Resources.Load<GameObject>("Prefabs/UI/UA11YScreenReaderManager");
+                GameObject instanceObject = Resources.Load<GameObject>("Prefabs/ScreenReader/UA11YScreenReaderManager");
                 _instance = Instantiate<GameObject>(instanceObject).GetComponent<UA11YScreenReaderManager>();
             } 
 
@@ -66,7 +66,7 @@ public class UA11YScreenReaderManager : MonoBehaviour
         }
         else
         {
-            GameObject screenReaderObject = Resources.Load<GameObject>("Prefabs/UI/UA11YScreenReader");
+            GameObject screenReaderObject = Resources.Load<GameObject>("Prefabs/ScreenReader/UA11YScreenReader");
             screenReaderObject = Instantiate<GameObject>(screenReaderObject);
             screenReaderObject.name = "UA11YScreenReader";
             screenReaderObject.gameObject.transform.SetParent(gameObject.transform);

@@ -41,7 +41,7 @@ public class UA11YCustomScreenReader : MonoBehaviour, IUA11YInputReceiver, IUA11
         selectAudioClip = Resources.Load("Audio/UA11Y_select") as AudioClip;
 
         // Initialize Visualizer
-        GameObject visualizerObject = Resources.Load<GameObject>("Prefabs/UI/UA11YUIVisualizer");
+        GameObject visualizerObject = Resources.Load<GameObject>("Prefabs/ScreenReader/UA11YUIVisualizer");
         visualizerObject = Instantiate<GameObject>(visualizerObject);
         visualizerObject.name = "UA11YUIVisualizer";
         visualizerObject.gameObject.transform.SetParent(gameObject.transform);

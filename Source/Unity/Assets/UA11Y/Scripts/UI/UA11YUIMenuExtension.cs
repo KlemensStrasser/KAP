@@ -7,7 +7,7 @@ public class UA11YUIMenuExtension : MonoBehaviour
     [MenuItem("GameObject/KAP/KAPUI/KAPUIManager", false, 10)]
     static void CreateKAPUIManager(MenuCommand menuCommand)
     {
-        GameObject managerGameObject = Resources.Load<GameObject>("Prefabs/UI/UA11YUIManager");
+        GameObject managerGameObject = Resources.Load<GameObject>("Prefabs/ScreenReader/UA11YUIManager");
         managerGameObject = Instantiate<GameObject>(managerGameObject);
         managerGameObject.name = "KAPUIManager";
 
