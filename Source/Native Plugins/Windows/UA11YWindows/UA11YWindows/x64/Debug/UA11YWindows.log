@@ -1,2 +1,6 @@
-﻿  UA11YWinVoice.cpp
+﻿  pch.cpp
+  dllmain.cpp
+  UA11YWinVoice.cpp
+  Generating Code...
+     Creating library C:\Users\Klemens\Developer\KAP\Source\Native Plugins\Windows\UA11YWindows\x64\Debug\UA11YWindows.lib and object C:\Users\Klemens\Developer\KAP\Source\Native Plugins\Windows\UA11YWindows\x64\Debug\UA11YWindows.exp
   UA11YWindows.vcxproj -> C:\Users\Klemens\Developer\KAP\Source\Native Plugins\Windows\UA11YWindows\x64\Debug\UA11YWindows.dll

@@ -1,0 +1,9 @@
+﻿  pch.cpp
+  dllmain.cpp
+  UA11YWinVoice.cpp
+     Creating library C:\Users\Klemens\Developer\KAP\Source\Native Plugins\Windows\UA11YWindows\x64\Release\UA11YWindows.lib and object C:\Users\Klemens\Developer\KAP\Source\Native Plugins\Windows\UA11YWindows\x64\Release\UA11YWindows.exp
+  Generating code
+  Previous IPDB not found, fall back to full compilation.
+  All 162 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  UA11YWindows.vcxproj -> C:\Users\Klemens\Developer\KAP\Source\Native Plugins\Windows\UA11YWindows\x64\Release\UA11YWindows.dll
