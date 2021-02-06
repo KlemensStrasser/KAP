@@ -97,7 +97,12 @@ public class UA11YScreenReaderManager : MonoBehaviour
         if (accessibilityElements != null)
         {
             Rect screenRect = new Rect(0f, 0f, Screen.width, Screen.height);
-            accessibilityElements = accessibilityElements.Where(c => screenRect.Overlaps(c.frame)).ToArray();
+
+            // Only keep visible objects
+            // TODO: Reenable this when we've double check that this works with sprites.
+            //accessibilityElements = accessibilityElements.Where(g => IsAccessibleElementVisible(g)).ToArray();
+
+            accessibilityElements = accessibilityElements.Where(g => screenRect.Overlaps(g.frame)).ToArray();
 
             // Sort by frame
             Array.Sort(accessibilityElements, delegate (UA11YElement element1, UA11YElement element2)
@@ -114,6 +119,76 @@ public class UA11YScreenReaderManager : MonoBehaviour
         accessibilityElements = accessibilityElements.Where(e => e.traits.Contains(UA11YTrait.HideFromScreenReader) == false).ToArray();
 
         return accessibilityElements;
+    }
+
+    private bool IsAccessibleElementVisible(UA11YElement a11yElement)
+    {
+        bool isVisible = false;
+
+        GameObject gameObject = a11yElement.gameObject;
+        Renderer renderer = gameObject.GetComponent<Renderer>();
+
+        if (renderer == null)
+        {
+            renderer = gameObject.GetComponentInChildren<Renderer>();
+        }
+
+        Vector2 elementCenter = a11yElement.frame.center;
+        // TODO: Offer alternative to set player
+        GameObject player = GameObject.Find("Player");
+
+        if (player != null && renderer != null)
+        {
+            isVisible = IsVisibleForPlayer(a11yElement, player);
+        }
+        else
+        {
+            // TODO: Alternative when player or renderer (for UI elements) don't exist.
+            isVisible = true;
+        }
+
+        return isVisible;
+    }
+
+    private bool IsVisibleForPlayer(UA11YElement a11yElement, GameObject player)
+    {
+        bool isVisible = false;
+
+        Vector3 transformDirection = player.transform.TransformDirection(a11yElement.gameObject.transform.position);
+        RaycastHit hit;
+
+        bool hasCollider = a11yElement.gameObject.GetComponent<Collider>();
+
+        // TODO: Offer LayerMask
+
+        Vector3 direction = a11yElement.gameObject.transform.position - player.transform.position;
+        if (direction.x >= 0.0 && Physics.Raycast(player.transform.position, direction, out hit))
+        {
+            Debug.DrawRay(player.transform.position, direction, Color.green, 5);
+
+            if (a11yElement.gameObject.GetComponent<Collider>() == hit.collider)
+            {
+                isVisible = true;
+            }
+            else
+            {
+                foreach (Collider collider in a11yElement.gameObject.GetComponentsInChildren<Collider>())
+                {
+                    if (collider == hit.collider)
+                    {
+                        isVisible = true;
+                        break;
+                    }
+                }
+            }
+
+        }
+        else
+        {
+            isVisible = false;
+        }
+
+        return isVisible;
     }
 
     /// <summary>

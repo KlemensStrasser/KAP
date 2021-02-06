@@ -41,14 +41,12 @@ public class UA11YToggle : UA11YElement
 
     private void Awake()
     {
-        this.toggle = gameObject.GetComponent<Toggle>();
+        toggle = gameObject.GetComponent<Toggle>();
 
         if (toggle != null)
         {
-            this.title = toggle.GetComponentInChildren<Text>();
+            title = toggle.GetComponentInChildren<Text>();
         }
-
-        SetupLabel();
     }
 
     override protected string ImplicitLabelValue()

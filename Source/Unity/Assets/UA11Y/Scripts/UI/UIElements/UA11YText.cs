@@ -19,7 +19,6 @@ public class UA11YText : UA11YElement
     private void Awake()
     {
         this.text = gameObject.GetComponent<Text>();
-        SetupLabel();
     }
 
     override protected string ImplicitLabelValue()

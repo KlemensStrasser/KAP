@@ -25,8 +25,6 @@ public class UA11YButton : UA11YElement
         {
             this.buttonText = button.GetComponentInChildren<Text>();
         }
-
-        SetupLabel();
     }
 
     override protected string ImplicitLabelValue()
